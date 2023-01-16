@@ -1,0 +1,369 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Docker教程(七)---Cgroups-2-subsystem演示 -</title><meta name=Description content="Cgroups 中的pids、cpu、memory 3个 subsystem 演示"><meta property="og:title" content="Docker教程(七)---Cgroups-2-subsystem演示"><meta property="og:description" content="Cgroups 中的pids、cpu、memory 3个 subsystem 演示"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.yudlk.com/posts/docker/07-cgroups-2/"><meta property="og:image" content="https://blog.yudlk.com/img/jinx.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-02-25T22:00:00+00:00"><meta property="article:modified_time" content="2022-02-25T22:00:00+00:00"><meta property="og:site_name" content="qpt的个人博客"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.yudlk.com/img/jinx.png"><meta name=twitter:title content="Docker教程(七)---Cgroups-2-subsystem演示"><meta name=twitter:description content="Cgroups 中的pids、cpu、memory 3个 subsystem 演示"><meta name=application-name content="指月小筑"><meta name=apple-mobile-web-app-title content="指月小筑"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://blog.yudlk.com/posts/docker/07-cgroups-2/><link rel=prev href=https://blog.yudlk.com/posts/docker/06-cgroups-1/><link rel=next href=https://blog.yudlk.com/posts/docker/08-cgroups-3/><link rel=stylesheet href=/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Docker教程(七)---Cgroups-2-subsystem演示","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.yudlk.com\/posts\/docker\/07-cgroups-2\/"},"image":["https:\/\/blog.yudlk.com\/img\/jinx.png"],"genre":"posts","keywords":"Docker","wordcount":10970,"url":"https:\/\/blog.yudlk.com\/posts\/docker\/07-cgroups-2\/","datePublished":"2022-02-25T22:00:00+00:00","dateModified":"2022-02-25T22:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"qpt"},"description":"Cgroups 中的pids、cpu、memory 3个 subsystem 演示"}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/ title=指月小筑>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/ title=关于>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/posts/ title=指月小筑>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title=关于>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Docker教程(七)---Cgroups-2-subsystem演示</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://github.com/lixd title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>qpt</a></span>&nbsp;<span class=post-category>included in <a href=/categories/docker/><i class="far fa-folder fa-fw" aria-hidden=true></i>Docker</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-02-25>2022-02-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;10970 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;22 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#1-pids>1. pids</a><ul><li><a href=#创建子cgroup>创建子cgroup</a></li><li><a href=#限制进程数>限制进程数</a></li><li><a href=#当前cgroup和子cgroup之间的关系>当前cgroup和子cgroup之间的关系</a></li><li><a href=#pidscurrent--pidsmax的情况>pids.current > pids.max的情况</a></li><li><a href=#小结>小结</a></li></ul></li><li><a href=#2-cpu>2. cpu</a><ul><li><a href=#创建子-cgroup>创建子 cgroup</a></li><li><a href=#演示>演示</a></li><li><a href=#小结-1>小结</a></li></ul></li><li><a href=#3-memory>3. memory</a><ul><li><a href=#创建子cgroup-1>创建子cgroup</a></li><li><a href=#添加进程>添加进程</a></li><li><a href=#设置限额>设置限额</a></li><li><a href=#触发控制>触发控制</a></li><li><a href=#其他>其他</a></li><li><a href=#小结-2>小结</a></li></ul></li><li><a href=#4-参考>4. 参考</a></li></ul></nav></div></div><div class=content id=content><p>本章主要演示以下 cgroups 下各个 subsystem 的作用。</p><p>根据难易程度，依次演示了 pids 、cpu 和 memory 3 个 subsystem 的使用。</p><blockquote><p>注：本文所有操作在 Ubuntu20.04 下进行。</p></blockquote><blockquote><p>准备跟着《自己动手写 docker》这本书从零开始实现一个简易版的 docker，加深对 docker 的理解。</p><p>源码及相关教程见 <a href=https://github.com/lixd/mydocker target=_blank rel="noopener noreffer">Github</a>，欢迎 star。</p></blockquote><h2 id=1-pids>1. pids</h2><p><strong>pids subsystem 功能是限制cgroup及其所有子孙cgroup里面能创建的总的task数量</strong>。</p><blockquote><p>注意：这里的task指通过fork和clone函数创建的进程，由于clone函数也能创建线程（在Linux里面，线程是一种特殊的进程），所以这里的task也包含线程，本文统一以进程来代表task，即本文中的进程代表了进程和线程</p></blockquote><h3 id=创建子cgroup>创建子cgroup</h3><p>创建子cgroup，取名为test</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#进入目录/sys/fs/cgroup/pids/并新建一个目录，即创建了一个子cgroup</span>
+</span></span><span class=line><span class=cl>lixd  /home/lixd $ <span class=nb>cd</span> /sys/fs/cgroup/pids
+</span></span><span class=line><span class=cl>lixd  /sys/fs/cgroup/pids $ sudo mkdir <span class=nb>test</span>
+</span></span></code></pre></div><p>再来看看test目录下的文件</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>lixd  /sys/fs/cgroup/pids $ <span class=nb>cd</span> <span class=nb>test</span>
+</span></span><span class=line><span class=cl><span class=c1>#除了上一篇中介绍的那些文件外，多了两个文件</span>
+</span></span><span class=line><span class=cl> lixd  /sys/fs/cgroup/pids/test $ ls
+</span></span><span class=line><span class=cl>cgroup.clone_children  cgroup.procs  notify_on_release  pids.current  pids.events  pids.max  tasks
+</span></span></code></pre></div><p>下面是这两个文件的含义：</p><ul><li>pids.current: 表示当前cgroup及其所有子孙cgroup中现有的总的进程数量</li><li>pids.max: 当前cgroup及其所有子孙cgroup中所允许创建的总的最大进程数量</li></ul><h3 id=限制进程数>限制进程数</h3><p>首先是将当前bash加入到cgroup中，并修改<code>pids.max</code>的值，为了便于测试，这里就限制为1：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#--------------------------第一个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1># 将当前bash进程加入到该cgroup</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/pids/test# <span class=nb>echo</span> <span class=nv>$$</span> &gt; cgroup.procs
+</span></span><span class=line><span class=cl><span class=c1>#将pids.max设置为1，即当前cgroup只允许有一个进程</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/pids/test# <span class=nb>echo</span> <span class=m>1</span> &gt; pids.max
+</span></span></code></pre></div><p>由于 bash 已经占用了一个进程，所以此时 bash 中已经无法创建新的进程了：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/pids/test# ls
+</span></span><span class=line><span class=cl>bash: fork: retry: Resource temporarily unavailable
+</span></span><span class=line><span class=cl>bash: fork: retry: Resource temporarily unavailable
+</span></span><span class=line><span class=cl>bash: fork: retry: Resource temporarily unavailable
+</span></span></code></pre></div><p>创建新进程失败，于是命令运行失败，说明限制生效。</p><p>打开另一个 shell 查看</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl> lixd  /mnt/c/Users/意琦行 $ <span class=nb>cd</span> /sys/fs/cgroup/pids/test
+</span></span><span class=line><span class=cl> lixd  /sys/fs/cgroup/pids/test $ ls
+</span></span><span class=line><span class=cl>cgroup.clone_children  cgroup.procs  notify_on_release  pids.current  pids.events  pids.max  tasks
+</span></span><span class=line><span class=cl> lixd  /sys/fs/cgroup/pids/test $ cat pids.current
+</span></span><span class=line><span class=cl><span class=m>1</span>
+</span></span></code></pre></div><p>果然，pids.current 为 1，已经到 pids.max 的限制了。</p><h3 id=当前cgroup和子cgroup之间的关系>当前cgroup和子cgroup之间的关系</h3><p>当前cgroup中的pids.current和pids.max代表了当前cgroup及所有子孙cgroup的所有进程，所以子孙cgroup中的pids.max大小不能超过父cgroup中的大小。</p><p><strong>如果子cgroup中的pids.max设置的大于父cgroup里的大小，会怎么样？</strong></p><p>答案是子cgroup中的进程不光受子cgroup限制，还要受其父cgroup的限制。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#继续使用上面的两个窗口</span>
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第二个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#将pids.max设置成2</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ <span class=nb>echo</span> <span class=m>2</span> &gt; pids.max
+</span></span><span class=line><span class=cl><span class=c1>#在test下面创建一个子cgroup</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ mkdir subtest
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ <span class=nb>cd</span> subtest/
+</span></span><span class=line><span class=cl><span class=c1>#将subtest的pids.max设置为5</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test/subtest$ <span class=nb>echo</span> <span class=m>5</span> &gt; pids.max
+</span></span><span class=line><span class=cl><span class=c1>#将当前bash进程加入到subtest中</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test/subtest$ <span class=nb>echo</span> <span class=nv>$$</span> &gt; cgroup.procs
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第三个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#重新打开一个bash窗口，看一下test和subtest里面的数据</span>
+</span></span><span class=line><span class=cl><span class=c1>#test里面的数据如下：</span>
+</span></span><span class=line><span class=cl>dev@dev:~$ <span class=nb>cd</span> /sys/fs/cgroup/pids/test
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ cat pids.max
+</span></span><span class=line><span class=cl><span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=c1>#这里为2表示目前test和subtest里面总的进程数为2</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ cat pids.current
+</span></span><span class=line><span class=cl><span class=m>2</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ cat cgroup.procs
+</span></span><span class=line><span class=cl><span class=m>3083</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#subtest里面的数据如下：</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ cat subtest/pids.max
+</span></span><span class=line><span class=cl><span class=m>5</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ cat subtest/pids.current
+</span></span><span class=line><span class=cl><span class=m>1</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ cat subtest/cgroup.procs
+</span></span><span class=line><span class=cl><span class=m>3185</span>
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第一个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#回到第一个窗口，随便运行一个命令，由于test里面的pids.current已经等于pids.max了，</span>
+</span></span><span class=line><span class=cl><span class=c1>#所以创建新进程失败，于是命令运行失败，说明限制生效</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test$ ls
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: Resource temporarily unavailable
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第二个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#回到第二个窗口，随便运行一个命令，虽然subtest里面的pids.max还大于pids.current，</span>
+</span></span><span class=line><span class=cl><span class=c1>#但由于其父cgroup “test”里面的pids.current已经等于pids.max了，</span>
+</span></span><span class=line><span class=cl><span class=c1>#所以创建新进程失败，于是命令运行失败，说明子cgroup中的进程数不仅受自己的pids.max的限制，还受祖先cgroup的限制</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/pids/test/subtest$ ls
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: retry: No child processes
+</span></span><span class=line><span class=cl>-bash: fork: Resource temporarily unavailable
+</span></span></code></pre></div><h3 id=pidscurrent--pidsmax的情况>pids.current > pids.max的情况</h3><p>并不是所有情况下都是pids.max >= pids.current，在下面两种情况下，会出现pids.max &lt; pids.current 的情况：</p><ul><li>设置pids.max时，将其值设置的比pids.current小</li><li>将其他进程加入到当前cgroup有可能会导致pids.current > pids.max<ul><li>因为 pids.max 只会在当前cgroup中的进程fork、clone的时候生效，将其他进程加入到当前cgroup时，不会检测pids.max，所以可能触发这种情况</li></ul></li></ul><h3 id=小结>小结</h3><p>总的来说，pids subsystem 是比较简单的。</p><h2 id=2-cpu>2. cpu</h2><p>在cgroup里面，跟CPU相关的子系统有 <a href=https://www.kernel.org/doc/Documentation/cgroup-v1/cpusets.txt target=_blank rel="noopener noreffer">cpusets</a>、<a href=https://www.kernel.org/doc/Documentation/cgroup-v1/cpuacct.txt target=_blank rel="noopener noreffer">cpuacct </a>和 <a href=https://www.kernel.org/doc/Documentation/scheduler/sched-bwc.txt target=_blank rel="noopener noreffer">cpu</a>。</p><ul><li><p>其中 cpuset 主要用于设置 CPU 的亲和性，可以限制 cgroup 中的进程只能在指定的 CPU 上运行，或者不能在指定的 CPU上运行，同时 cpuset 还能设置内存的亲和性。设置亲和性一般只在比较特殊的情况才用得着，所以这里不做介绍。</p></li><li><p>cpuacct 包含当前 cgroup 所使用的 CPU 的统计信息，信息量较少，有兴趣可以去看看它的文档，这里不做介绍。</p></li></ul><p>本节只介绍 cpu 子系统，包括怎么限制 cgroup 的 CPU 使用上限及相对于其它 cgroup 的相对值。</p><h3 id=创建子-cgroup>创建子 cgroup</h3><p>通用是创建子目录即可。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1>#进入/sys/fs/cgroup/cpu并创建子cgroup</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu# <span class=nb>cd</span> /sys/fs/cgroup/cpu
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu# mkdir <span class=nb>test</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu# <span class=nb>cd</span> test/
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu/test# ls
+</span></span><span class=line><span class=cl>cgroup.clone_children  cpu.cfs_period_us  cpu.rt_period_us   cpu.shares  notify_on_release
+</span></span><span class=line><span class=cl>cgroup.procs           cpu.cfs_quota_us   cpu.rt_runtime_us  cpu.stat    tasks
+</span></span></code></pre></div><p>看起来文件比 memory subsystem 还是少一些。</p><p><strong>cpu.cfs_period_us & cpu.cfs_quota_us</strong>：两个文件配合起来设置CPU的使用上限，两个文件的单位都是微秒（us）。</p><ul><li>cfs_period_us：用来配置时间周期长度<ul><li>取值范围为1毫秒（ms）到1秒（s）</li></ul></li><li>cfs_quota_us：用来配置当前cgroup在设置的周期长度内所能使用的CPU时间数<ul><li>取值大于1ms即可</li><li>默认值为 -1，表示不受cpu时间的限制。</li></ul></li></ul><p><strong>cpu.shares</strong>用来设置CPU的相对值（比例），并且是针对所有的CPU（内核），默认值是1024。</p><blockquote><p>假如系统中有两个cgroup，分别是A和B，A的shares值是1024，B的shares值是512，那么A将获得1024/(1204+512)=66%的CPU资源，而B将获得33%的CPU资源。</p></blockquote><p>shares有两个特点：</p><ul><li>如果A不忙，没有使用到66%的CPU时间，那么剩余的CPU时间将会被系统分配给B，即B的CPU使用率可以超过33%</li><li>如果添加了一个新的cgroup C，且它的shares值是1024，那么A的限额变成了1024/(1204+512+1024)=40%，B的变成了20%</li></ul><p>从上面两个特点可以看出：</p><ul><li>在闲的时候，shares基本上不起作用，只有在CPU忙的时候起作用，这是一个优点。</li><li>由于shares是一个绝对值，需要和其它cgroup的值进行比较才能得到自己的相对限额，而在一个部署很多容器的机器上，cgroup的数量是变化的，所以这个限额也是变化的，自己设置了一个高的值，但别人可能设置了一个更高的值，所以这个功能没法精确的控制CPU使用率。</li></ul><p><strong>cpu.stat</strong>包含了下面三项统计结果：</p><ul><li>nr_periods： 表示过去了多少个cpu.cfs_period_us里面配置的时间周期</li><li>nr_throttled： 在上面的这些周期中，有多少次是受到了限制（即cgroup中的进程在指定的时间周期中用光了它的配额）</li><li>throttled_time: cgroup中的进程被限制使用CPU持续了多长时间(纳秒)</li></ul><h3 id=演示>演示</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#继续使用上面创建的子cgroup： test</span>
+</span></span><span class=line><span class=cl><span class=c1>#设置只能使用1个cpu的20%的时间</span>
+</span></span><span class=line><span class=cl>dev@ubuntu:/sys/fs/cgroup/cpu,cpuacct/test$ sudo sh -c <span class=s2>&#34;echo 50000 &gt; cpu.cfs_period_us&#34;</span>
+</span></span><span class=line><span class=cl>dev@ubuntu:/sys/fs/cgroup/cpu,cpuacct/test$ sudo sh -c <span class=s2>&#34;echo 10000 &gt; cpu.cfs_quota_us&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#将当前bash加入到该cgroup</span>
+</span></span><span class=line><span class=cl>dev@ubuntu:/sys/fs/cgroup/cpu,cpuacct/test$ <span class=nb>echo</span> <span class=nv>$$</span>
+</span></span><span class=line><span class=cl><span class=m>5456</span>
+</span></span><span class=line><span class=cl>dev@ubuntu:/sys/fs/cgroup/cpu,cpuacct/test$ sudo sh -c <span class=s2>&#34;echo 5456 &gt; cgroup.procs&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#在bash中启动一个死循环来消耗cpu，正常情况下应该使用100%的cpu（即消耗一个内核）</span>
+</span></span><span class=line><span class=cl>dev@ubuntu:/sys/fs/cgroup/cpu,cpuacct/test$ <span class=k>while</span> :<span class=p>;</span> <span class=k>do</span> <span class=nb>echo</span> <span class=nb>test</span> &gt; /dev/null<span class=p>;</span> <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------重新打开一个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#通过top命令可以看到5456的CPU使用率为20%左右，说明被限制住了</span>
+</span></span><span class=line><span class=cl><span class=c1>#不过这时系统的%us+%sy在10%左右，那是因为我测试的机器上cpu是双核的，</span>
+</span></span><span class=line><span class=cl><span class=c1>#所以系统整体的cpu使用率为10%左右</span>
+</span></span><span class=line><span class=cl>dev@ubuntu:~$ top
+</span></span><span class=line><span class=cl>Tasks: <span class=m>139</span> total,   <span class=m>2</span> running, <span class=m>137</span> sleeping,   <span class=m>0</span> stopped,   <span class=m>0</span> zombie
+</span></span><span class=line><span class=cl>%Cpu<span class=o>(</span>s<span class=o>)</span>:  5.6 us,  6.2 sy,  0.0 ni, 88.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+</span></span><span class=line><span class=cl>KiB Mem :   <span class=m>499984</span> total,    <span class=m>15472</span> free,    <span class=m>81488</span> used,   <span class=m>403024</span> buff/cache
+</span></span><span class=line><span class=cl>KiB Swap:        <span class=m>0</span> total,        <span class=m>0</span> free,        <span class=m>0</span> used.   <span class=m>383332</span> avail Mem
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+</span></span><span class=line><span class=cl> <span class=m>5456</span> dev       <span class=m>20</span>   <span class=m>0</span>   <span class=m>22640</span>   <span class=m>5472</span>   <span class=m>3524</span> R  20.3  1.1   0:04.62 bash
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#这时可以看到被限制的统计结果</span>
+</span></span><span class=line><span class=cl>dev@ubuntu:~$ cat /sys/fs/cgroup/cpu,cpuacct/test/cpu.stat
+</span></span><span class=line><span class=cl>nr_periods <span class=m>1436</span>
+</span></span><span class=line><span class=cl>nr_throttled <span class=m>1304</span>
+</span></span><span class=line><span class=cl>throttled_time <span class=m>51542291833</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># cfs_period_us 值为 10W</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu/test# cat cpu.cfs_period_us
+</span></span><span class=line><span class=cl><span class=m>100000</span>
+</span></span><span class=line><span class=cl><span class=c1># 往 cfs_quota_us 写入 20000，即限制只能使用20%cpu</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu/test# <span class=nb>echo</span> <span class=m>20000</span> &gt; cpu.cfs_quota_us
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 新开一个窗口，运行一个死循环</span>
+</span></span><span class=line><span class=cl>$ <span class=k>while</span> : <span class=p>;</span> <span class=k>do</span> : <span class=p>;</span> <span class=k>done</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span> <span class=m>519</span>
+</span></span><span class=line><span class=cl><span class=c1># top 看一下 cpu 占用率，果然是100%了</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+</span></span><span class=line><span class=cl>  <span class=m>519</span> lixd      <span class=m>25</span>   <span class=m>5</span>   <span class=m>13444</span>   <span class=m>2912</span>      <span class=m>0</span> R 100.0   0.0   0:05.66 zsh   
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 回到第一个shell窗口，限制当前进程的cpu使用率</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu/test# <span class=nb>echo</span> <span class=m>519</span> &gt;&gt; cgroup.procs
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 再切回第二个窗口，发现519进程的cpu已经降到20%了，说明限制生效了</span>
+</span></span><span class=line><span class=cl>  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+</span></span><span class=line><span class=cl>  <span class=m>519</span> lixd      <span class=m>25</span>   <span class=m>5</span>   <span class=m>13444</span>   <span class=m>2912</span>      <span class=m>0</span> R  20.0   0.0   0:31.86 zsh  
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl><span class=c1># 查看被限制的统计结果</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu/test# cat cpu.stat
+</span></span><span class=line><span class=cl>nr_periods <span class=m>2090</span>
+</span></span><span class=line><span class=cl>nr_throttled <span class=m>2088</span>
+</span></span><span class=line><span class=cl>throttled_time <span class=m>166752684900</span>
+</span></span></code></pre></div><h3 id=小结-1>小结</h3><p>使用 cgroup 限制 CPU 的使用率比较纠结，用 cfs_period_us & cfs_quota_us 吧，限制死了，没法充分利用空闲的 CPU，用 shares 吧，又没法配置百分比，极其难控制。总之，使用 cgroup 的 cpu 子系统需谨慎。</p><h2 id=3-memory>3. memory</h2><p>相比之下 memory subsystem 就要复杂许多。</p><p><strong>为什么需要内存控制</strong></p><ul><li>站在一个普通Linux开发者的角度，如果能控制一个或者一组进程所能使用的内存数，那么就算代码有bug，内存泄漏也不会对系统造成影响，因为可以设置内存使用量的上限，当到达这个值之后可以将进程重启。</li><li>站在一个系统管理者的角度，如果能限制每组进程所能使用的内存量，那么不管程序的质量如何，都能将它们对系统的影响降到最低，从而保证整个系统的稳定性。</li></ul><p><strong>内存控制能控制些什么？</strong></p><ul><li>限制cgroup中所有进程所能使用的物理内存总量</li><li>限制cgroup中所有进程所能使用的物理内存+交换空间总量(CONFIG_MEMCG_SWAP)： 一般在server上，不太会用到swap空间，所以不在这里介绍这部分内容。</li><li>限制cgroup中所有进程所能使用的内核内存总量及其它一些内核资源(CONFIG_MEMCG_KMEM)： 限制内核内存有什么用呢？其实限制内核内存就是限制当前cgroup所能使用的内核资源，比如进程的内核栈空间，socket所占用的内存空间等，通过限制内核内存，当内存吃紧时，可以阻止当前cgroup继续创建进程以及向内核申请分配更多的内核资源。由于这块功能被使用的较少，本篇中也不对它做介绍。</li></ul><h3 id=创建子cgroup-1>创建子cgroup</h3><p>在/sys/fs/cgroup/memory下创建一个子目录即创建了一个子cgroup</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory# <span class=nb>cd</span> /sys/fs/cgroup/memory
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory# mkdir <span class=nb>test</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory# ls test/
+</span></span><span class=line><span class=cl>cgroup.clone_children           memory.kmem.tcp.max_usage_in_bytes  memory.oom_control
+</span></span><span class=line><span class=cl>cgroup.event_control            memory.kmem.tcp.usage_in_bytes      memory.pressure_level
+</span></span><span class=line><span class=cl>cgroup.procs                    memory.kmem.usage_in_bytes          memory.soft_limit_in_bytes
+</span></span><span class=line><span class=cl>memory.failcnt                  memory.limit_in_bytes               memory.stat
+</span></span><span class=line><span class=cl>memory.force_empty              memory.max_usage_in_bytes           memory.swappiness
+</span></span><span class=line><span class=cl>memory.kmem.failcnt             memory.memsw.failcnt                memory.usage_in_bytes
+</span></span><span class=line><span class=cl>memory.kmem.limit_in_bytes      memory.memsw.limit_in_bytes         memory.use_hierarchy
+</span></span><span class=line><span class=cl>memory.kmem.max_usage_in_bytes  memory.memsw.max_usage_in_bytes     notify_on_release
+</span></span><span class=line><span class=cl>memory.kmem.tcp.failcnt         memory.memsw.usage_in_bytes         tasks
+</span></span><span class=line><span class=cl>memory.kmem.tcp.limit_in_bytes  memory.move_charge_at_immigrate
+</span></span></code></pre></div><p>从上面ls的输出可以看出，除了每个cgroup都有的那几个文件外，和memory相关的文件还不少,这里先做个大概介绍(kernel相关的文件除外)，后面会详细介绍每个文件的作用：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl> cgroup.event_control       <span class=c1>#用于eventfd的接口</span>
+</span></span><span class=line><span class=cl> memory.usage_in_bytes      <span class=c1>#显示当前已用的内存</span>
+</span></span><span class=line><span class=cl> memory.limit_in_bytes      <span class=c1>#设置/显示当前限制的内存额度</span>
+</span></span><span class=line><span class=cl> memory.failcnt             <span class=c1>#显示内存使用量达到限制值的次数</span>
+</span></span><span class=line><span class=cl> memory.max_usage_in_bytes  <span class=c1>#历史内存最大使用量</span>
+</span></span><span class=line><span class=cl> memory.soft_limit_in_bytes <span class=c1>#设置/显示当前限制的内存软额度</span>
+</span></span><span class=line><span class=cl> memory.stat                <span class=c1>#显示当前cgroup的内存使用情况</span>
+</span></span><span class=line><span class=cl> memory.use_hierarchy       <span class=c1>#设置/显示是否将子cgroup的内存使用情况统计到当前cgroup里面</span>
+</span></span><span class=line><span class=cl> memory.force_empty         <span class=c1>#触发系统立即尽可能的回收当前cgroup中可以回收的内存</span>
+</span></span><span class=line><span class=cl> memory.pressure_level      <span class=c1>#设置内存压力的通知事件，配合cgroup.event_control一起使用</span>
+</span></span><span class=line><span class=cl> memory.swappiness          <span class=c1>#设置和显示当前的swappiness</span>
+</span></span><span class=line><span class=cl> memory.move_charge_at_immigrate <span class=c1>#设置当进程移动到其他cgroup中时，它所占用的内存是否也随着移动过去</span>
+</span></span><span class=line><span class=cl> memory.oom_control         <span class=c1>#设置/显示oom controls相关的配置</span>
+</span></span><span class=line><span class=cl> memory.numa_stat           <span class=c1>#显示numa相关的内存</span>
+</span></span></code></pre></div><h3 id=添加进程>添加进程</h3><p>也是往cgroup中添加进程只要将进程号写入cgroup.procs就可以了。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#重新打开一个shell窗口，避免相互影响</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:~# <span class=nb>cd</span> /sys/fs/cgroup/memory/test/
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> <span class=nv>$$</span> &gt;&gt; cgroup.procs
+</span></span><span class=line><span class=cl><span class=c1>#运行top命令，这样这个cgroup消耗的内存会多点，便于观察</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# top
+</span></span><span class=line><span class=cl><span class=c1># 后续操作不再在这个窗口进行，避免在这个bash中运行进程影响cgropu里面的进程数及相关统计</span>
+</span></span></code></pre></div><h3 id=设置限额>设置限额</h3><p>设置限额很简单，写文件memory.limit_in_bytes就可以了。</p><ul><li>echo 1M > memory.limit_in_bytes：限制只能用1M内存</li><li>echo -1 > memory.limit_in_bytes：-1则是不限制</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#回到第一个shell窗口</span>
+</span></span><span class=line><span class=cl><span class=c1>#开始设置之前，看看当前使用的内存数量，这里的单位是字节</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.usage_in_bytes
+</span></span><span class=line><span class=cl><span class=m>2379776</span>
+</span></span><span class=line><span class=cl><span class=c1>#设置1M的限额</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> 1M &gt; memory.limit_in_bytes
+</span></span><span class=line><span class=cl><span class=c1>#设置完之后记得要查看一下这个文件，因为内核要考虑页对齐, 所以生效的数量不一定完全等于设置的数量</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.usage_in_bytes
+</span></span><span class=line><span class=cl><span class=m>950272</span>
+</span></span><span class=line><span class=cl><span class=c1>#如果不再需要限制这个cgroup，写-1到文件memory.limit_in_bytes即可</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> -1 &gt; memory.limit_in_bytes
+</span></span><span class=line><span class=cl><span class=c1>#这时可以看到limit被设置成了一个很大的数字</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.limit_in_bytes
+</span></span><span class=line><span class=cl><span class=m>9223372036854771712</span>
+</span></span></code></pre></div><p><strong>如果设置的限额比当前已经使用的内存少呢？</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# free -h
+</span></span><span class=line><span class=cl>              total        used        free      shared  buff/cache   available
+</span></span><span class=line><span class=cl>Mem:          7.7Gi       253Mi       7.4Gi       0.0Ki        95Mi       7.3Gi
+</span></span><span class=line><span class=cl>Swap:         2.0Gi       0.0Ki       2.0Gi
+</span></span><span class=line><span class=cl><span class=c1># 此时用了 1232K</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.usage_in_bytes
+</span></span><span class=line><span class=cl><span class=m>1232896</span>
+</span></span><span class=line><span class=cl><span class=c1># 限制成500K</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> 500k &gt; memory.limit_in_bytes
+</span></span><span class=line><span class=cl><span class=c1># 再次查看发现现在只用了401K</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.usage_in_bytes
+</span></span><span class=line><span class=cl><span class=m>401408</span>
+</span></span><span class=line><span class=cl><span class=c1># 发现swap多了1M，说明另外的数据被转移到swap上了</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# free -h
+</span></span><span class=line><span class=cl>              total        used        free      shared  buff/cache   available
+</span></span><span class=line><span class=cl>Mem:          7.7Gi       254Mi       7.4Gi       0.0Ki        94Mi       7.3Gi
+</span></span><span class=line><span class=cl>Swap:         2.0Gi       1.0Mi       2.0Gi
+</span></span><span class=line><span class=cl><span class=c1>#这个时候再来看failcnt，发现有381次之多(隔几秒再看这个文件，发现次数在增长)</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.failcnt
+</span></span><span class=line><span class=cl><span class=m>381</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.failcnt
+</span></span><span class=line><span class=cl><span class=m>385</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#再看看memory.stat（这里只显示部分内容），发现物理内存用了400K，</span>
+</span></span><span class=line><span class=cl><span class=c1>#但有很多pgmajfault以及pgpgin和pgpgout，说明发生了很多的swap in和swap out</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.stat
+</span></span><span class=line><span class=cl>swap <span class=m>946176</span> <span class=c1># 946K 差不多刚好是内存中少的量</span>
+</span></span><span class=line><span class=cl>pgpgin <span class=m>30492</span>
+</span></span><span class=line><span class=cl>pgpgout <span class=m>30443</span>
+</span></span><span class=line><span class=cl>pgfault <span class=m>23859</span>
+</span></span><span class=line><span class=cl>pgmajfault <span class=m>12507</span>
+</span></span></code></pre></div><p>从上面的结果可以看出，当物理内存不够时，就会触发memory.failcnt里面的数量加1，但进程不会被kill掉，那是因为内核会尝试将物理内存中的数据移动到swap空间中，从而让内存分配成功。</p><p><strong>如果设置的限额过小，就算swap out部分内存后还是不够会怎么样？</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#--------------------------第一个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1># 限制到100k</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> 100K &gt; memory.limit_in_bytes
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第二个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1># 尝试执行 top 发现刚运行就被Kill了</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# top
+</span></span><span class=line><span class=cl>Killed
+</span></span></code></pre></div><p>从上面的这些测试可以看出，一旦设置了内存限制，将立即生效，并且当物理内存使用量达到limit的时候，memory.failcnt的内容会加1，但这时进程不一定就会</p><p>被kill掉，内核会尽量将物理内存中的数据移到swap空间上去，如果实在是没办法移动了（设置的limit过小，或者swap空间不足），默认情况下，就会kill掉</p><p>cgroup里面继续申请内存的进程。</p><h3 id=触发控制>触发控制</h3><p>通过修改<code>memory.oom_control</code>文件，可以控制 subsystem 在物理内存达到上限时的行为。文件中包含以下3个参数：</p><ul><li>oom_kill_disable：是否启用 oom kill<ul><li>0：关闭</li><li>1：开启</li></ul></li><li>under_oom：表示当前是否已经进入oom状态，也即是否有进程被暂停了。</li><li>oom_kill：oom 后是否执行 kill<ul><li>1：启动，oom 后直接 kill 掉对应进程</li><li>2：关闭：当内核无法给进程分配足够的内存时，将会暂停该进程直到有空余的内存之后再继续运行。同时会更新 under_oom 状态</li><li>注意：root cgroup的oom killer是不能被禁用的</li></ul></li></ul><p>为了演示OOM-killer的功能，创建了下面这样一个程序，用来向系统申请内存，它会每秒消耗1M的内存。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=err>#</span><span class=nx>include</span> <span class=p>&lt;</span><span class=nx>stdio</span><span class=p>.</span><span class=nx>h</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=err>#</span><span class=nx>include</span> <span class=p>&lt;</span><span class=nx>stdlib</span><span class=p>.</span><span class=nx>h</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=err>#</span><span class=nx>include</span> <span class=p>&lt;</span><span class=kt>string</span><span class=p>.</span><span class=nx>h</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=err>#</span><span class=nx>include</span> <span class=p>&lt;</span><span class=nx>unistd</span><span class=p>.</span><span class=nx>h</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=err>#</span><span class=nx>define</span> <span class=nf>MB</span> <span class=p>(</span><span class=mi>1024</span> <span class=o>*</span> <span class=mi>1024</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=nx>argc</span><span class=p>,</span> <span class=nx>char</span> <span class=o>*</span><span class=nx>argv</span><span class=p>[])</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>char</span> <span class=o>*</span><span class=nx>p</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=nx>i</span> <span class=p>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nf>while</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>p</span> <span class=p>=</span> <span class=p>(</span><span class=nx>char</span> <span class=o>*</span><span class=p>)</span><span class=nf>malloc</span><span class=p>(</span><span class=nx>MB</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>memset</span><span class=p>(</span><span class=nx>p</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=nx>MB</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%dM memory allocated\n&#34;</span><span class=p>,</span> <span class=o>++</span><span class=nx>i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>sleep</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>保存上面的程序到文件<code>~/mem-allocate.c</code>，然后编译并测试</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#--------------------------第一个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#编译上面的文件</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ gcc ~/mem-allocate.c -o ~/mem-allocate
+</span></span><span class=line><span class=cl><span class=c1>#设置内存限额为5M</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ sudo sh -c <span class=s2>&#34;echo 5M &gt; memory.limit_in_bytes&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1>#将当前bash加入到test中，这样这个bash创建的所有进程都会自动加入到test中</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ sudo sh -c <span class=s2>&#34;echo </span><span class=nv>$$</span><span class=s2> &gt;&gt; cgroup.procs&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1>#默认情况下，memory.oom_control的值为0，即默认启用oom killer</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ cat memory.oom_control
+</span></span><span class=line><span class=cl>oom_kill_disable <span class=m>0</span>
+</span></span><span class=line><span class=cl>under_oom <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=c1>#为了避免受swap空间的影响，设置swappiness为0来禁止当前cgroup使用swap</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ sudo sh -c <span class=s2>&#34;echo 0 &gt; memory.swappiness&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1>#当分配第5M内存时，由于总内存量超过了5M，所以进程被kill了</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ ~/mem-allocate
+</span></span><span class=line><span class=cl>1M memory allocated
+</span></span><span class=line><span class=cl>2M memory allocated
+</span></span><span class=line><span class=cl>3M memory allocated
+</span></span><span class=line><span class=cl>4M memory allocated
+</span></span><span class=line><span class=cl>Killed
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#设置oom_control为1，这样内存达到限额的时候会暂停</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ sudo sh -c <span class=s2>&#34;echo 1 &gt;&gt; memory.oom_control&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1>#跟预期的一样，程序被暂停了</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ ~/mem-allocate
+</span></span><span class=line><span class=cl>1M memory allocated
+</span></span><span class=line><span class=cl>2M memory allocated
+</span></span><span class=line><span class=cl>3M memory allocated
+</span></span><span class=line><span class=cl>4M memory allocated
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第二个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#再打开一个窗口</span>
+</span></span><span class=line><span class=cl>dev@dev:~$ <span class=nb>cd</span> /sys/fs/cgroup/memory/test/
+</span></span><span class=line><span class=cl><span class=c1>#这时候可以看到memory.oom_control里面under_oom的值为1，表示当前已经oom了</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ cat memory.oom_control
+</span></span><span class=line><span class=cl>oom_kill_disable <span class=m>1</span>
+</span></span><span class=line><span class=cl>under_oom <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=c1>#修改test的额度为7M</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ sudo sh -c <span class=s2>&#34;echo 7M &gt; memory.limit_in_bytes&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第一个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#再回到第一个窗口，会发现进程mem-allocate继续执行了两步，然后暂停在6M那里了</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ ~/mem-allocate
+</span></span><span class=line><span class=cl>1M memory allocated
+</span></span><span class=line><span class=cl>2M memory allocated
+</span></span><span class=line><span class=cl>3M memory allocated
+</span></span><span class=line><span class=cl>4M memory allocated
+</span></span><span class=line><span class=cl>5M memory allocated
+</span></span><span class=line><span class=cl>6M memory allocated
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 创建上面的文件并编译</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# vim ~/mem-allocate.c
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# gcc ~/mem-allocate.c -o ~/mem-allocate
+</span></span><span class=line><span class=cl><span class=c1># 限制5M的上限</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> 5M &gt; memory.limit_in_bytes
+</span></span><span class=line><span class=cl><span class=c1>#将当前bash加入到test中，这样这个bash创建的所有进程都会自动加入到test中</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> <span class=nv>$$</span> &gt;&gt; cgroup.procs
+</span></span><span class=line><span class=cl><span class=c1>#默认情况下，会启用oom killer</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.oom_control
+</span></span><span class=line><span class=cl>oom_kill_disable <span class=m>0</span>
+</span></span><span class=line><span class=cl>under_oom <span class=m>0</span>
+</span></span><span class=line><span class=cl>oom_kill <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=c1>#为了避免受swap空间的影响，设置swappiness为0来禁止当前cgroup使用swap</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> <span class=m>0</span> &gt; memory.swappiness
+</span></span><span class=line><span class=cl><span class=c1>#当分配第5M内存时，由于总内存量超过了5M，所以进程被kill了</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# ~/mem-allocate
+</span></span><span class=line><span class=cl>1M memory allocated
+</span></span><span class=line><span class=cl>2M memory allocated
+</span></span><span class=line><span class=cl>3M memory allocated
+</span></span><span class=line><span class=cl>4M memory allocated
+</span></span><span class=line><span class=cl>Killed
+</span></span><span class=line><span class=cl><span class=c1>#设置oom_control为1，这样内存达到限额的时候会暂停</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> <span class=m>1</span> &gt;&gt; memory.oom_control
+</span></span><span class=line><span class=cl><span class=c1>#跟预期的一样，程序被暂停了</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# ~/mem-allocate
+</span></span><span class=line><span class=cl>1M memory allocated
+</span></span><span class=line><span class=cl>2M memory allocated
+</span></span><span class=line><span class=cl>3M memory allocated
+</span></span><span class=line><span class=cl>4M memory allocated
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#--------------------------第二个shell窗口----------------------</span>
+</span></span><span class=line><span class=cl><span class=c1>#再打开一个窗口</span>
+</span></span><span class=line><span class=cl>dev@dev:~$ <span class=nb>cd</span> /sys/fs/cgroup/memory/test/
+</span></span><span class=line><span class=cl><span class=c1>#这时候可以看到memory.oom_control里面under_oom的值为1，表示当前已经oom了</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# cat memory.oom_control
+</span></span><span class=line><span class=cl>oom_kill_disable <span class=m>1</span>
+</span></span><span class=line><span class=cl>under_oom <span class=m>1</span>
+</span></span><span class=line><span class=cl>oom_kill <span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=c1>#修改test的额度为7M</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# <span class=nb>echo</span> 7M &gt; memory.limit_in_bytes
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 切换会第一个窗口，发送程序又跑了两步，停在了6M</span>
+</span></span><span class=line><span class=cl>root@DESKTOP-9K4GB6E:/sys/fs/cgroup/memory/test# ~/mem-allocate
+</span></span><span class=line><span class=cl>1M memory allocated
+</span></span><span class=line><span class=cl>2M memory allocated
+</span></span><span class=line><span class=cl>3M memory allocated
+</span></span><span class=line><span class=cl>4M memory allocated
+</span></span><span class=line><span class=cl>5M memory allocated
+</span></span><span class=line><span class=cl>6M memory allocated
+</span></span></code></pre></div><h3 id=其他>其他</h3><h4 id=进程迁移migration>进程迁移（migration）</h4><p>当一个进程从一个cgroup移动到另一个cgroup时，默认情况下，该进程已经占用的内存还是统计在原来的cgroup里面，不会占用新cgroup的配额，但新分配的内存会统计到新的cgroup中（包括swap out到交换空间后再swap in到物理内存中的部分）。</p><p>我们可以通过设置memory.move_charge_at_immigrate让进程所占用的内存随着进程的迁移一起迁移到新的cgroup中。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>enable： <span class=nb>echo</span> <span class=m>1</span> &gt; memory.move_charge_at_immigrate
+</span></span><span class=line><span class=cl>disable：echo <span class=m>0</span> &gt; memory.move_charge_at_immigrate
+</span></span></code></pre></div><blockquote><p>注意: 就算设置为1，但如果不是thread group的leader，这个task占用的内存也不能被迁移过去。换句话说，如果以线程为单位进行迁移，必须是进程的第一个线程，如果以进程为单位进行迁移，就没有这个问题。</p></blockquote><p>当memory.move_charge_at_immigrate被设置成1之后，进程占用的内存将会被统计到目的cgroup中，如果目的cgroup没有足够的内存，系统将尝试回收目的cgroup的部分内存（和系统内存紧张时的机制一样，删除不常用的file backed的内存或者swap out到交换空间上，请参考<a href=https://segmentfault.com/a/1190000008125006 target=_blank rel="noopener noreffer">Linux内存管理</a>），如果回收不成功，那么进程迁移将失败。</p><blockquote><p>注意：迁移内存占用数据是比较耗时的操作。</p></blockquote><h4 id=移除cgroup>移除cgroup</h4><p>当memory.move_charge_at_immigrate为0时，就算当前cgroup中里面的进程都已经移动到其它cgropu中去了，由于进程已经占用的内存没有被统计过去，当前cgroup有可能还占用很多内存，当移除该cgroup时，占用的内存需要统计到谁头上呢？答案是依赖memory.use_hierarchy的值，如果该值为0，将会统计到root cgroup里；如果值为1，将统计到它的父cgroup里面。</p><p><strong>force_empty</strong></p><p>当向memory.force_empty文件写入0时（echo 0 > memory.force_empty），将会立即触发系统尽可能的回收该cgroup占用的内存。该功能主要使用场景是移除cgroup前（cgroup中没有进程），先执行该命令，可以尽可能的回收该cgropu占用的内存，这样迁移内存的占用数据到父cgroup或者root cgroup时会快些。</p><p><strong>memory.swappiness</strong></p><p>该文件的值默认和全局的swappiness（/proc/sys/vm/swappiness）一样，修改该文件只对当前cgroup生效，其功能和全局的swappiness一样，请参考<a href=https://segmentfault.com/a/1190000008125116 target=_blank rel="noopener noreffer">Linux交换空间</a>中关于swappiness的介绍。</p><blockquote><p>注意：有一点和全局的swappiness不同，那就是如果这个文件被设置成0，就算系统配置的有交换空间，当前cgroup也不会使用交换空间。</p></blockquote><p><strong>memory.use_hierarchy</strong></p><p>该文件内容为0时，表示不使用继承，即父子cgroup之间没有关系；当该文件内容为1时，子cgroup所占用的内存会统计到所有祖先cgroup中。</p><p>如果该文件内容为1，当一个cgroup内存吃紧时，会触发系统回收它以及它所有子孙cgroup的内存。</p><blockquote><p>注意: 当该cgroup下面有子cgroup或者父cgroup已经将该文件设置成了1，那么当前cgroup中的该文件就不能被修改。</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1>#当前cgroup和父cgroup里都是1</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ cat memory.use_hierarchy
+</span></span><span class=line><span class=cl><span class=m>1</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ cat ../memory.use_hierarchy
+</span></span><span class=line><span class=cl><span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#由于父cgroup里面的值为1，所以修改当前cgroup的值失败</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ sudo sh -c <span class=s2>&#34;echo 0 &gt; ./memory.use_hierarchy&#34;</span>
+</span></span><span class=line><span class=cl>sh: echo: I/O error
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#由于父cgroup里面有子cgroup（至少有当前cgroup这么一个子cgroup），</span>
+</span></span><span class=line><span class=cl><span class=c1>#修改父cgroup里面的值也失败</span>
+</span></span><span class=line><span class=cl>dev@dev:/sys/fs/cgroup/memory/test$ sudo sh -c <span class=s2>&#34;echo 0 &gt; ../memory.use_hierarchy&#34;</span>
+</span></span><span class=line><span class=cl>sh: echo: I/O error
+</span></span></code></pre></div><p><strong>memory.soft_limit_in_bytes</strong></p><p>有了hard limit（memory.limit_in_bytes），为什么还要soft limit呢？hard limit是一个硬性标准，绝对不能超过这个值，而soft limit可以被超越，既然能被超越，要这个配置还有啥用？先看看它的特点</p><ol><li>当系统内存充裕时，soft limit不起任何作用</li><li>当系统内存吃紧时，系统会尽量的将cgroup的内存限制在soft limit值之下（内核会尽量，但不100%保证）</li></ol><p>从它的特点可以看出，它的作用主要发生在系统内存吃紧时，如果没有soft limit，那么所有的cgroup一起竞争内存资源，占用内存多的cgroup不会让着内存占用少的cgroup，这样就会出现某些cgroup内存饥饿的情况。如果配置了soft limit，那么当系统内存吃紧时，系统会让超过soft limit的cgroup释放出超过soft limit的那部分内存（有可能更多），这样其它cgroup就有了更多的机会分配到内存。</p><p>从上面的分析看出，这其实是系统内存不足时的一种妥协机制，给次等重要的进程设置soft limit，当系统内存吃紧时，把机会让给其它重要的进程。</p><blockquote><p>注意： 当系统内存吃紧且cgroup达到soft limit时，系统为了把当前cgroup的内存使用量控制在soft limit下，在收到当前cgroup新的内存分配请求时，就会触发回收内存操作，所以一旦到达这个状态，就会频繁的触发对当前cgroup的内存回收操作，会严重影响当前cgroup的性能。</p></blockquote><p><strong>memory.pressure_level</strong></p><p>这个文件主要用来监控当前cgroup的内存压力，当内存压力大时（即已使用内存快达到设置的限额），在分配内存之前需要先回收部分内存，从而影响内存分配速度，影响性能，而通过监控当前cgroup的内存压力，可以在有压力的时候采取一定的行动来改善当前cgroup的性能，比如关闭当前cgroup中不重要的服务等。目前有三种压力水平：</p><ul><li><p>low</p><ul><li>意味着系统在开始为当前cgroup分配内存之前，需要先回收内存中的数据了，这时候回收的是在磁盘上有对应文件的内存数据。</li></ul></li><li><p>medium</p><ul><li>意味着系统已经开始频繁为当前cgroup使用交换空间了。</li></ul></li><li><p>critical</p><ul><li>快撑不住了，系统随时有可能kill掉cgroup中的进程。</li></ul></li></ul><p>如何配置相关的监听事件呢？和memory.oom_control类似，大概步骤如下：</p><ol><li>利用函数eventfd(2)创建一个event_fd</li><li>打开文件memory.pressure_level，得到pressure_level_fd</li><li>往cgroup.event_control中写入这么一串：<code>&lt;event_fd> &lt;pressure_level_fd> &lt;level></code></li><li>然后通过读event_fd得到通知</li></ol><blockquote><p>注意： 多个level可能要创建多个event_fd，好像没有办法共用一个（本人没有测试过）</p></blockquote><p><strong>Memory thresholds</strong></p><p>我们可以通过cgroup的事件通知机制来实现对内存的监控，当内存使用量穿过（变得高于或者低于）我们设置的值时，就会收到通知。使用方法和memory.oom_control类似，大概步骤如下：</p><ol><li>利用函数eventfd(2)创建一个event_fd</li><li>打开文件memory.usage_in_bytes，得到usage_in_bytes_fd</li><li>往cgroup.event_control中写入这么一串：<code>&lt;event_fd> &lt;usage_in_bytes_fd> &lt;threshold></code></li><li>然后通过读event_fd得到通知</li></ol><p><strong>stat file</strong></p><p>这个文件包含的统计项比较细，需要一些内核的内存管理知识才能看懂，这里就不介绍了（怕说错）。详细信息可以参考<a href=https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt target=_blank rel="noopener noreffer">Memory Resource Controller</a>中的“5.2 stat file”。这里有几个需要注意的地方：</p><ul><li>里面total开头的统计项包含了子cgroup的数据（前提条件是memory.use_hierarchy等于1）。</li><li>里面的&rsquo;rss + file_mapped"才约等于是我们常说的RSS（ps aux命令看到的RSS）</li><li>文件（动态库和可执行文件）及共享内存可以在多个进程之间共享，不过它们只会统计到他们的owner cgroup中的file_mapped去。（不确定是怎么定义owner的，但如果看到当前cgroup的file_mapped值很小，说明共享的数据没有算到它头上，而是其它的cgroup）</li></ul><h3 id=小结-2>小结</h3><p>本节没有介绍 swap 和 kernel 相关的内容，不过在实际使用过程中一定要留意 swap 空间，如果系统使用了交换空间，那么设置限额时一定要注意一点，那就是当 cgroup 的物理空间不够时，内核会将不常用的内存 swap out 到交换空间上，从而导致一直不触发 oom killer，而是不停的 swap out／in，导致 cgroup 中的进程运行速度很慢。</p><p>如果一定要用交换空间，最好的办法是限制 swap+物理内存 的额度，虽然我们在这篇中没有介绍这部分内容，但其使用方法和限制物理内存是一样的，只是换做写文件 memory.memsw.limit_in_bytes 罢了。</p><h2 id=4-参考>4. 参考</h2><p><a href=https://man7.org/linux/man-pages/man7/cgroups.7.html target=_blank rel="noopener noreffer">cgroups(7) — Linux manual page</a></p><p><a href=https://tech.meituan.com/2015/03/31/cgroups.html target=_blank rel="noopener noreffer">美团技术团队&mdash;Linux资源管理之cgroups简介</a></p><p><a href=https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/resource_management_guide/chap-introduction_to_control_groups target=_blank rel="noopener noreffer">Red Hat&mdash;资源管理指南</a></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2022-02-25</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://blog.yudlk.com/posts/docker/07-cgroups-2/ data-title=Docker教程(七)---Cgroups-2-subsystem演示 data-hashtags=Docker><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://blog.yudlk.com/posts/docker/07-cgroups-2/ data-hashtag=Docker><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://blog.yudlk.com/posts/docker/07-cgroups-2/ data-title=Docker教程(七)---Cgroups-2-subsystem演示><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://blog.yudlk.com/posts/docker/07-cgroups-2/ data-title=Docker教程(七)---Cgroups-2-subsystem演示><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://blog.yudlk.com/posts/docker/07-cgroups-2/ data-title=Docker教程(七)---Cgroups-2-subsystem演示><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/docker/>Docker</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/docker/06-cgroups-1/ class=prev rel=prev title=Docker教程(六)---Cgroups-1-初体验><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Docker教程(六)---Cgroups-1-初体验</a>
+<a href=/posts/docker/08-cgroups-3/ class=next rel=next title="Docker教程(八)---Cgroups-3-相关命令汇总及Go Demo">Docker教程(八)---Cgroups-3-相关命令汇总及Go Demo<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.100.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2018 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://github.com/lixd target=_blank>qpt</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a rel="license external nofollow noopener noreffer" href=https://beian.miit.gov.cn/ target=_blank>渝ICP备20005680号-1</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.480e58b2c2a8605d406f34667e92ff8f1ae50cfee5b653bead570f004839a983.js integrity="sha256-SA5YssKoYF1AbzRmfpL/jxrlDP7ltlO+rVcPAEg5qYM="></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-FL23FNP7CM',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-FL23FNP7CM" async></script><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?4b7c98449a6edf8492a8f3404e6d06a0",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7693630257897132" crossorigin=anonymous></script></body></html>

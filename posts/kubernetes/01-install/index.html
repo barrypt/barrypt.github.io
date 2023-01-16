@@ -1,0 +1,392 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd) -</title><meta name=Description content="使用 kubeadm 从头搭建一个使用 containerd 作为容器运行时的 Kubernetes 集群"><meta property="og:title" content="Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)"><meta property="og:description" content="使用 kubeadm 从头搭建一个使用 containerd 作为容器运行时的 Kubernetes 集群"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.yudlk.com/posts/kubernetes/01-install/"><meta property="og:image" content="https://blog.yudlk.com/img/jinx.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-05-28T00:00:00+00:00"><meta property="article:modified_time" content="2022-05-28T00:00:00+00:00"><meta property="og:site_name" content="qpt的个人博客"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.yudlk.com/img/jinx.png"><meta name=twitter:title content="Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)"><meta name=twitter:description content="使用 kubeadm 从头搭建一个使用 containerd 作为容器运行时的 Kubernetes 集群"><meta name=application-name content="指月小筑"><meta name=apple-mobile-web-app-title content="指月小筑"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://blog.yudlk.com/posts/kubernetes/01-install/><link rel=prev href=https://blog.yudlk.com/posts/docker/10-bridge-network/><link rel=next href=https://blog.yudlk.com/posts/kubernetes/09-volume/><link rel=stylesheet href=/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.yudlk.com\/posts\/kubernetes\/01-install\/"},"image":["https:\/\/blog.yudlk.com\/img\/jinx.png"],"genre":"posts","keywords":"Kubernetes","wordcount":4431,"url":"https:\/\/blog.yudlk.com\/posts\/kubernetes\/01-install\/","datePublished":"2022-05-28T00:00:00+00:00","dateModified":"2022-05-28T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"qpt"},"description":"使用 kubeadm 从头搭建一个使用 containerd 作为容器运行时的 Kubernetes 集群"}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/ title=指月小筑>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/ title=关于>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/posts/ title=指月小筑>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title=关于>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://github.com/lixd title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>qpt</a></span>&nbsp;<span class=post-category>included in <a href=/categories/kubernetes/><i class="far fa-folder fa-fw" aria-hidden=true></i>Kubernetes</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-05-28>2022-05-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;4431 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;9 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#0-安装-containerd>0. 安装 containerd</a><ul><li><a href=#1-安装>1. 安装</a></li><li><a href=#2-修改配置>2. 修改配置</a></li><li><a href=#3-测试>3. 测试</a></li></ul></li><li><a href=#1-k8s-环境准备>1. k8s 环境准备</a><ul><li><a href=#关闭交换空间>关闭交换空间</a></li><li><a href=#关闭防火墙>关闭防火墙</a></li><li><a href=#禁用-selinux>禁用 SELinux</a></li><li><a href=#允许-iptables-检查桥接流量>允许 iptables 检查桥接流量</a></li><li><a href=#配置-hosts>配置 hosts</a></li></ul></li><li><a href=#2-安装>2. 安装</a><ul><li><a href=#21-安装-kubeadmkubelet-和-kubectl>2.1 安装 kubeadm、kubelet 和 kubectl</a></li><li><a href=#22-初始化主节点>2.2 初始化主节点</a></li><li><a href=#23-node节点加入集群>2.3 Node节点加入集群</a></li><li><a href=#24-faq>2.4 FAQ</a></li></ul></li><li><a href=#3-安装-calicohttpsprojectcalicodocstigeraiogetting-startedkubernetesquickstart>3. 安装 <a href=https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart>Calico</a></a><ul><li><a href=#31-下载配置文件并拉取镜像>3.1 下载配置文件并拉取镜像</a></li><li><a href=#32-配置网卡名>3.2 配置网卡名</a></li><li><a href=#33-部署>3.3 部署</a></li><li><a href=#34-faq>3.4 FAQ</a></li></ul></li><li><a href=#4-检查集群状态>4. 检查集群状态</a></li><li><a href=#5-运行第一个容器实例>5. 运行第一个容器实例</a><ul><li><a href=#51-创建deployment>5.1 创建Deployment</a></li><li><a href=#52-创建-service>5.2 创建 Service</a></li><li><a href=#53-验证>5.3 验证</a></li><li><a href=#54-重置环境>5.4 重置环境</a></li></ul></li><li><a href=#6-相关文档>6. 相关文档</a></li></ul></nav></div></div><div class=content id=content><p>本文记录了使用 kubeadm 从头搭建一个使用 containerd 作为容器运行时的 Kubernetes 集群的过程。</p><blockquote><p>本文创建于 2021.3.12，更新于 2022.5.28</p><p>推荐使用 KubeClipper 来创建 k8s 集群，一条命令搞定：<a href=https://www.lixueduan.com/posts/kubernetes/11-install-by-kubeclipper/ target=_blank rel="noopener noreffer">Kubernetes教程(十一)&mdash;使用 KubeClipper 通过一条命令快速创建 k8s 集群</a></p></blockquote><p>本次实验用到的机器如下：</p><table><thead><tr><th style=text-align:center>主机名</th><th>系统版本</th><th>内核版本</th><th>配置</th><th style=text-align:center>IP</th><th style=text-align:center>角色</th></tr></thead><tbody><tr><td style=text-align:center>k8s-1</td><td>CentOS 7.9</td><td>5.18</td><td>2C4G</td><td style=text-align:center>192.168.2.131</td><td style=text-align:center>master</td></tr><tr><td style=text-align:center>k8s-2</td><td>CentOS 7.9</td><td>5.18</td><td>2C4G</td><td style=text-align:center>192.168.2.132</td><td style=text-align:center>worker</td></tr><tr><td style=text-align:center>k8s-3</td><td>CentOS 7.9</td><td>5.18</td><td>2C4G</td><td style=text-align:center>192.168.2.133</td><td style=text-align:center>worker</td></tr></tbody></table><blockquote><p>Linux Kernel 版本需要 <strong>4.x</strong> 以上,否则 calico 可能无法正常启动。</p></blockquote><p>软件版本</p><ul><li>containerd：1.5.11<ul><li>libseccomp 2.5.1</li></ul></li><li>k8s：1.23.5<ul><li>kubeadm</li><li>kubelet</li><li>kubectl</li></ul></li><li>calico：3.22</li></ul><blockquote><p>各个组件不同版本可能存在不兼容情况，调整组件版本时请注意。</p></blockquote><p>本文主要分为以下几个部分：</p><ul><li>1）安装 containerd(<strong>所有节点</strong>)</li><li>2）安装 kubeadm、kubelet、kubectl(<strong>所有节点</strong>)</li><li>3）初始化 master 节点(<strong>k8s-1</strong>)</li><li>4）加入到集群(<strong>k8s-2,k8s-3</strong>)</li><li>5）部署 calico(<strong>k8s-1</strong>)</li><li>6）k8s 简单体验(<strong>k8s-1</strong>)</li></ul><h2 id=0-安装-containerd>0. 安装 containerd</h2><blockquote><p>在<strong>所有节点</strong>上执行该步骤</p></blockquote><blockquote><p>containerd 官方文档 <a href=https://github.com/containerd/containerd/blob/c76559a6a965c6f606c4f6d1a68f38610961dfb1/docs/getting-started.md target=_blank rel="noopener noreffer">getting-started</a></p><p>k8s 官方文档 <a href=https://kubernetes.io/zh/docs/setup/production-environment/container-runtimes/#containerd target=_blank rel="noopener noreffer">container-runtimes#containerd</a></p></blockquote><h3 id=1-安装>1. 安装</h3><p>安装和配置的先决条件：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+</span></span></span><span class=line><span class=cl><span class=s>overlay
+</span></span></span><span class=line><span class=cl><span class=s>br_netfilter
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sudo modprobe overlay
+</span></span><span class=line><span class=cl>sudo modprobe br_netfilter
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 设置必需的 sysctl 参数，这些参数在重新启动后仍然存在。</span>
+</span></span><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+</span></span></span><span class=line><span class=cl><span class=s>net.bridge.bridge-nf-call-iptables  = 1
+</span></span></span><span class=line><span class=cl><span class=s>net.ipv4.ip_forward                 = 1
+</span></span></span><span class=line><span class=cl><span class=s>net.bridge.bridge-nf-call-ip6tables = 1
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 应用 sysctl 参数而无需重新启动</span>
+</span></span><span class=line><span class=cl>sudo sysctl --system
+</span></span></code></pre></div><h4 id=yum-方式>yum 方式</h4><p>安装<code>yum-utils</code>包（提供<code>yum-config-manager</code> 实用程序）并设置<strong>稳定</strong>的存储库。</p><blockquote><p>这部分参考如何安装 Docker：<a href=https://docs.docker.com/engine/install/centos/ target=_blank rel="noopener noreffer">在 CentOS 上安装 Docker 引擎</a>，安装的时候只安装 containerd 即可。</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo yum install -y yum-utils
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</span></span><span class=line><span class=cl>   
+</span></span><span class=line><span class=cl>yum install containerd -y
+</span></span></code></pre></div><h4 id=二进制方式>二进制方式</h4><p>这里我使用的系统是 <code>CentOS 7.9</code>，首先需要安装 <code>libseccomp</code> 依赖。</p><p>先查看系统有没有 libseccomp 软件包</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># rpm -qa | grep libseccomp</span>
+</span></span><span class=line><span class=cl>libseccomp-2.3.1-4.el7.x86_64
+</span></span></code></pre></div><p>centos 7.9 默认安装了 2.3 版本，不过太旧了需要升级</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 卸载原来的</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># rpm -e libseccomp-2.3.1-4.el7.x86_64 --nodeps</span>
+</span></span><span class=line><span class=cl><span class=c1>#下载高于2.4以上的包</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># wget http://rpmfind.net/linux/centos/8-stream/BaseOS/x86_64/os/Packages/libseccomp-2.5.1-1.el8.x86_64.rpm</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#安装</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># rpm -ivh libseccomp-2.5.1-1.el8.x86_64.rpm </span>
+</span></span><span class=line><span class=cl><span class=c1>#查看当前版本</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># rpm -qa | grep libseccomp</span>
+</span></span><span class=line><span class=cl>libseccomp-2.5.1-1.el8.x86_64
+</span></span></code></pre></div><p>然后去 containerd 的 <a href=https://github.com/containerd/containerd/releases target=_blank rel="noopener noreffer">release</a> 页面下载对应的压缩包。</p><p>有两种压缩包</p><ul><li><a href=https://github.com/containerd/containerd/releases/download/v1.5.11/containerd-1.5.11-linux-amd64.tar.gz target=_blank rel="noopener noreffer">containerd-1.5.11-linux-amd64.tar.gz</a><ul><li>单独的 containerd</li></ul></li><li><a href=https://github.com/containerd/containerd/releases/download/v1.5.11/cri-containerd-cni-1.5.11-linux-amd64.tar.gz target=_blank rel="noopener noreffer">cri-containerd-cni-1.5.11-linux-amd64.tar.gz</a><ul><li>containerd + runc</li></ul></li></ul><p>安装了 containerd 也要安装 runc，所以这里直接下载第二个打包好的就行。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>wget https://github.com/containerd/containerd/releases/download/v1.5.11/cri-containerd-cni-1.5.11-linux-amd64.tar.gz
+</span></span></code></pre></div><p>可以通过 tar 的 <code>-t</code> 选项直接看到压缩包中包含哪些文件：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@localhost ~<span class=o>]</span><span class=c1># tar -tf cri-containerd-cni-1.5.11-linux-amd64.tar.gz</span>
+</span></span><span class=line><span class=cl>etc/
+</span></span><span class=line><span class=cl>etc/cni/
+</span></span><span class=line><span class=cl>etc/cni/net.d/
+</span></span><span class=line><span class=cl>etc/cni/net.d/10-containerd-net.conflist
+</span></span><span class=line><span class=cl>etc/systemd/
+</span></span><span class=line><span class=cl>etc/systemd/system/
+</span></span><span class=line><span class=cl>etc/systemd/system/containerd.service
+</span></span><span class=line><span class=cl>etc/crictl.yaml
+</span></span><span class=line><span class=cl>usr/
+</span></span><span class=line><span class=cl>usr/local/
+</span></span><span class=line><span class=cl>usr/local/bin/
+</span></span><span class=line><span class=cl>usr/local/bin/containerd-shim-runc-v2
+</span></span><span class=line><span class=cl>usr/local/bin/containerd-shim
+</span></span><span class=line><span class=cl>usr/local/bin/crictl
+</span></span><span class=line><span class=cl>usr/local/bin/ctr
+</span></span><span class=line><span class=cl>usr/local/bin/containerd-shim-runc-v1
+</span></span><span class=line><span class=cl>usr/local/bin/containerd
+</span></span><span class=line><span class=cl>usr/local/bin/ctd-decoder
+</span></span><span class=line><span class=cl>usr/local/bin/critest
+</span></span><span class=line><span class=cl>usr/local/bin/containerd-stress
+</span></span><span class=line><span class=cl>usr/local/sbin/
+</span></span><span class=line><span class=cl>usr/local/sbin/runc
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></div><p>可以看到里面有 containerd 和 runc ，而且目录也是设置好了的，直接解压到各个目录中去，甚至不用手动配置环境变量。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>tar -C / -zxvf cri-containerd-cni-1.5.11-linux-amd64.tar.gz
+</span></span></code></pre></div><h3 id=2-修改配置>2. 修改配置</h3><p>生成默认 containerd 配置文件</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo mkdir -p /etc/containerd
+</span></span><span class=line><span class=cl><span class=c1># 生成默认配置文件并写入到 config.toml 中</span>
+</span></span><span class=line><span class=cl>containerd config default <span class=p>|</span> sudo tee /etc/containerd/config.toml
+</span></span></code></pre></div><p><strong>使用 <code>systemd</code> cgroup 驱动程序</strong></p><blockquote><p>注意：cri 使用的 cgroup 和 kubelet 使用的 cgroup 最好是一致的，如果使用 kubeadm 安装的那么 kubelet 也默认使用 systemd cgroup。</p></blockquote><p>结合 <code>runc</code> 使用 <code>systemd</code> cgroup 驱动，在 <code>/etc/containerd/config.toml</code> 中设置</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vim /etc/containerd/config.toml
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=c># 把配置文件中的 SystemdCgroup 修改为 true</span>
+</span></span><span class=line><span class=cl><span class=p>[</span><span class=nx>plugins</span><span class=p>.</span><span class=s2>&#34;io.containerd.grpc.v1.cri&#34;</span><span class=p>.</span><span class=nx>containerd</span><span class=p>.</span><span class=nx>runtimes</span><span class=p>.</span><span class=nx>runc</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>...</span>
+</span></span><span class=line><span class=cl>  <span class=p>[</span><span class=nx>plugins</span><span class=p>.</span><span class=s2>&#34;io.containerd.grpc.v1.cri&#34;</span><span class=p>.</span><span class=nx>containerd</span><span class=p>.</span><span class=nx>runtimes</span><span class=p>.</span><span class=nx>runc</span><span class=p>.</span><span class=nx>options</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=nx>SystemdCgroup</span> <span class=p>=</span> <span class=kc>true</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-BASH data-lang=BASH><span class=line><span class=cl><span class=c1>#一键替换</span>
+</span></span><span class=line><span class=cl>sed <span class=s1>&#39;s/SystemdCgroup = false/SystemdCgroup = true/g&#39;</span> /etc/containerd/config.toml
+</span></span></code></pre></div><p>用国内源替换 containerd 默认的 sand_box 镜像，编辑 /etc/containerd/config.toml</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>plugins<span class=o>]</span>
+</span></span><span class=line><span class=cl>  .....
+</span></span><span class=line><span class=cl>  <span class=o>[</span>plugins.<span class=s2>&#34;io.containerd.grpc.v1.cri&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>  	...
+</span></span><span class=line><span class=cl>	<span class=nv>sandbox_image</span> <span class=o>=</span> <span class=s2>&#34;registry.aliyuncs.com/google_containers/pause:3.5&#34;</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1>#一键替换</span>
+</span></span><span class=line><span class=cl><span class=c1># 需要对路径中的/ 进行转移，替换成\/</span>
+</span></span><span class=line><span class=cl>sed <span class=s1>&#39;s/k8s.gcr.io\/pause/registry.aliyuncs.com\/google_containers\/pause/g&#39;</span> /etc/containerd/config.toml
+</span></span></code></pre></div><p><strong>配置镜像加速器地址</strong></p><p>然后再为镜像仓库配置一个加速器，需要在 cri 配置块下面的 <code>registry</code> 配置块下面进行配置 <code>registry.mirrors</code>：（注意缩进）</p><blockquote><p>比较麻烦，只能手动替换了</p></blockquote><blockquote><p>镜像来源：<a href=https://github.com/muzi502/registry-mirrors target=_blank rel="noopener noreffer"> registry-mirrors</a></p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>plugins.<span class=s2>&#34;io.containerd.grpc.v1.cri&#34;</span>.registry<span class=o>]</span>
+</span></span><span class=line><span class=cl>  <span class=o>[</span>plugins.<span class=s2>&#34;io.containerd.grpc.v1.cri&#34;</span>.registry.mirrors<span class=o>]</span>
+</span></span><span class=line><span class=cl>  <span class=c1># 添加下面两个配置</span>
+</span></span><span class=line><span class=cl>    <span class=o>[</span>plugins.<span class=s2>&#34;io.containerd.grpc.v1.cri&#34;</span>.registry.mirrors.<span class=s2>&#34;docker.io&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=nv>endpoint</span> <span class=o>=</span> <span class=o>[</span><span class=s2>&#34;https://ekxinbbh.mirror.aliyuncs.com&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>    <span class=o>[</span>plugins.<span class=s2>&#34;io.containerd.grpc.v1.cri&#34;</span>.registry.mirrors.<span class=s2>&#34;k8s.gcr.io&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=nv>endpoint</span> <span class=o>=</span> <span class=o>[</span><span class=s2>&#34;https://gcr.k8s.li&#34;</span><span class=o>]</span>
+</span></span></code></pre></div><h3 id=3-测试>3. 测试</h3><p>启动 containerd</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>systemctl daemon-reload
+</span></span><span class=line><span class=cl>systemctl <span class=nb>enable</span> containerd --now
+</span></span></code></pre></div><p>启动完成后就可以使用 containerd 的本地 CLI 工具 <code>ctr</code> 和了，比如查看版本：</p><pre tabindex=0><code>ctr version
+</code></pre><h2 id=1-k8s-环境准备>1. k8s 环境准备</h2><blockquote><p>在<strong>所有节点</strong>上执行该步骤</p></blockquote><h3 id=关闭交换空间>关闭交换空间</h3><blockquote><p>不关则会出现以下错误：failed to run Kubelet: running with swap on is not supported, please disable swap!</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo swapoff -a
+</span></span><span class=line><span class=cl>sed -ri <span class=s1>&#39;s/.*swap.*/#&amp;/&#39;</span> /etc/fstab
+</span></span></code></pre></div><h3 id=关闭防火墙>关闭防火墙</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>systemctl stop firewalld <span class=o>&amp;&amp;</span> systemctl disable  firewalld
+</span></span><span class=line><span class=cl>systemctl stop NetworkManager <span class=o>&amp;&amp;</span> systemctl disable  NetworkManager
+</span></span></code></pre></div><h3 id=禁用-selinux>禁用 SELinux</h3><p>将 SELinux 设置为 permissive 模式（相当于将其禁用）， 这是允许容器访问主机文件系统所必需的</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo setenforce <span class=m>0</span>
+</span></span><span class=line><span class=cl>sudo sed -i <span class=s1>&#39;s/^SELINUX=enforcing$/SELINUX=permissive/&#39;</span> /etc/selinux/config
+</span></span></code></pre></div><h3 id=允许-iptables-检查桥接流量>允许 iptables 检查桥接流量</h3><p>确保 <code>br_netfilter</code> 模块被加载。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+</span></span></span><span class=line><span class=cl><span class=s>br_netfilter
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+</span></span></span><span class=line><span class=cl><span class=s>net.bridge.bridge-nf-call-ip6tables = 1
+</span></span></span><span class=line><span class=cl><span class=s>net.bridge.bridge-nf-call-iptables = 1
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>sudo sysctl --system
+</span></span></code></pre></div><h3 id=配置-hosts>配置 hosts</h3><blockquote><p>这里需要根据自己环境的节点 hostname 和 ip 来调整</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># hostnamectl set-hostname xxx 修改 hostname</span>
+</span></span><span class=line><span class=cl>cat &gt;&gt; /etc/hosts <span class=s>&lt;&lt; EOF
+</span></span></span><span class=line><span class=cl><span class=s>192.168.2.131 k8s-1
+</span></span></span><span class=line><span class=cl><span class=s>192.168.2.132 k8s-2
+</span></span></span><span class=line><span class=cl><span class=s>192.168.2.133 k8s-3
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span></code></pre></div><h2 id=2-安装>2. 安装</h2><h3 id=21-安装-kubeadmkubelet-和-kubectl>2.1 安装 kubeadm、kubelet 和 kubectl</h3><blockquote><p>在<strong>所有节点</strong>上执行该步骤</p></blockquote><p><strong>配置 yum 源</strong></p><p>官网提供的 google 源一般用不了，这里直接换成阿里的源：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+</span></span></span><span class=line><span class=cl><span class=s>[kubernetes]
+</span></span></span><span class=line><span class=cl><span class=s>name=Kubernetes
+</span></span></span><span class=line><span class=cl><span class=s>baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+</span></span></span><span class=line><span class=cl><span class=s>enabled=1
+</span></span></span><span class=line><span class=cl><span class=s>gpgcheck=1
+</span></span></span><span class=line><span class=cl><span class=s>repo_gpgcheck=1
+</span></span></span><span class=line><span class=cl><span class=s>gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+</span></span></span><span class=line><span class=cl><span class=s>        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+</span></span></span><span class=line><span class=cl><span class=s>exclude=kubelet kubeadm kubectl
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span></code></pre></div><p>然后执行安装</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># --disableexcludes 禁掉除了kubernetes之外的别的仓库</span>
+</span></span><span class=line><span class=cl><span class=c1># 由于官网未开放同步方式, 替换成阿里源后可能会有索引 gpg 检查失败的情况, 这时请带上`--nogpgcheck`选项安装</span>
+</span></span><span class=line><span class=cl><span class=c1># 指定安装 1.23.5 版本</span>
+</span></span><span class=line><span class=cl>sudo yum install -y kubelet-1.23.5 kubeadm-1.23.5 kubectl-1.23.5 --disableexcludes<span class=o>=</span>kubernetes --nogpgcheck
+</span></span></code></pre></div><p>kubelet 设置开机启动</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo systemctl <span class=nb>enable</span> kubelet --now 
+</span></span></code></pre></div><h3 id=22-初始化主节点>2.2 初始化主节点</h3><blockquote><p>在 <strong>k8s-1</strong> 上执行该步骤</p></blockquote><h4 id=生成-kubeadmyaml-文件>生成 kubeadm.yaml 文件</h4><p>首先导出 kubeadm 配置文件并修改</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubeadm config print init-defaults --kubeconfig ClusterConfiguration &gt; kubeadm.yml
+</span></span></code></pre></div><p>然后对配置文件做以下修改：</p><ul><li><strong>nodeRegistration.criSocket</strong>：1.23.5 版本默认还是用的 docker，由于我们用的是 containerd，所以需要改一下</li><li><strong>nodeRegistration.name</strong>：节点名，改成主节点的主机名（即 k8s-1）</li><li><strong>localAPIEndpoint.advertiseAddress</strong>：这个就是 apiserver 的地址，需要修改为主节点的 IP</li><li><strong>imageRepository</strong>：镜像仓库，默认是国外的地址，需要替换成国内源</li><li><strong>kubernetesVersion</strong>：调整版本号和之前安装的 kubeadm 一致</li><li><strong>networking.podSubnet</strong>：新增子网信息，固定为 192.168.0.0/16，主要方便后续安装 calico</li></ul><p>具体如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vim kubeadm.yml
+</span></span></code></pre></div><p>修改后 yaml 如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>apiVersion: kubeadm.k8s.io/v1beta3
+</span></span><span class=line><span class=cl>bootstrapTokens:
+</span></span><span class=line><span class=cl>- groups:
+</span></span><span class=line><span class=cl>  - system:bootstrappers:kubeadm:default-node-token
+</span></span><span class=line><span class=cl>  token: abcdef.0123456789abcdef
+</span></span><span class=line><span class=cl>  ttl: 24h0m0s
+</span></span><span class=line><span class=cl>  usages:
+</span></span><span class=line><span class=cl>  - signing
+</span></span><span class=line><span class=cl>  - authentication
+</span></span><span class=line><span class=cl>kind: InitConfiguration
+</span></span><span class=line><span class=cl>localAPIEndpoint:
+</span></span><span class=line><span class=cl>  <span class=c1># 修改为主节点IP地址</span>
+</span></span><span class=line><span class=cl>  advertiseAddress: 192.168.2.131
+</span></span><span class=line><span class=cl>  bindPort: <span class=m>6443</span>
+</span></span><span class=line><span class=cl>nodeRegistration:
+</span></span><span class=line><span class=cl>  <span class=c1># 修改为 containerd</span>
+</span></span><span class=line><span class=cl>  criSocket: /run/containerd/containerd.sock
+</span></span><span class=line><span class=cl>  imagePullPolicy: IfNotPresent
+</span></span><span class=line><span class=cl>  <span class=c1># 节点名改成主节点的主机名</span>
+</span></span><span class=line><span class=cl>  name: k8s-1
+</span></span><span class=line><span class=cl>  taints: null
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>apiServer:
+</span></span><span class=line><span class=cl>  timeoutForControlPlane: 4m0s
+</span></span><span class=line><span class=cl>apiVersion: kubeadm.k8s.io/v1beta3
+</span></span><span class=line><span class=cl>certificatesDir: /etc/kubernetes/pki
+</span></span><span class=line><span class=cl>clusterName: kubernetes
+</span></span><span class=line><span class=cl>controllerManager: <span class=o>{}</span>
+</span></span><span class=line><span class=cl>dns: <span class=o>{}</span>
+</span></span><span class=line><span class=cl>etcd:
+</span></span><span class=line><span class=cl>  local:
+</span></span><span class=line><span class=cl>    dataDir: /var/lib/etcd
+</span></span><span class=line><span class=cl><span class=c1># 换成国内的源</span>
+</span></span><span class=line><span class=cl>imageRepository: registry.aliyuncs.com/google_containers
+</span></span><span class=line><span class=cl>kind: ClusterConfiguration
+</span></span><span class=line><span class=cl><span class=c1># 修改版本号 必须对应</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>kubernetesVersion: 1.24.1
+</span></span><span class=line><span class=cl>networking:
+</span></span><span class=line><span class=cl>  <span class=c1># 新增该配置 固定为 192.168.0.0/16，用于后续 Calico网络插件</span>
+</span></span><span class=line><span class=cl>  podSubnet: 192.168.0.0/16
+</span></span><span class=line><span class=cl>  dnsDomain: cluster.local
+</span></span><span class=line><span class=cl>  serviceSubnet: 10.96.0.0/12
+</span></span><span class=line><span class=cl>scheduler: <span class=o>{}</span>
+</span></span></code></pre></div><h4 id=拉取镜像>拉取镜像</h4><p>查看所需镜像列表</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubeadm config images list --config kubeadm.yml</span>
+</span></span><span class=line><span class=cl>registry.aliyuncs.com/google_containers/kube-apiserver:v1.23.5
+</span></span><span class=line><span class=cl>registry.aliyuncs.com/google_containers/kube-controller-manager:v1.23.5
+</span></span><span class=line><span class=cl>registry.aliyuncs.com/google_containers/kube-scheduler:v1.23.5
+</span></span><span class=line><span class=cl>registry.aliyuncs.com/google_containers/kube-proxy:v1.23.5
+</span></span><span class=line><span class=cl>registry.aliyuncs.com/google_containers/pause:3.6
+</span></span><span class=line><span class=cl>registry.aliyuncs.com/google_containers/etcd:3.5.1-0
+</span></span><span class=line><span class=cl>registry.aliyuncs.com/google_containers/coredns:v1.8.6
+</span></span></code></pre></div><p>先手动拉取镜像</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>kubeadm config images pull --config kubeadm.yml
+</span></span></code></pre></div><p>有时候发现一直拉不下来，也没有报错，就一直搁这阻塞着，可以通过以下命令测试</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># ctr --debug images pull {image}</span>
+</span></span><span class=line><span class=cl>ctr --debug images pull registry.aliyuncs.com/google_containers/kube-apiserver:v1.23.5
+</span></span></code></pre></div><p>最后发现直接用 ctr images pull 可以拉下来，那就手动拉吧，脚本如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=k>for</span> i in <span class=sb>`</span>kubeadm config images list --config kubeadm.yml<span class=sb>`</span><span class=p>;</span><span class=k>do</span> ctr images pull <span class=nv>$i</span><span class=p>;</span><span class=k>done</span>
+</span></span></code></pre></div><h4 id=执行初始化>执行初始化</h4><p>镜像拉取下来后就可以开始安装了</p><p>执行以下命令初始化主节点</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># --config=kubeadm.yml 指定配置文件</span>
+</span></span><span class=line><span class=cl><span class=c1># --upload-certs 上传证书，可以在后续执行加入节点时自动分发证书文件</span>
+</span></span><span class=line><span class=cl><span class=c1># tee kubeadm-init.log 将日志保存到文件</span>
+</span></span><span class=line><span class=cl>kubeadm init --config<span class=o>=</span>kubeadm.yml --upload-certs <span class=p>|</span> tee kubeadm-init.log
+</span></span></code></pre></div><p>输出如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 出现这个就说明安装成功了</span>
+</span></span><span class=line><span class=cl>Your Kubernetes control-plane has initialized successfully!
+</span></span><span class=line><span class=cl><span class=c1># 执行下面的命令配置 kubeconfig</span>
+</span></span><span class=line><span class=cl>To start using your cluster, you need to run the following as a regular user:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  mkdir -p <span class=nv>$HOME</span>/.kube
+</span></span><span class=line><span class=cl>  sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
+</span></span><span class=line><span class=cl>  sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Alternatively, <span class=k>if</span> you are the root user, you can run:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nb>export</span> <span class=nv>KUBECONFIG</span><span class=o>=</span>/etc/kubernetes/admin.conf
+</span></span><span class=line><span class=cl><span class=c1># 配置 pod 网络的命令</span>
+</span></span><span class=line><span class=cl>You should now deploy a pod network to the cluster.
+</span></span><span class=line><span class=cl>Run <span class=s2>&#34;kubectl apply -f [podnetwork].yaml&#34;</span> with one of the options listed at:
+</span></span><span class=line><span class=cl>  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+</span></span><span class=line><span class=cl><span class=c1># node 节点加入集群需要执行如下指令</span>
+</span></span><span class=line><span class=cl>Then you can join any number of worker nodes by running the following on each as root:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>kubeadm join 192.168.2.131:6443 --token abcdef.0123456789abcdef <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	--discovery-token-ca-cert-hash sha256:d53020265c2bae4f691258966b3d35f99a9cc2dc530514888d85e916b2844525 
+</span></span></code></pre></div><p>按照提示配置 kubeconfig</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mkdir -p <span class=nv>$HOME</span>/.kube
+</span></span><span class=line><span class=cl>sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
+</span></span><span class=line><span class=cl>sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
+</span></span></code></pre></div><p>配置好后查看一下 node 状态</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get node</span>
+</span></span><span class=line><span class=cl>NAME    STATUS     ROLES           AGE    VERSION
+</span></span><span class=line><span class=cl>k8s-1   NotReady   control-plane   109s   v1.23.5
+</span></span></code></pre></div><p>状态为 NotReady，因为此时还没有安装网络插件。</p><h3 id=23-node节点加入集群>2.3 Node节点加入集群</h3><blockquote><p>在 k8s-2 和 k8s-3 上执行该步骤，将节点加入到集群中。</p></blockquote><p>将 worker 加入到集群中很简单，只需要在对应节点上安装 kubeadm，kubectl，kubelet 三个工具，然后使用 <code>kubeadm join</code> 命令加入即可。</p><p>先在 k8s-2 节点执行</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 这就是前面安装Master节点时日志中的提示</span>
+</span></span><span class=line><span class=cl>kubeadm join 192.168.2.131:6443 --token abcdef.0123456789abcdef <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	--discovery-token-ca-cert-hash sha256:d53020265c2bae4f691258966b3d35f99a9cc2dc530514888d85e916b2844525 
+</span></span></code></pre></div><p>输出如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>This node has joined the cluster:
+</span></span><span class=line><span class=cl>* Certificate signing request was sent to apiserver and a response was received.
+</span></span><span class=line><span class=cl>* The Kubelet was informed of the new secure connection details.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Run <span class=s1>&#39;kubectl get nodes&#39;</span> on the control-plane to see this node join the cluster.
+</span></span></code></pre></div><p>在 master 节点查询</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get nodes</span>
+</span></span><span class=line><span class=cl>NAME    STATUS     ROLES           AGE     VERSION
+</span></span><span class=line><span class=cl>k8s-1   NotReady   control-plane   3m46s   v1.23.5
+</span></span><span class=line><span class=cl>k8s-2   NotReady   &lt;none&gt;          20s     v1.23.5
+</span></span></code></pre></div><p>然后把 k8s-3 也加进来</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get nodes</span>
+</span></span><span class=line><span class=cl>NAME    STATUS     ROLES           AGE     VERSION
+</span></span><span class=line><span class=cl>k8s-1   NotReady   control-plane   3m46s   v1.23.5
+</span></span><span class=line><span class=cl>k8s-2   NotReady   &lt;none&gt;          20s     v1.23.5
+</span></span><span class=line><span class=cl>k8s-3   NotReady   &lt;none&gt;          17s     v1.23.5
+</span></span></code></pre></div><p>到此基本安装完成，后续就是部署 calico 了。</p><p>此时由于没有安装网络插件，所有节点都还处于 NotReady 状态。</p><h3 id=24-faq>2.4 FAQ</h3><p>1）kubelet 报错找不到节点</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>Failed <span class=k>while</span> requesting a signed certificate from the master: cannot create certificate signing request: Unauthorized
+</span></span><span class=line><span class=cl><span class=s2>&#34;Error getting node&#34;</span> <span class=nv>err</span><span class=o>=</span><span class=s2>&#34;node \&#34;k8s-master\&#34; not found&#34;</span>
+</span></span></code></pre></div><p>因为第一次安装的时候生成了证书，但是第一次安装失败了，第二次安装 kubeadm 又生成了新证书，导致二者证书对不上，于是出现了 Unauthorized 的错误，然后没有把 node 信息注册到 api server，然后就出现了第二个错误，node not found。</p><p>每次安装失败后，都需要执行 kubeadm reset 重置环境。</p><h2 id=3-安装-calicohttpsprojectcalicodocstigeraiogetting-startedkubernetesquickstart>3. 安装 <a href=https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart target=_blank rel="noopener noreffer">Calico</a></h2><p>具体参考：<a href=https://projectcalico.docs.tigera.io/archive/v3.22/getting-started/kubernetes/self-managed-onprem/onpremises target=_blank rel="noopener noreffer">install calico</a></p><h3 id=31-下载配置文件并拉取镜像>3.1 下载配置文件并拉取镜像</h3><blockquote><p><strong>所有节点</strong>都需要执行该步骤</p></blockquote><p>第一步获取官方给的 yaml 文件</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl https://projectcalico.docs.tigera.io/archive/v3.22/manifests/calico.yaml -O
+</span></span></code></pre></div><p>可能是网络问题，导致 calico 相关镜像一直拉取超时，最终 pod 无法启动，所以建议提前手动拉取镜像。</p><blockquote><p>手动拉取也很慢，不过最终还是会成功，不过直接超时报错。</p></blockquote><p>查看一共需要哪些镜像</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># cat calico.yaml |grep docker.io|awk {&#39;print $2&#39;}</span>
+</span></span><span class=line><span class=cl>docker.io/calico/cni:v3.23.1
+</span></span><span class=line><span class=cl>docker.io/calico/cni:v3.23.1
+</span></span><span class=line><span class=cl>docker.io/calico/node:v3.23.1
+</span></span><span class=line><span class=cl>docker.io/calico/kube-controllers:v3.23.1
+</span></span></code></pre></div><p>手动拉取</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=k>for</span> i in <span class=sb>`</span>cat calico.yaml <span class=p>|</span>grep docker.io<span class=p>|</span>awk <span class=o>{</span><span class=s1>&#39;print $2&#39;</span><span class=o>}</span><span class=sb>`</span><span class=p>;</span><span class=k>do</span> ctr images pull <span class=nv>$i</span><span class=p>;</span><span class=k>done</span>
+</span></span></code></pre></div><p>最后查看一下，确定是否拉取下来了</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-2 ~<span class=o>]</span><span class=c1># ctr images ls</span>
+</span></span><span class=line><span class=cl>REF                                       TYPE                                                      DIGEST                                                                  SIZE      PLATFORMS                                          LABELS 
+</span></span><span class=line><span class=cl>docker.io/calico/cni:v3.23.1              application/vnd.docker.distribution.manifest.list.v2+json sha256:26802bb7714fda18b93765e908f2d48b0230fd1c620789ba2502549afcde4338 105.4 MiB linux/amd64,linux/arm/v7,linux/arm64,linux/ppc64le -      
+</span></span><span class=line><span class=cl>docker.io/calico/kube-controllers:v3.23.1 application/vnd.docker.distribution.manifest.list.v2+json sha256:e8b2af28f2c283a38b4d80436e2d2a25e70f2820d97d1a8684609d42c3973afb 53.8 MiB  linux/amd64,linux/arm/v7,linux/arm64,linux/ppc64le -      
+</span></span><span class=line><span class=cl>docker.io/calico/node:v3.23.1             application/vnd.docker.distribution.manifest.list.v2+json sha256:d2c1613ef26c9ad43af40527691db1f3ad640291d5e4655ae27f1dd9222cc380 73.0 MiB  linux/amd64,linux/arm/v7,linux/arm64,linux/ppc64le -  
+</span></span></code></pre></div><h3 id=32-配置网卡名>3.2 配置网卡名</h3><blockquote><p>在 <strong>k8s-1</strong> 上执行该步骤</p></blockquote><p>calico 默认会找 <strong>eth0</strong>网卡，如果当前机器网卡不是这个名字，可能会无法启动，需要手动配置以下。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-BASH data-lang=BASH><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># ip a</span>
+</span></span><span class=line><span class=cl>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class=m>65536</span> qdisc noqueue state UNKNOWN group default qlen <span class=m>1000</span>
+</span></span><span class=line><span class=cl>    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span><span class=line><span class=cl>    inet 127.0.0.1/8 scope host lo
+</span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
+</span></span><span class=line><span class=cl>    inet6 ::1/128 scope host 
+</span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
+</span></span><span class=line><span class=cl>2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class=m>1500</span> qdisc pfifo_fast state UP group default qlen <span class=m>1000</span>
+</span></span></code></pre></div><p>我这里网卡名是 ens33，不符合默认条件，需要修改 calico.yaml 手动指定一下。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vi calico.yaml
+</span></span></code></pre></div><p>然后直接搜索 CLUSTER_TYPE，找到下面这段</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CLUSTER_TYPE</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>   </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;k8s,bgp&#34;</span><span class=w>
+</span></span></span></code></pre></div><p>然后添加一个和 CLUSTER_TYPE 同级的 **IP_AUTODETECTION_METHOD **字段，具体如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># value 就是指定你的网卡名字，我这里网卡是 ens33，然后直接配置的通配符 ens.*</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>IP_AUTODETECTION_METHOD  </span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;interface=ens.*&#34;</span><span class=w>
+</span></span></span></code></pre></div><h3 id=33-部署>3.3 部署</h3><blockquote><p>在 <strong>k8s-1</strong>上执行该步骤</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-BASH data-lang=BASH><span class=line><span class=cl>kubectl apply -f calico.yaml
+</span></span></code></pre></div><p>如果不错意外的话等一会 calico 就安装好了，可以通过以下命令查看：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get pods -A</span>
+</span></span><span class=line><span class=cl>NAMESPACE     NAME                                       READY   STATUS    RESTARTS        AGE
+</span></span><span class=line><span class=cl>kube-system   calico-kube-controllers-6c75955484-hhvh6   1/1     Running   <span class=m>0</span>               7m37s
+</span></span><span class=line><span class=cl>kube-system   calico-node-5xjqd                          1/1     Running   <span class=m>0</span>               7m37s
+</span></span><span class=line><span class=cl>kube-system   calico-node-6lnd6                          1/1     Running   <span class=m>0</span>               7m37s
+</span></span><span class=line><span class=cl>kube-system   calico-node-vkgfr                          1/1     Running   <span class=m>0</span>               7m37s
+</span></span><span class=line><span class=cl>kube-system   coredns-6d8c4cb4d-8gxsf                    1/1     Running   <span class=m>0</span>               20m
+</span></span><span class=line><span class=cl>kube-system   coredns-6d8c4cb4d-m596j                    1/1     Running   <span class=m>0</span>               20m
+</span></span><span class=line><span class=cl>kube-system   etcd-k8s-1                                 1/1     Running   <span class=m>0</span>               20m
+</span></span><span class=line><span class=cl>kube-system   kube-apiserver-k8s-1                       1/1     Running   <span class=m>0</span>               20m
+</span></span><span class=line><span class=cl>kube-system   kube-controller-manager-k8s-1              1/1     Running   <span class=m>1</span> <span class=o>(</span>6m16s ago<span class=o>)</span>   20m
+</span></span><span class=line><span class=cl>kube-system   kube-proxy-5qj6j                           1/1     Running   <span class=m>0</span>               20m
+</span></span><span class=line><span class=cl>kube-system   kube-proxy-rhwb7                           1/1     Running   <span class=m>0</span>               20m
+</span></span><span class=line><span class=cl>kube-system   kube-proxy-xzswm                           1/1     Running   <span class=m>0</span>               20m
+</span></span><span class=line><span class=cl>kube-system   kube-scheduler-k8s-1                       1/1     Running   <span class=m>1</span> <span class=o>(</span>5m56s ago<span class=o>)</span>   20m
+</span></span></code></pre></div><p>calico 开头的以及 coredns 都跑起来就算完成。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl get pod <span class=si>${</span><span class=nv>POD_NAME</span><span class=si>}</span> -n <span class=si>${</span><span class=nv>NAMESPACE</span><span class=si>}</span> -o yaml <span class=p>|</span> kubectl replace --force -f -
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl get pod calico-node-68fnx -n kube-system -o yaml <span class=p>|</span> kubectl replace --force -f -
+</span></span><span class=line><span class=cl>kubectl get pod calico-node-5d6zb -n kube-system -o yaml <span class=p>|</span> kubectl replace --force -f -
+</span></span><span class=line><span class=cl>kubectl get pod calico-kube-controllers-56cdb7c587-blc9l -n kube-system -o yaml <span class=p>|</span> kubectl replace --force -f -
+</span></span></code></pre></div><h3 id=34-faq>3.4 FAQ</h3><p>calico controller 无法启动，报错信息如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>client.go 272: Error getting cluster information config <span class=nv>ClusterInformation</span><span class=o>=</span><span class=s2>&#34;default&#34;</span> <span class=nv>error</span><span class=o>=</span>Get <span class=s2>&#34;https://10.96.0.1:443/apis/crd.projectcalico.org/v1/clusterinformations/default&#34;</span>: context deadline exceeded
+</span></span></code></pre></div><p>查看对应 pod 日志发现有一个错误，提示内核版本过低，需要 4.x 版本才行。于是更新内核版本只会就可以了</p><blockquote><p>写本文时安装的是 5.18 版本内核，所有应该不会出现这个问题。</p></blockquote><h2 id=4-检查集群状态>4. 检查集群状态</h2><blockquote><p>在 <strong>k8s-1</strong> 上执行该步骤</p></blockquote><p>检查各组件运行状态</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get cs</span>
+</span></span><span class=line><span class=cl>Warning: v1 ComponentStatus is deprecated in v1.19+
+</span></span><span class=line><span class=cl>NAME                 STATUS    MESSAGE                         ERROR
+</span></span><span class=line><span class=cl>controller-manager   Healthy   ok                              
+</span></span><span class=line><span class=cl>scheduler            Healthy   ok                              
+</span></span><span class=line><span class=cl>etcd-0               Healthy   <span class=o>{</span><span class=s2>&#34;health&#34;</span>:<span class=s2>&#34;true&#34;</span>,<span class=s2>&#34;reason&#34;</span>:<span class=s2>&#34;&#34;</span><span class=o>}</span> 
+</span></span></code></pre></div><p>查看集群信息</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl cluster-info</span>
+</span></span><span class=line><span class=cl>Kubernetes control plane is running at https://192.168.2.131:6443
+</span></span><span class=line><span class=cl>CoreDNS is running at https://192.168.2.131:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>To further debug and diagnose cluster problems, use <span class=s1>&#39;kubectl cluster-info dump&#39;</span>.
+</span></span></code></pre></div><p>查看节点状态</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get nodes</span>
+</span></span><span class=line><span class=cl>NAME    STATUS   ROLES                  AGE   VERSION
+</span></span><span class=line><span class=cl>k8s-1   Ready    control-plane,master   22m   v1.23.5
+</span></span><span class=line><span class=cl>k8s-2   Ready    &lt;none&gt;                 21m   v1.23.5
+</span></span><span class=line><span class=cl>k8s-3   Ready    &lt;none&gt;                 21m   v1.23.5
+</span></span></code></pre></div><h2 id=5-运行第一个容器实例>5. 运行第一个容器实例</h2><blockquote><p>在 <strong>k8s-1</strong> 上执行该步骤</p></blockquote><h3 id=51-创建deployment>5.1 创建Deployment</h3><p><code>nginx-deployment.yaml</code> 文件内容如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Deployment</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx-deployment</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 创建2个nginx容器</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>replicas</span><span class=p>:</span><span class=w> </span><span class=m>2</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>nginx:1.18.0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span></code></pre></div><p>创建实例</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl apply -f nginx-deployment.yaml</span>
+</span></span><span class=line><span class=cl>deployment.apps/nginx-deployment created
+</span></span></code></pre></div><p>查看 pod</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ kubectl get pods
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 输出如下，需要等待一小段时间，STATUS 为 Running 即为运行成功</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get pods</span>
+</span></span><span class=line><span class=cl>NAME                               READY   STATUS              RESTARTS   AGE
+</span></span><span class=line><span class=cl>nginx-deployment-79fccc485-7czxp   0/1     ContainerCreating   <span class=m>0</span>          37s
+</span></span><span class=line><span class=cl>nginx-deployment-79fccc485-hp565   0/1     ContainerCreating   <span class=m>0</span>          37s
+</span></span></code></pre></div><p>查看 deployment</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get deployment</span>
+</span></span><span class=line><span class=cl>NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+</span></span><span class=line><span class=cl>nginx-deployment   2/2     <span class=m>2</span>            <span class=m>2</span>           50s
+</span></span></code></pre></div><h3 id=52-创建-service>5.2 创建 Service</h3><blockquote><p>创建一个 service</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl expose deployment nginx-deployment --port=80 --type=LoadBalancer --name=nginx-svc</span>
+</span></span><span class=line><span class=cl>service/nginx-deployment exposed
+</span></span></code></pre></div><p>也可以通过 配置文件方式创建，<code>nginx-vc.yaml</code> 文件内容如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx-svc</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx-svc</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>LoadBalancer      </span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>         
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>targetPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>  
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>nginx         </span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl apply -f nginx-svc.yaml
+</span></span></code></pre></div><p>查看 service</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl get services</span>
+</span></span><span class=line><span class=cl>NAME               TYPE           CLUSTER-IP       EXTERNAL-IP   PORT<span class=o>(</span>S<span class=o>)</span>        AGE
+</span></span><span class=line><span class=cl>kubernetes         ClusterIP      10.96.0.1        &lt;none&gt;        443/TCP        25m
+</span></span><span class=line><span class=cl><span class=c1># 由此可见，Nginx 服务已成功发布并将 80 端口映射为 30842</span>
+</span></span><span class=line><span class=cl>nginx-deployment   LoadBalancer   10.102.137.171   &lt;pending&gt;     80:30842/TCP   40s
+</span></span></code></pre></div><p>查看 service 详情</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl describe service nginx-deployment</span>
+</span></span><span class=line><span class=cl>Name:                     nginx-deployment
+</span></span><span class=line><span class=cl>Namespace:                default
+</span></span><span class=line><span class=cl>Labels:                   <span class=nv>app</span><span class=o>=</span>nginx
+</span></span><span class=line><span class=cl>Annotations:              &lt;none&gt;
+</span></span><span class=line><span class=cl>Selector:                 <span class=nv>app</span><span class=o>=</span>nginx
+</span></span><span class=line><span class=cl>Type:                     LoadBalancer
+</span></span><span class=line><span class=cl>IP Family Policy:         SingleStack
+</span></span><span class=line><span class=cl>IP Families:              IPv4
+</span></span><span class=line><span class=cl>IP:                       10.102.137.171
+</span></span><span class=line><span class=cl>IPs:                      10.102.137.171
+</span></span><span class=line><span class=cl>Port:                     &lt;unset&gt;  80/TCP
+</span></span><span class=line><span class=cl>TargetPort:               80/TCP
+</span></span><span class=line><span class=cl>NodePort:                 &lt;unset&gt;  30842/TCP
+</span></span><span class=line><span class=cl>Endpoints:                192.168.13.65:80,192.168.200.193:80
+</span></span><span class=line><span class=cl>Session Affinity:         None
+</span></span><span class=line><span class=cl>External Traffic Policy:  Cluster
+</span></span><span class=line><span class=cl>Events:                   &lt;none&gt;
+</span></span></code></pre></div><h3 id=53-验证>5.3 验证</h3><p>通过浏览器访问任意服务器</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 端口号为第五步中的端口号</span>
+</span></span><span class=line><span class=cl>http://192.168.2.131:30842/
+</span></span></code></pre></div><p>此时 Kubernetes 会以负载均衡的方式访问部署的 Nginx 服务，能够正常看到 Nginx 的欢迎页即表示成功。容器实际部署在其它 Node 节点上，通过访问 Node 节点的 IP:Port 也是可以的。</p><h3 id=54-重置环境>5.4 重置环境</h3><p>删除 deployment</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl delete deployment nginx-deployment</span>
+</span></span><span class=line><span class=cl>deployment.apps <span class=s2>&#34;nginx-deployment&#34;</span> deleted
+</span></span></code></pre></div><p>删除 services</p><p>deployment 移除了 但是 services 中还存在，所以也需要一并删除。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@k8s-1 ~<span class=o>]</span><span class=c1># kubectl delete service nginx-svc</span>
+</span></span><span class=line><span class=cl>service <span class=s2>&#34;nginx-deployment&#34;</span> deleted
+</span></span></code></pre></div><p>至此，实验完成，感谢阅读~</p><h2 id=6-相关文档>6. 相关文档</h2><p><a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm target=_blank rel="noopener noreffer">install-kubeadm</a></p><p><a href=https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/ target=_blank rel="noopener noreffer">create-cluster-kubeadm</a></p><p><a href=https://projectcalico.docs.tigera.io/archive/v3.22/getting-started/kubernetes/self-managed-onprem/onpremises target=_blank rel="noopener noreffer">Install Calico</a></p><p><a href=https://github.com/containerd/containerd/blob/main/docs/getting-started.md target=_blank rel="noopener noreffer">containerd#getting-started</a></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2022-05-28</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://blog.yudlk.com/posts/kubernetes/01-install/ data-title="Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)" data-hashtags=Kubernetes><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://blog.yudlk.com/posts/kubernetes/01-install/ data-hashtag=Kubernetes><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://blog.yudlk.com/posts/kubernetes/01-install/ data-title="Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)"><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://blog.yudlk.com/posts/kubernetes/01-install/ data-title="Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://blog.yudlk.com/posts/kubernetes/01-install/ data-title="Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)"><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/kubernetes/>Kubernetes</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/docker/10-bridge-network/ class=prev rel=prev title="Docker教程(十)---Docker 单机(桥接)网络实现"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Docker教程(十)---Docker 单机(桥接)网络实现</a>
+<a href=/posts/kubernetes/09-volume/ class=next rel=next title="Kubernetes教程(九)---Volume 实现原理">Kubernetes教程(九)---Volume 实现原理<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.100.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2018 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://github.com/lixd target=_blank>qpt</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a rel="license external nofollow noopener noreffer" href=https://beian.miit.gov.cn/ target=_blank>渝ICP备20005680号-1</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.480e58b2c2a8605d406f34667e92ff8f1ae50cfee5b653bead570f004839a983.js integrity="sha256-SA5YssKoYF1AbzRmfpL/jxrlDP7ltlO+rVcPAEg5qYM="></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-FL23FNP7CM',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-FL23FNP7CM" async></script><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?4b7c98449a6edf8492a8f3404e6d06a0",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7693630257897132" crossorigin=anonymous></script></body></html>

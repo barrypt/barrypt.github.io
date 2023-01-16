@@ -1,0 +1,256 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Java设计模式(二)---工厂模式 -</title><meta name=Description content="工厂模式的实现与使用场景分析"><meta property="og:title" content="Java设计模式(二)---工厂模式"><meta property="og:description" content="工厂模式的实现与使用场景分析"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.yudlk.com/posts/java/design-pattern/02--factory/"><meta property="og:image" content="https://blog.yudlk.com/img/jinx.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2018-11-18T22:00:00+00:00"><meta property="article:modified_time" content="2018-11-18T22:00:00+00:00"><meta property="og:site_name" content="qpt的个人博客"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.yudlk.com/img/jinx.png"><meta name=twitter:title content="Java设计模式(二)---工厂模式"><meta name=twitter:description content="工厂模式的实现与使用场景分析"><meta name=application-name content="指月小筑"><meta name=apple-mobile-web-app-title content="指月小筑"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://blog.yudlk.com/posts/java/design-pattern/02--factory/><link rel=prev href=https://blog.yudlk.com/posts/java/design-pattern/01-singleton/><link rel=next href=https://blog.yudlk.com/posts/android/02-view-click-event/><link rel=stylesheet href=/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Java设计模式(二)---工厂模式","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.yudlk.com\/posts\/java\/design-pattern\/02--factory\/"},"image":["https:\/\/blog.yudlk.com\/img\/jinx.png"],"genre":"posts","keywords":"设计模式","wordcount":2067,"url":"https:\/\/blog.yudlk.com\/posts\/java\/design-pattern\/02--factory\/","datePublished":"2018-11-18T22:00:00+00:00","dateModified":"2018-11-18T22:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"qpt"},"description":"工厂模式的实现与使用场景分析"}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/ title=指月小筑>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/ title=关于>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/posts/ title=指月小筑>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title=关于>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Java设计模式(二)---工厂模式</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://github.com/lixd title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>qpt</a></span>&nbsp;<span class=post-category>included in <a href=/categories/java/><i class="far fa-folder fa-fw" aria-hidden=true></i>Java</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2018-11-18>2018-11-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;2067 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;5 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#1-简介>1. 简介</a></li><li><a href=#2-简单工厂模式>2. 简单工厂模式</a></li><li><a href=#3-工厂方法模式>3. 工厂方法模式</a></li><li><a href=#4-抽象工厂模式>4. 抽象工厂模式</a></li><li><a href=#5-总结>5. 总结</a></li><li><a href=#6-参考>6. 参考</a></li></ul></nav></div></div><div class=content id=content><p>本章主要介绍了设计模式中的工厂模式，并结合实例描述了工厂模式的具体实现和使用场景。包括：<code>普通工厂模式</code>、<code>工厂方法模式</code>、<code>抽象工厂模式</code>等。</p><h2 id=1-简介>1. 简介</h2><p>工厂模式可以分为普通工厂模、工厂方法模式和抽象工厂模式。</p><p><strong>简单工厂模式</strong>：建立一个工厂类，根据传入的参数对实现了同一接口的一些类进行实例的创建。如果传入的字符串错误就不能正确创建对象。</p><p><strong>工厂方法模式</strong>：是对普通工厂方法模式的改进，提供多个工厂方法，分别创建对象。</p><p><strong>抽象工厂模式</strong>：创建多个工厂类，这样一旦需要增加新的功能，直接增加新的工厂类就可以了，不需要修改之前的代码。</p><p><strong>工厂模式优点：</strong></p><p>(1) <code>解耦 </code>：把对象的创建和使用的过程分开</p><p>(2)<code>减少重复代码</code>: 若创建对象的过程很复杂，有一定的代码量，且很多地方都要用到，那么就会有很多重复代码。</p><p>(3) <code>降低维护成本</code> ：创建过程都由工厂统一管理，发生业务逻辑变化，只需要在工厂里修改即可。</p><p><strong>适用场景</strong></p><p>（1）需要创建的对象较少。</p><p>（2）客户端不关心对象的创建过程。</p><h2 id=2-简单工厂模式>2. 简单工厂模式</h2><p><img class=lazyload src=/svg/loading.min.svg data-src=https://github.com/lixd/blog/raw/master/images/java/design-patterns/easy-factory.png data-srcset="https://github.com/lixd/blog/raw/master/images/java/design-patterns/easy-factory.png, https://github.com/lixd/blog/raw/master/images/java/design-patterns/easy-factory.png 1.5x, https://github.com/lixd/blog/raw/master/images/java/design-patterns/easy-factory.png 2x" data-sizes=auto alt=https://github.com/lixd/blog/raw/master/images/java/design-patterns/easy-factory.png title=https://github.com/lixd/blog/raw/master/images/java/design-patterns/easy-factory.png></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 抽象产品类 水果
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>Fruit</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>void</span> <span class=nf>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体产品类
+</span></span></span><span class=line><span class=cl><span class=cm> * 苹果  实现了水果接口
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>Apple</span> <span class=kd>implements</span> <span class=n>Fruit</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>show</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;This is Apple&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体产品类
+</span></span></span><span class=line><span class=cl><span class=cm> * 橘子 实现了水果接口
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>Orange</span> <span class=kd>implements</span> <span class=n>Fruit</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>show</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;This is Orange&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 工厂类   水果工厂
+</span></span></span><span class=line><span class=cl><span class=cm> * 负责生产各种产品
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>FruitFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>FRUIT_APPLE</span> <span class=o>=</span> <span class=s>&#34;Apple&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>FRUIT_ORANGE</span> <span class=o>=</span> <span class=s>&#34;Orange&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=n>Fruit</span> <span class=nf>creatFruit</span><span class=o>(</span><span class=n>String</span> <span class=n>fruit</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>FRUIT_APPLE</span><span class=o>.</span><span class=na>equals</span><span class=o>(</span><span class=n>fruit</span><span class=o>))</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=k>new</span> <span class=n>Apple</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>else</span> <span class=k>if</span> <span class=o>(</span><span class=n>FRUIT_ORANGE</span><span class=o>.</span><span class=na>equals</span><span class=o>(</span><span class=n>fruit</span><span class=o>))</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=k>new</span> <span class=n>Orange</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;error unknown fruit ~&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 简单工厂模式 测试
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>EasyFactoryTest</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Test</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>testEasyFactory</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Fruit</span> <span class=n>apple</span> <span class=o>=</span> <span class=n>FruitFactory</span><span class=o>.</span><span class=na>creatFruit</span><span class=o>(</span><span class=n>FruitFactory</span><span class=o>.</span><span class=na>FRUIT_APPLE</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>apple</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>apple</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>Fruit</span> <span class=n>orange</span> <span class=o>=</span> <span class=n>FruitFactory</span><span class=o>.</span><span class=na>creatFruit</span><span class=o>(</span><span class=n>FruitFactory</span><span class=o>.</span><span class=na>FRUIT_ORANGE</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>orange</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>orange</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><h2 id=3-工厂方法模式>3. 工厂方法模式</h2><p>简单工厂模式中，如果创建对象时传入的字符串出现错误则不能正确创建产品。工厂方法模式为每种产品创建一个工厂，则不会出现这样的问题。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://github.com/lixd/blog/raw/master/images/java/design-patterns/factory-method.png data-srcset="https://github.com/lixd/blog/raw/master/images/java/design-patterns/factory-method.png, https://github.com/lixd/blog/raw/master/images/java/design-patterns/factory-method.png 1.5x, https://github.com/lixd/blog/raw/master/images/java/design-patterns/factory-method.png 2x" data-sizes=auto alt=https://github.com/lixd/blog/raw/master/images/java/design-patterns/factory-method.png title=https://github.com/lixd/blog/raw/master/images/java/design-patterns/factory-method.png></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> *  抽象产品工厂类
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>FruitFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Fruit</span> <span class=nf>create</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体产品工厂 实现接口
+</span></span></span><span class=line><span class=cl><span class=cm> * 苹果工厂
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>AppleFactory</span> <span class=kd>implements</span> <span class=n>FruitFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>Fruit</span> <span class=nf>create</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>Apple</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体产品工厂 实现接口
+</span></span></span><span class=line><span class=cl><span class=cm> * 苹果工厂
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>AppleFactory</span> <span class=kd>implements</span> <span class=n>FruitFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>Fruit</span> <span class=nf>create</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>Apple</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 工厂方法模式 测试类
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>FactoryMethodTest</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Test</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>factoryMethodTest</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Fruit</span> <span class=n>apple</span> <span class=o>=</span> <span class=k>new</span> <span class=n>AppleFactory</span><span class=o>().</span><span class=na>create</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>apple</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>Fruit</span> <span class=n>orange</span> <span class=o>=</span> <span class=k>new</span> <span class=n>OrangeFactory</span><span class=o>().</span><span class=na>create</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>orange</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><h2 id=4-抽象工厂模式>4. 抽象工厂模式</h2><p>网上找的一个类图：</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://github.com/lixd/blog/raw/master/images/java/design-patterns/abstract-factory.jpg data-srcset="https://github.com/lixd/blog/raw/master/images/java/design-patterns/abstract-factory.jpg, https://github.com/lixd/blog/raw/master/images/java/design-patterns/abstract-factory.jpg 1.5x, https://github.com/lixd/blog/raw/master/images/java/design-patterns/abstract-factory.jpg 2x" data-sizes=auto alt=https://github.com/lixd/blog/raw/master/images/java/design-patterns/abstract-factory.jpg title=https://github.com/lixd/blog/raw/master/images/java/design-patterns/abstract-factory.jpg></p><blockquote><p>工厂方法模式有一个问题就是，类的创建依赖工厂类，也就是说，如果想要拓展程序，必须对工厂类进行修改，这违背了闭包原则，所以，从设计角度考虑，有一定的问题，如何解决？就用到抽象工厂模式，创建多个工厂类，这样一旦需要增加新的功能，直接增加新的工厂类就可以了，不需要修改之前的代码。</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 抽象产品类 果汁
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>Juice</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>void</span> <span class=nf>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体产品类
+</span></span></span><span class=line><span class=cl><span class=cm> * 苹果汁
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>AppleJuice</span> <span class=kd>implements</span> <span class=n>Juice</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>show</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;AppleJuice&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体产品类
+</span></span></span><span class=line><span class=cl><span class=cm> * 橘子汁
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>OrangeJuice</span> <span class=kd>implements</span> <span class=n>Juice</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>show</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;OrangeJuice&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 抽象工厂类
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>AbstractFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * 创建水果
+</span></span></span><span class=line><span class=cl><span class=cm>     *
+</span></span></span><span class=line><span class=cl><span class=cm>     * @return 水果
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=n>Fruit</span> <span class=nf>createFruit</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * 创建果汁
+</span></span></span><span class=line><span class=cl><span class=cm>     *
+</span></span></span><span class=line><span class=cl><span class=cm>     * @return 果汁
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=n>Juice</span> <span class=nf>createJuice</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体工厂类
+</span></span></span><span class=line><span class=cl><span class=cm> * 苹果工厂 生产苹果和苹果汁
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>AppleFactory</span> <span class=kd>implements</span> <span class=n>AbstractFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>Fruit</span> <span class=nf>createFruit</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>Apple</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>Juice</span> <span class=nf>createJuice</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>AppleJuice</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 具体工厂类
+</span></span></span><span class=line><span class=cl><span class=cm> * 橘子工厂 生产橘子和橘子汁
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>OrangeFactory</span> <span class=kd>implements</span> <span class=n>AbstractFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>Fruit</span> <span class=nf>createFruit</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>Orange</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>Juice</span> <span class=nf>createJuice</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>OrangeJuice</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 抽象工厂模式 测试类
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author illusoryCloud
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>AbstractFactoryTest</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Test</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>abstractFactoryTest</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>//苹果产品簇
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>AbstractFactory</span> <span class=n>appleFactory</span> <span class=o>=</span> <span class=k>new</span> <span class=n>AppleFactory</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>Fruit</span> <span class=n>apple</span> <span class=o>=</span> <span class=n>appleFactory</span><span class=o>.</span><span class=na>createFruit</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>Juice</span> <span class=n>appleJuice</span> <span class=o>=</span> <span class=n>appleFactory</span><span class=o>.</span><span class=na>createJuice</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=c1>//橘子产品簇
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>AbstractFactory</span> <span class=n>orangeFactory</span> <span class=o>=</span> <span class=k>new</span> <span class=n>OrangeFactory</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>Fruit</span> <span class=n>orange</span> <span class=o>=</span> <span class=n>orangeFactory</span><span class=o>.</span><span class=na>createFruit</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>Juice</span> <span class=n>orangeJuice</span> <span class=o>=</span> <span class=n>orangeFactory</span><span class=o>.</span><span class=na>createJuice</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>apple</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>appleJuice</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>orange</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>orangeJuice</span><span class=o>.</span><span class=na>show</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p><strong>优点</strong>：当一个产品族中的多个对象被设计成一起工作时，它能保证客户端始终只使用同一个产品族中的对象。</p><p><strong>缺点</strong>：产品族扩展非常困难，要增加一个系列的某一产品，既要在抽象的 工厂里加代码，又要在具体的工厂里面加代码。要增加一个新的系列时比较简单。</p><p>例如上面例子中在苹果系列增加一个苹果派就很困难得修改苹果工厂和抽象工厂，但是若增加一个菠萝系列就很简单，只需要添加一个菠萝工厂就行了。</p><h2 id=5-总结>5. 总结</h2><p><strong>工厂模式的优点？为什么要使用工厂模式</strong></p><ul><li>工厂都是用来封装对象的具体创建过程，减少重复代码，降低对象变化时的维护成本，将对象创建过程和使用相解耦。</li><li>工厂方法模式使用继承，抽象工厂使用对象组合；两者利用抽象的原则，将具体的实例化过程延迟到子类。</li><li>工厂利用的最重要和基本的原则——依赖抽象，不要依赖具体类。</li></ul><p><strong>应用场景</strong></p><p>简单工厂：适合创建同一级别的不同对象。</p><p>工厂方法：为每种产品提供一个工厂类，通过不同的工厂实例来创建不同的产品。</p><p>抽象工厂模式：一个对象族（或是一组没有任何关系的对象）都有相同的约束，则可以使用抽象工厂模式。</p><p><strong>工厂模式在Java中的应用</strong></p><p><code>简单工厂模式</code></p><p>JDK中的简单工厂模式有很多应用，比较典型的比如线程池。我们使用线程池的时候，可以使用ThreadPoolExecutor，根据自己的喜好传入corePoolSize、maximumPoolSize、keepAliveTimem、unit、workQueue、threadFactory、handler这几个参数，new出一个指定的ThreadPoolExecutor出来。</p><p><code>工厂方法模式</code></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>ThreadFactory</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * Constructs a new {@code Thread}.  Implementations may also initialize
+</span></span></span><span class=line><span class=cl><span class=cm>     * priority, name, daemon status, {@code ThreadGroup}, etc.
+</span></span></span><span class=line><span class=cl><span class=cm>     *
+</span></span></span><span class=line><span class=cl><span class=cm>     * @param r a runnable to be executed by new thread instance
+</span></span></span><span class=line><span class=cl><span class=cm>     * @return constructed thread, or {@code null} if the request to
+</span></span></span><span class=line><span class=cl><span class=cm>     *         create a thread is rejected
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=n>Thread</span> <span class=nf>newThread</span><span class=o>(</span><span class=n>Runnable</span> <span class=n>r</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>这是一个生产线程的接口,具体的线程工厂可以implements这个接口并实现newThread(Runnable r)方法，来生产具体线程工厂想要生产的线程。</p><h2 id=6-参考>6. 参考</h2><p><code>https://blog.csdn.net/d1562901685/article/details/77623237</code></p><p><code>https://www.cnblogs.com/xrq730/p/4905578.html</code></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2018-11-18</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://blog.yudlk.com/posts/java/design-pattern/02--factory/ data-title=Java设计模式(二)---工厂模式 data-hashtags=设计模式><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://blog.yudlk.com/posts/java/design-pattern/02--factory/ data-hashtag=设计模式><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://blog.yudlk.com/posts/java/design-pattern/02--factory/ data-title=Java设计模式(二)---工厂模式><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://blog.yudlk.com/posts/java/design-pattern/02--factory/ data-title=Java设计模式(二)---工厂模式><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://blog.yudlk.com/posts/java/design-pattern/02--factory/ data-title=Java设计模式(二)---工厂模式><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/>设计模式</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/java/design-pattern/01-singleton/ class=prev rel=prev title=Java设计模式(一)---单例模式><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Java设计模式(一)---单例模式</a>
+<a href=/posts/android/02-view-click-event/ class=next rel=next title=Android事件分发机制详解>Android事件分发机制详解<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.100.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2018 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://github.com/lixd target=_blank>qpt</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a rel="license external nofollow noopener noreffer" href=https://beian.miit.gov.cn/ target=_blank>渝ICP备20005680号-1</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.480e58b2c2a8605d406f34667e92ff8f1ae50cfee5b653bead570f004839a983.js integrity="sha256-SA5YssKoYF1AbzRmfpL/jxrlDP7ltlO+rVcPAEg5qYM="></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-FL23FNP7CM',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-FL23FNP7CM" async></script><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?4b7c98449a6edf8492a8f3404e6d06a0",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7693630257897132" crossorigin=anonymous></script></body></html>

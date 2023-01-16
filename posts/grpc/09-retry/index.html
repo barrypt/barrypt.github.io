@@ -1,0 +1,351 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>gRPC(Go)教程(九)---配置retry自动重试 -</title><meta name=Description content="gRPC 中的retry自动重试配置"><meta property="og:title" content="gRPC(Go)教程(九)---配置retry自动重试"><meta property="og:description" content="gRPC 中的retry自动重试配置"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.yudlk.com/posts/grpc/09-retry/"><meta property="og:image" content="https://blog.yudlk.com/img/jinx.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-02-06T22:00:00+00:00"><meta property="article:modified_time" content="2021-02-06T22:00:00+00:00"><meta property="og:site_name" content="qpt的个人博客"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.yudlk.com/img/jinx.png"><meta name=twitter:title content="gRPC(Go)教程(九)---配置retry自动重试"><meta name=twitter:description content="gRPC 中的retry自动重试配置"><meta name=application-name content="指月小筑"><meta name=apple-mobile-web-app-title content="指月小筑"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://blog.yudlk.com/posts/grpc/09-retry/><link rel=prev href=https://blog.yudlk.com/posts/grpc/08-ctx-cancel-deadline/><link rel=next href=https://blog.yudlk.com/posts/docker/03-container-core/><link rel=stylesheet href=/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"gRPC(Go)教程(九)---配置retry自动重试","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.yudlk.com\/posts\/grpc\/09-retry\/"},"image":["https:\/\/blog.yudlk.com\/img\/jinx.png"],"genre":"posts","keywords":"gRPC","wordcount":3245,"url":"https:\/\/blog.yudlk.com\/posts\/grpc\/09-retry\/","datePublished":"2021-02-06T22:00:00+00:00","dateModified":"2021-02-06T22:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"qpt"},"description":"gRPC 中的retry自动重试配置"}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/ title=指月小筑>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/ title=关于>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title>指月小筑</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/posts/ title=指月小筑>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title=关于>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">gRPC(Go)教程(九)---配置retry自动重试</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://github.com/lixd title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>qpt</a></span>&nbsp;<span class=post-category>included in <a href=/categories/grpc/><i class="far fa-folder fa-fw" aria-hidden=true></i>gRPC</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2021-02-06>2021-02-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;3245 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;7 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#1-概述>1. 概述</a></li><li><a href=#2-demo>2. Demo</a><ul><li><a href=#server>Server</a></li><li><a href=#client>Client</a></li><li><a href=#run>Run</a></li><li><a href=#开启重试>开启重试</a></li></ul></li><li><a href=#3-配置>3. 配置</a><ul><li><a href=#service_configproto>service_config.proto</a></li><li><a href=#retry-config>retry config</a></li></ul></li><li><a href=#4-小结>4. 小结</a></li></ul></nav></div></div><div class=content id=content><p>本文主要记录了如何使用 gRPC 中的 自动重试功能。</p><h2 id=1-概述>1. 概述</h2><blockquote><p>gRPC 系列相关代码见 <a href=https://github.com/lixd/grpc-go-example target=_blank rel="noopener noreffer">Github</a></p></blockquote><p>gRPC 中已经内置了 retry 功能，可以直接使用，不需要我们手动来实现，非常方便。</p><h2 id=2-demo>2. Demo</h2><h3 id=server>Server</h3><p>为了测试 retry 功能，服务端做了一点调整。</p><p>记录客户端的请求次数，只有满足条件的那一次（这里就是请求次数模4等于0的那一次）才返回成功，其他时候都返回失败。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;context&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;flag&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;log&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;net&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;sync&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;google.golang.org/grpc&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;google.golang.org/grpc/codes&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;google.golang.org/grpc/status&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>pb</span> <span class=s>&#34;github.com/lixd/grpc-go-example/features/proto/echo&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>port</span> <span class=p>=</span> <span class=nx>flag</span><span class=p>.</span><span class=nf>Int</span><span class=p>(</span><span class=s>&#34;port&#34;</span><span class=p>,</span> <span class=mi>50052</span><span class=p>,</span> <span class=s>&#34;port number&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>failingServer</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>pb</span><span class=p>.</span><span class=nx>UnimplementedEchoServer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>mu</span> <span class=nx>sync</span><span class=p>.</span><span class=nx>Mutex</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>reqCounter</span> <span class=kt>uint</span>
+</span></span><span class=line><span class=cl>	<span class=nx>reqModulo</span>  <span class=kt>uint</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// maybeFailRequest 手动模拟请求失败 一共请求n次，前n-1次都返回失败，最后一次返回成功。
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>s</span> <span class=o>*</span><span class=nx>failingServer</span><span class=p>)</span> <span class=nf>maybeFailRequest</span><span class=p>()</span> <span class=kt>error</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>s</span><span class=p>.</span><span class=nx>mu</span><span class=p>.</span><span class=nf>Lock</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=k>defer</span> <span class=nx>s</span><span class=p>.</span><span class=nx>mu</span><span class=p>.</span><span class=nf>Unlock</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=nx>s</span><span class=p>.</span><span class=nx>reqCounter</span><span class=o>++</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=nx>s</span><span class=p>.</span><span class=nx>reqModulo</span> <span class=p>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=nx>s</span><span class=p>.</span><span class=nx>reqCounter</span><span class=o>%</span><span class=nx>s</span><span class=p>.</span><span class=nx>reqModulo</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>status</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=nx>codes</span><span class=p>.</span><span class=nx>Unavailable</span><span class=p>,</span> <span class=s>&#34;maybeFailRequest: failing it&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=p>(</span><span class=nx>s</span> <span class=o>*</span><span class=nx>failingServer</span><span class=p>)</span> <span class=nf>UnaryEcho</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>req</span> <span class=o>*</span><span class=nx>pb</span><span class=p>.</span><span class=nx>EchoRequest</span><span class=p>)</span> <span class=p>(</span><span class=o>*</span><span class=nx>pb</span><span class=p>.</span><span class=nx>EchoResponse</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>s</span><span class=p>.</span><span class=nf>maybeFailRequest</span><span class=p>();</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;request failed count:&#34;</span><span class=p>,</span> <span class=nx>s</span><span class=p>.</span><span class=nx>reqCounter</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>log</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;request succeeded count:&#34;</span><span class=p>,</span> <span class=nx>s</span><span class=p>.</span><span class=nx>reqCounter</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=o>&amp;</span><span class=nx>pb</span><span class=p>.</span><span class=nx>EchoResponse</span><span class=p>{</span><span class=nx>Message</span><span class=p>:</span> <span class=nx>req</span><span class=p>.</span><span class=nx>Message</span><span class=p>},</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>flag</span><span class=p>.</span><span class=nf>Parse</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>address</span> <span class=o>:=</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;:%v&#34;</span><span class=p>,</span> <span class=o>*</span><span class=nx>port</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>lis</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>net</span><span class=p>.</span><span class=nf>Listen</span><span class=p>(</span><span class=s>&#34;tcp&#34;</span><span class=p>,</span> <span class=nx>address</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;failed to listen: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;listen on address&#34;</span><span class=p>,</span> <span class=nx>address</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>s</span> <span class=o>:=</span> <span class=nx>grpc</span><span class=p>.</span><span class=nf>NewServer</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 指定第4次请求才返回成功，用于测试 gRPC 的 retry 功能。
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>failingservice</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>failingServer</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>reqModulo</span><span class=p>:</span> <span class=mi>4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>pb</span><span class=p>.</span><span class=nf>RegisterEchoServer</span><span class=p>(</span><span class=nx>s</span><span class=p>,</span> <span class=nx>failingservice</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>s</span><span class=p>.</span><span class=nf>Serve</span><span class=p>(</span><span class=nx>lis</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;failed to serve: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><h3 id=client>Client</h3><p>客户端则是建立连接的时候通过<code>grpc.WithDefaultServiceConfig()</code>配置好 retry 功能。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;context&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;flag&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;log&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>pb</span> <span class=s>&#34;github.com/lixd/grpc-go-example/features/proto/echo&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;google.golang.org/grpc&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=nx>addr</span> <span class=p>=</span> <span class=nx>flag</span><span class=p>.</span><span class=nf>String</span><span class=p>(</span><span class=s>&#34;addr&#34;</span><span class=p>,</span> <span class=s>&#34;localhost:50052&#34;</span><span class=p>,</span> <span class=s>&#34;the address to connect to&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 更多配置信息查看官方文档： https://github.com/grpc/grpc/blob/master/doc/service_config.md
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// service这里语法为&lt;package&gt;.&lt;service&gt; package就是proto文件中指定的package，service也是proto文件中指定的 Service Name。
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// method 可以不指定 即当前service下的所以方法都使用该配置。
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>retryPolicy</span> <span class=p>=</span> <span class=s>`{
+</span></span></span><span class=line><span class=cl><span class=s>		&#34;methodConfig&#34;: [{
+</span></span></span><span class=line><span class=cl><span class=s>		  &#34;name&#34;: [{&#34;service&#34;: &#34;echo.Echo&#34;,&#34;method&#34;:&#34;UnaryEcho&#34;}],
+</span></span></span><span class=line><span class=cl><span class=s>		  &#34;retryPolicy&#34;: {
+</span></span></span><span class=line><span class=cl><span class=s>			  &#34;MaxAttempts&#34;: 4,
+</span></span></span><span class=line><span class=cl><span class=s>			  &#34;InitialBackoff&#34;: &#34;.01s&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>			  &#34;MaxBackoff&#34;: &#34;.01s&#34;,
+</span></span></span><span class=line><span class=cl><span class=s>			  &#34;BackoffMultiplier&#34;: 1.0,
+</span></span></span><span class=line><span class=cl><span class=s>			  &#34;RetryableStatusCodes&#34;: [ &#34;UNAVAILABLE&#34; ]
+</span></span></span><span class=line><span class=cl><span class=s>		  }
+</span></span></span><span class=line><span class=cl><span class=s>		}]}`</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>flag</span><span class=p>.</span><span class=nf>Parse</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=nx>conn</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>grpc</span><span class=p>.</span><span class=nf>Dial</span><span class=p>(</span><span class=o>*</span><span class=nx>addr</span><span class=p>,</span> <span class=nx>grpc</span><span class=p>.</span><span class=nf>WithInsecure</span><span class=p>(),</span> <span class=nx>grpc</span><span class=p>.</span><span class=nf>WithDefaultServiceConfig</span><span class=p>(</span><span class=nx>retryPolicy</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;did not connect: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>defer</span> <span class=kd>func</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nx>e</span> <span class=o>:=</span> <span class=nx>conn</span><span class=p>.</span><span class=nf>Close</span><span class=p>();</span> <span class=nx>e</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nx>log</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;failed to close connection: %s&#34;</span><span class=p>,</span> <span class=nx>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=p>}()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>c</span> <span class=o>:=</span> <span class=nx>pb</span><span class=p>.</span><span class=nf>NewEchoClient</span><span class=p>(</span><span class=nx>conn</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>ctx</span><span class=p>,</span> <span class=nx>cancel</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>context</span><span class=p>.</span><span class=nf>Background</span><span class=p>(),</span> <span class=mi>1</span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>defer</span> <span class=nf>cancel</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>reply</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nf>UnaryEcho</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=o>&amp;</span><span class=nx>pb</span><span class=p>.</span><span class=nx>EchoRequest</span><span class=p>{</span><span class=nx>Message</span><span class=p>:</span> <span class=s>&#34;Try and Success&#34;</span><span class=p>})</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;UnaryEcho error: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>log</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;UnaryEcho reply: %v&#34;</span><span class=p>,</span> <span class=nx>reply</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><blockquote><p>配置信息具体含义这里先不解释，在后续章节有详细说明。</p></blockquote><h3 id=run>Run</h3><p>先启动服务端</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>lixd@17x:~/17x/projects/grpc-go-example/features/retry/server$ go run main.go 
+</span></span><span class=line><span class=cl>listen on address :50052
+</span></span><span class=line><span class=cl>2021/02/17 17:35:29 request failed count: <span class=m>1</span>
+</span></span></code></pre></div><p>在启动客户端</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>lixd@17x:~/17x/projects/grpc-go-example/features/retry/client$ go run main.go 
+</span></span><span class=line><span class=cl>2021/02/17 17:35:29 UnaryEcho error: rpc error: <span class=nv>code</span> <span class=o>=</span> Unavailable <span class=nv>desc</span> <span class=o>=</span> maybeFailRequest: failing it
+</span></span><span class=line><span class=cl><span class=nb>exit</span> status <span class=m>1</span>
+</span></span></code></pre></div><p>emmm 并没有重试。。。</p><h3 id=开启重试>开启重试</h3><p>查看文档后发现是需要<strong>设置环境变量（GRPC_GO_RETRY=on）</strong>。</p><blockquote><p>因为是客户端的重试功能，所以是在客户端设置环境变量，服务端则不需要。</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>lixd@17x$ <span class=nb>export</span> <span class=nv>GRPC_GO_RETRY</span><span class=o>=</span>on
+</span></span><span class=line><span class=cl>lixd@17x$ <span class=nb>echo</span> <span class=nv>$GRPC_GO_RETRY</span>
+</span></span><span class=line><span class=cl>on
+</span></span></code></pre></div><p>然后重新启动服务端和客户端</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>lixd@17x:~/17x/projects/grpc-go-example/features/retry/server$ go run main.go 
+</span></span><span class=line><span class=cl>listen on address :50052
+</span></span><span class=line><span class=cl>2021/02/17 17:37:55 request failed count: <span class=m>1</span>
+</span></span><span class=line><span class=cl>2021/02/17 17:37:55 request failed count: <span class=m>2</span>
+</span></span><span class=line><span class=cl>2021/02/17 17:37:55 request failed count: <span class=m>3</span>
+</span></span><span class=line><span class=cl>2021/02/17 17:37:55 request succeeded count: <span class=m>4</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>lixd@17x:~/17x/projects/grpc-go-example/features/retry/client$ go run main.go 
+</span></span><span class=line><span class=cl>2021/02/17 17:37:55 UnaryEcho reply: message:<span class=s2>&#34;Try and Success&#34;</span>
+</span></span></code></pre></div><p>现在重试功能就生效了。</p><p>前3次都失败了，且返回错误码是客户端重试策略中指定的<code>UNAVAILABLE</code>,所以都进行了重试，直到第4次成功了就不在重试了。</p><blockquote><p>当然，第4次已经是最大尝试次数了，就算失败也不会重试了。</p></blockquote><h2 id=3-配置>3. 配置</h2><p>Service Config 是以 JSON 格式配置的，具体文档见 <a href=https://github.com/grpc/grpc/blob/master/doc/service_config.md target=_blank rel="noopener noreffer">service_config.md</a>。</p><h3 id=service_configproto>service_config.proto</h3><p>当前支持的配置信息由 <a href=https://github.com/grpc/grpc-proto/blob/master/grpc/service_config/service_config.proto target=_blank rel="noopener noreffer">service_config.proto</a> 文件定义，详细信息可以参考该文件，这里贴一部分仅供参考：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-protobuf data-lang=protobuf><span class=line><span class=cl><span class=c1>// Configuration for a method.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>message</span> <span class=nc>MethodConfig</span> <span class=p>{</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=c1>// The names of the methods to which this configuration applies.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// - MethodConfig without names (empty list) will be skipped.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// - Each name entry must be unique across the entire ServiceConfig.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// - If the &#39;method&#39; field is empty, this MethodConfig specifies the defaults
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//   for all methods for the specified service.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// - If the &#39;service&#39; field is empty, the &#39;method&#39; field must be empty, and
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//   this MethodConfig specifies the default for all methods (it&#39;s the default
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//   config).
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// When determining which MethodConfig to use for a given RPC, the most
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// specific match wins. For example, let&#39;s say that the service config
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// contains the following MethodConfig entries:
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// method_config { name { } ... }
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// method_config { name { service: &#34;MyService&#34; } ... }
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// method_config { name { service: &#34;MyService&#34; method: &#34;Foo&#34; } ... }
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// MyService/Foo will use the third entry, because it exactly matches the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// service and method name. MyService/Bar will use the second entry, because
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// it provides the default for all methods of MyService. AnotherService/Baz
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// will use the first entry, because it doesn&#39;t match the other two.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// In JSON representation, value &#34;&#34;, value `null`, and not present are the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// same. The following are the same Name:
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// - { &#34;service&#34;: &#34;s&#34; }
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// - { &#34;service&#34;: &#34;s&#34;, &#34;method&#34;: null }
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// - { &#34;service&#34;: &#34;s&#34;, &#34;method&#34;: &#34;&#34; }
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>message</span> <span class=nc>Name</span> <span class=p>{</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=kt>string</span> <span class=kd>service</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>  <span class=c1>// Required. Includes proto package name.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>string</span> <span class=n>method</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=p>}</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=k>repeated</span> <span class=n>Name</span> <span class=n>name</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=c1>// Whether RPCs sent to this method should wait until the connection is
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// ready by default. If false, the RPC will abort immediately if there is
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// a transient failure connecting to the server. Otherwise, gRPC will
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// attempt to connect until the deadline is exceeded.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// The value specified via the gRPC client API will override the value
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// set here. However, note that setting the value in the client API will
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// also affect transient errors encountered during name resolution, which
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// cannot be caught by the value here, since the service config is
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// obtained by the gRPC client via name resolution.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>google.protobuf.BoolValue</span> <span class=n>wait_for_ready</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=c1>// The default timeout in seconds for RPCs sent to this method. This can be
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// overridden in code. If no reply is received in the specified amount of
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// time, the request is aborted and a DEADLINE_EXCEEDED error status
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// is returned to the caller.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// The actual deadline used will be the minimum of the value specified here
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// and the value set by the application via the gRPC client API.  If either
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// one is not set, then the other will be used.  If neither is set, then the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// request has no deadline.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>google.protobuf.Duration</span> <span class=n>timeout</span> <span class=o>=</span> <span class=mi>3</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=c1>// The maximum allowed payload size for an individual request or object in a
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// stream (client-&gt;server) in bytes. The size which is measured is the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// serialized payload after per-message compression (but before stream
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// compression) in bytes. This applies both to streaming and non-streaming
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// requests.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// The actual value used is the minimum of the value specified here and the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// value set by the application via the gRPC client API.  If either one is
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// not set, then the other will be used.  If neither is set, then the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// built-in default is used.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// If a client attempts to send an object larger than this value, it will not
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// be sent and the client will see a ClientError.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// Note that 0 is a valid value, meaning that the request message
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// must be empty.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>google.protobuf.UInt32Value</span> <span class=n>max_request_message_bytes</span> <span class=o>=</span> <span class=mi>4</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=c1>// The maximum allowed payload size for an individual response or object in a
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// stream (server-&gt;client) in bytes. The size which is measured is the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// serialized payload after per-message compression (but before stream
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// compression) in bytes. This applies both to streaming and non-streaming
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// requests.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// The actual value used is the minimum of the value specified here and the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// value set by the application via the gRPC client API.  If either one is
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// not set, then the other will be used.  If neither is set, then the
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// built-in default is used.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// If a server attempts to send an object larger than this value, it will not
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// be sent, and a ServerError will be sent to the client instead.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// Note that 0 is a valid value, meaning that the response message
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// must be empty.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>google.protobuf.UInt32Value</span> <span class=n>max_response_message_bytes</span> <span class=o>=</span> <span class=mi>5</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=c1>// The retry policy for outgoing RPCs.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>message</span> <span class=nc>RetryPolicy</span> <span class=p>{</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// The maximum number of RPC attempts, including the original attempt.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// This field is required and must be greater than 1.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// Any value greater than 5 will be treated as if it were 5.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>uint32</span> <span class=n>max_attempts</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// Exponential backoff parameters. The initial retry attempt will occur at
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// random(0, initial_backoff). In general, the nth attempt will occur at
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// random(0,
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>//   min(initial_backoff*backoff_multiplier**(n-1), max_backoff)).
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// Required. Must be greater than zero.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>google.protobuf.Duration</span> <span class=n>initial_backoff</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// Required. Must be greater than zero.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>google.protobuf.Duration</span> <span class=n>max_backoff</span> <span class=o>=</span> <span class=mi>3</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=kt>float</span> <span class=n>backoff_multiplier</span> <span class=o>=</span> <span class=mi>4</span><span class=p>;</span>  <span class=c1>// Required. Must be greater than zero.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// The set of status codes which may be retried.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// This field is required and must be non-empty.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>repeated</span> <span class=n>google.rpc.Code</span> <span class=n>retryable_status_codes</span> <span class=o>=</span> <span class=mi>5</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=p>}</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// The hedging policy for outgoing RPCs. Hedged RPCs may execute more than
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// once on the server, so only idempotent methods should specify a hedging
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// policy.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>message</span> <span class=nc>HedgingPolicy</span> <span class=p>{</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// The hedging policy will send up to max_requests RPCs.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// This number represents the total number of all attempts, including
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// the original attempt.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// This field is required and must be greater than 1.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// Any value greater than 5 will be treated as if it were 5.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>uint32</span> <span class=n>max_attempts</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// The first RPC will be sent immediately, but the max_requests-1 subsequent
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// hedged RPCs will be sent at intervals of every hedging_delay. Set this
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// to 0 to immediately send all max_requests RPCs.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>google.protobuf.Duration</span> <span class=n>hedging_delay</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=c1>// The set of status codes which indicate other hedged RPCs may still
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// succeed. If a non-fatal status code is returned by the server, hedged
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// RPCs will continue. Otherwise, outstanding requests will be canceled and
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// the error returned to the client application layer.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// This field is optional.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>repeated</span> <span class=n>google.rpc.Code</span> <span class=n>non_fatal_status_codes</span> <span class=o>=</span> <span class=mi>3</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=p>}</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=c1>// Only one of retry_policy or hedging_policy may be set. If neither is set,
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// RPCs will not be retried or hedged.
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>oneof</span> <span class=n>retry_or_hedging_policy</span> <span class=p>{</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=n>RetryPolicy</span> <span class=n>retry_policy</span> <span class=o>=</span> <span class=mi>6</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>    <span class=n>HedgingPolicy</span> <span class=n>hedging_policy</span> <span class=o>=</span> <span class=mi>7</span><span class=p>;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span>  <span class=p>}</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span><span class=p>}</span><span class=err>
+</span></span></span></code></pre></div><p>注释写的还是很详细的，转换成 JSON 如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nt>&#34;methodConfig&#34;</span><span class=p>:</span> <span class=p>[{</span>
+</span></span><span class=line><span class=cl>		  <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=p>[{</span><span class=nt>&#34;service&#34;</span><span class=p>:</span> <span class=s2>&#34;echo.Echo&#34;</span><span class=p>,</span><span class=nt>&#34;method&#34;</span><span class=p>:</span><span class=s2>&#34;UnaryEcho&#34;</span><span class=p>}],</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;wait_for_ready&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;timeout&#34;</span><span class=p>:</span> <span class=mi>1000</span><span class=err>ms</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;max_request_message_bytes&#34;</span><span class=p>:</span> <span class=mi>1024</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;max_response_message_bytes&#34;</span><span class=p>:</span> <span class=mi>1024</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		  <span class=nt>&#34;retryPolicy&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;maxAttempts&#34;</span><span class=p>:</span> <span class=mi>4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;initialBackoff&#34;</span><span class=p>:</span> <span class=s2>&#34;.01s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;maxBackoff&#34;</span><span class=p>:</span> <span class=s2>&#34;.01s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;backoffMultiplier&#34;</span><span class=p>:</span> <span class=mf>1.0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;retryableStatusCodes&#34;</span><span class=p>:</span> <span class=p>[</span> <span class=s2>&#34;UNAVAILABLE&#34;</span> <span class=p>]</span>
+</span></span><span class=line><span class=cl>		  <span class=p>},</span>
+</span></span><span class=line><span class=cl>		  <span class=nt>&#34;hedgingPolicy&#34;</span><span class=p>:{</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&#34;maxAttempts&#34;</span><span class=p>:</span><span class=mi>4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&#34;hedgingDelay&#34;</span><span class=p>:</span><span class=s2>&#34;0.1s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&#34;nonFatalStatusCodes&#34;</span><span class=p>:</span> <span class=p>[</span> <span class=s2>&#34;&#34;</span> <span class=p>]</span>
+</span></span><span class=line><span class=cl>          <span class=p>}}]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>首先是 Name，通过 service + method 指定当前配置要应用到哪些服务和方法。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=s2>&#34;name&#34;</span><span class=err>:</span> <span class=p>[{</span><span class=nt>&#34;service&#34;</span><span class=p>:</span> <span class=s2>&#34;echo.Echo&#34;</span><span class=p>,</span><span class=nt>&#34;method&#34;</span><span class=p>:</span><span class=s2>&#34;UnaryEcho&#34;</span><span class=p>}]</span><span class=err>,</span>
+</span></span></code></pre></div><p>然后后续几个都不是重点：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl>          <span class=s2>&#34;wait_for_ready&#34;</span><span class=err>:</span> <span class=kc>false</span><span class=err>,</span>
+</span></span><span class=line><span class=cl>          <span class=s2>&#34;timeout&#34;</span><span class=err>:</span> <span class=mi>1000</span><span class=err>ms,</span>
+</span></span><span class=line><span class=cl>          <span class=s2>&#34;max_request_message_bytes&#34;</span><span class=err>:</span> <span class=mi>1024</span><span class=err>,</span>
+</span></span><span class=line><span class=cl>          <span class=s2>&#34;max_response_message_bytes&#34;</span><span class=err>:</span> <span class=mi>1024</span><span class=err>,</span>
+</span></span></code></pre></div><p>重点是下面这两个配置,重试策略和对冲策略：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl>		  <span class=s2>&#34;retryPolicy&#34;</span><span class=err>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;maxAttempts&#34;</span><span class=p>:</span> <span class=mi>4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;initialBackoff&#34;</span><span class=p>:</span> <span class=s2>&#34;.01s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;maxBackoff&#34;</span><span class=p>:</span> <span class=s2>&#34;.01s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;backoffMultiplier&#34;</span><span class=p>:</span> <span class=mf>1.0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=nt>&#34;retryableStatusCodes&#34;</span><span class=p>:</span> <span class=p>[</span> <span class=s2>&#34;UNAVAILABLE&#34;</span> <span class=p>]</span>
+</span></span><span class=line><span class=cl>		  <span class=p>}</span><span class=err>,</span>
+</span></span><span class=line><span class=cl>		  <span class=s2>&#34;hedgingPolicy&#34;</span><span class=err>:</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&#34;maxAttempts&#34;</span><span class=p>:</span><span class=mi>4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&#34;hedgingDelay&#34;</span><span class=p>:</span><span class=s2>&#34;0.1s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&#34;nonFatalStatusCodes&#34;</span><span class=p>:</span> <span class=p>[</span> <span class=s2>&#34;UNAVAILABLE&#34;</span> <span class=p>]</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span></code></pre></div><p>gRPC 的重试策略有两种分别是 <code>重试(retryPolicy)</code>和<code>对冲(hedging)</code>，一个RPC方法只能配置一种重试策略。</p><p><strong>对冲是指在不等待响应的情况主动发送单次调用的多个请求</strong>，如果一个方法使用对冲策略，那么首先会像正常的 RPC 调用一样发送第一次请求，如果 hedgingDelay 时间内没有响应，那么直接发送第二次请求，以此类推，直到发送了 maxAttempts 次。</p><blockquote><p>对冲在超过指定时间没有响应就会直接发起请求，而重试则必须要服务端响应后才会发起请求。</p></blockquote><p>注意： <strong>使用对冲的时候，请求可能会访问到不同的后端(如果设置了负载均衡)，那么就要求方法在多次执行下是安全，并且符合预期的</strong></p><h3 id=retry-config>retry config</h3><p>demo 中的配置信息如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=s>&#34;methodConfig&#34;</span><span class=p>:</span> <span class=p>[{</span>
+</span></span><span class=line><span class=cl>		  <span class=s>&#34;name&#34;</span><span class=p>:</span> <span class=p>[{</span><span class=s>&#34;service&#34;</span><span class=p>:</span> <span class=s>&#34;echo.Echo&#34;</span><span class=p>,</span><span class=s>&#34;method&#34;</span><span class=p>:</span><span class=s>&#34;UnaryEcho&#34;</span><span class=p>}],</span>
+</span></span><span class=line><span class=cl>		  <span class=s>&#34;retryPolicy&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			  <span class=s>&#34;MaxAttempts&#34;</span><span class=p>:</span> <span class=mi>4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=s>&#34;InitialBackoff&#34;</span><span class=p>:</span> <span class=s>&#34;.01s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=s>&#34;MaxBackoff&#34;</span><span class=p>:</span> <span class=s>&#34;.01s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=s>&#34;BackoffMultiplier&#34;</span><span class=p>:</span> <span class=mf>1.0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			  <span class=s>&#34;RetryableStatusCodes&#34;</span><span class=p>:</span> <span class=p>[</span> <span class=s>&#34;UNAVAILABLE&#34;</span> <span class=p>]</span>
+</span></span><span class=line><span class=cl>		  <span class=p>}}]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><ul><li>name 指定下面的配置信息作用的 RPC 服务或方法<ul><li>service：通过服务名匹配，语法为<code>&lt;package>.&lt;service> </code>package就是proto文件中指定的package，service也是proto文件中指定的 Service Name。</li><li>method：匹配具体某个方法，proto文件中定义的方法名。</li></ul></li></ul><p>主要关注 retryPolicy，重试策略</p><ul><li>MaxAttempts：最大尝试次数</li><li>InitialBackoff：默认退避时间</li><li>MaxBackoff：最大退避时间</li><li>BackoffMultiplier：退避时间增加倍率</li><li>RetryableStatusCodes：服务端返回什么错误码才重试</li></ul><p>重试机制一般会搭配退避算法一起使用。</p><blockquote><p>即假设第一次请求失败后，等1秒（随便取的一个数）再次请求，又失败后就等2秒在请求，一直重试直达超过指定重试次数或者等待时间就不在重试。</p></blockquote><p>如果不使用退避算法，失败后就一直重试只会增加服务器的压力。如果是因为服务器压力大，导致的请求失败，那么根据退避算法等待一定时间后再次请求可能就能成功。反之直接请求可能会因为压力过大导致服务崩溃。</p><ul><li>第一次重试间隔是 <code>random(0, initialBackoff)</code></li><li>第 n 次的重试间隔为 <code>random(0, min( initialBackoff*backoffMultiplier**(n-1) , maxBackoff))</code></li></ul><h2 id=4-小结>4. 小结</h2><p>gRPC 中内置了 retry 功能，使用比较简单。</p><ul><li>1）客户端建立连接时通过<code>grpc.WithDefaultServiceConfig(retryPolicy)</code>指定重试策略</li><li>2）环境变量中开启重试:<code>export GRPC_GO_RETRY=on</code></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2021-02-06</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://blog.yudlk.com/posts/grpc/09-retry/ data-title=gRPC(Go)教程(九)---配置retry自动重试 data-hashtags=gRPC><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://blog.yudlk.com/posts/grpc/09-retry/ data-hashtag=gRPC><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://blog.yudlk.com/posts/grpc/09-retry/ data-title=gRPC(Go)教程(九)---配置retry自动重试><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://blog.yudlk.com/posts/grpc/09-retry/ data-title=gRPC(Go)教程(九)---配置retry自动重试><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://blog.yudlk.com/posts/grpc/09-retry/ data-title=gRPC(Go)教程(九)---配置retry自动重试><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/grpc/>gRPC</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/grpc/08-ctx-cancel-deadline/ class=prev rel=prev title=gRPC(Go)教程(八)---使用context进行超时控制><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>gRPC(Go)教程(八)---使用context进行超时控制</a>
+<a href=/posts/docker/03-container-core/ class=next rel=next title=Docker教程(三)---核心实现原理分析>Docker教程(三)---核心实现原理分析<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.100.2">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2018 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://github.com/lixd target=_blank>qpt</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a rel="license external nofollow noopener noreffer" href=https://beian.miit.gov.cn/ target=_blank>渝ICP备20005680号-1</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.480e58b2c2a8605d406f34667e92ff8f1ae50cfee5b653bead570f004839a983.js integrity="sha256-SA5YssKoYF1AbzRmfpL/jxrlDP7ltlO+rVcPAEg5qYM="></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-FL23FNP7CM',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-FL23FNP7CM" async></script><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?4b7c98449a6edf8492a8f3404e6d06a0",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7693630257897132" crossorigin=anonymous></script></body></html>
