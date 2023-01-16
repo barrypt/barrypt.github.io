@@ -1,0 +1,38 @@
+name: Custom Server
+
+on:
+  push:
+    branches:
+      - main  # Set a branch to deploy
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.100.2'
+          extended: true
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Deploy
+        uses: burnett01/rsync-deployments@5.2
+        with:
+          switches: -avzr --delete
+          path: ./public
+          remote_path: /var/www/html/ # 需要先手动在远程主机创建该目录，否则会执行失败
+          remote_host: ${{ secrets.DEPLOY_HOST }} # 远程主机 IP
+          remote_port: ${{ secrets.DEPLOY_PORT }} # ssh 端口，默认为 22
+          remote_user: ${{ secrets.DEPLOY_USER }} # ssh user
+          remote_key: ${{ secrets.DEPLOY_KEY }} # ssh 私钥

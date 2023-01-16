@@ -1,0 +1,27 @@
+{
+	# General Options
+	# debug
+	admin off
+	grace_period 1m
+}
+lixueduan.com {
+	redir https://www.lixueduan.com{uri}
+}
+www.lixueduan.com {
+	tls 1033256636@qq.com
+	encode zstd gzip
+	root * /var/www/html/public
+	file_server
+	log {
+		output file /var/www/logs/access.log
+	}
+	# 正则表达式进行捕获,然后通过占位符进行使用
+	# 例如请求URL为 domain/post/k8s,占位符 {re.path.1}=/post/ 占位符2 {re.path.2}=k8s
+	@pathmatch {
+		path_regexp path (^/post/)(.*)
+	}
+	# 这里再通过redir+占位符进行302跳转,最终实现 /post/xxx 跳转到 /posts/xxx
+	redir @pathmatch /posts/{re.path.2} 302
+	# uri replace 也可以实现，但是无法做302跳转
+	#uri replace /post/ /posts/
+}
