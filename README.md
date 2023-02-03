@@ -1,4 +1,4 @@
-# 指月小筑
+# 面对疾风
 ![](./static/img/jinx.png)
 
 博客在本地修改及预览完成后 push 到该仓库，由 github action 推送到指定服务器以及 github page 上。

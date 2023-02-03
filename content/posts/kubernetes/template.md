@@ -15,6 +15,5 @@ write here
 
 <!--more-->
 
-> 更多文章欢迎访问我的个人博客-->[指月小筑](https://www.lixueduan.com/)
 
 后面写剩下的内容

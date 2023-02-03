@@ -26,7 +26,7 @@ post = ""
 name = "文章"
 url = "/posts/"
 # 当你将鼠标悬停在此菜单链接上时, 将显示的标题
-title = "指月小筑"
+title = "面对疾风"
 [[menu.main]]
 weight = 2
 identifier = "tags"
@@ -85,7 +85,7 @@ dateFormat = "2006-01-02"
 title = "qpt的个人博客"
 # website description for RSS, SEO, Open Graph and Twitter Cards
 # 网站描述, 用于 RSS, SEO, Open Graph 和 Twitter Cards
-description = "指月小筑是qpt的技术分享博客。内容涵盖云原生、Golang、Kubernetes、Docker相关的研究与知识分享。"
+description = "面对疾风是qpt的技术分享博客。内容涵盖云原生、Golang、Kubernetes、Docker相关的研究与知识分享。"
 # website images for Open Graph and Twitter Cards
 # 网站图片, 用于 Open Graph 和 Twitter Cards
 images = ["/img/jinx.png"]
@@ -107,7 +107,7 @@ mobileMode = "auto"
 logo = ""
 # title name
 # 标题名称
-name = "指月小筑"
+name = "面对疾风"
 # you can add extra information before the name (HTML format is supported), such as icons
 # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
 pre = ""
@@ -175,7 +175,7 @@ rss = 10
 [params.app]
 # optional site title override for the app when added to an iOS home screen or Android launcher
 # 当添加到 iOS 主屏幕或者 Android 启动器时的标题, 覆盖默认标题
-title = "指月小筑"
+title = "面对疾风"
 # whether to omit favicon resource links
 # 是否隐藏网站图标资源链接
 noFavicon = false
