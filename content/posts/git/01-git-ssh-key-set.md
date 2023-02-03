@@ -25,7 +25,7 @@ tags: ["Git"]
 
 ```sh
 # 记得改成自己的...
-git config --global user.name "lixd" 
+git config --global user.name "barrypt" 
 git config --global user.email "xueduanli@163.com"
 ```
 
@@ -41,9 +41,9 @@ git config --global user.email "xueduanli@163.com"
 
 ### 2.2 配置SSH key
 
-![](https://github.com/lixd/blog/raw/master/images/git/2018-12-27-git-ssh-key-set1.png)
+![](https://github.com/barrypt/blog/raw/master/images/git/2018-12-27-git-ssh-key-set1.png)
 
-![](https://github.com/lixd/blog/raw/master/images/git/2018-12-27-git-ssh-key-set2.png)
+![](https://github.com/barrypt/blog/raw/master/images/git/2018-12-27-git-ssh-key-set2.png)
 
 
 

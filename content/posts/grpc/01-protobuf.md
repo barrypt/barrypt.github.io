@@ -53,7 +53,7 @@ $ sudo vim /etc/profile
 
 ```shell
 #记得改成自己的路径
-export PATH=$PATH:/home/lixd/17x/protoc-3.14.0-linux-x86_64/bin
+export PATH=$PATH:/home/barrypt/17x/protoc-3.14.0-linux-x86_64/bin
 ```
 
 使其生效
@@ -90,8 +90,8 @@ go get google.golang.org/protobuf/cmd/protoc-gen-go
 ```protobuf
 //声明proto的版本 只有 proto3 才支持 gRPC
 syntax = "proto3";
-// 将编译后文件输出在 github.com/lixd/grpc-go-example/helloworld/helloworld 目录
-option go_package = "github.com/lixd/grpc-go-example/helloworld/helloworld";
+// 将编译后文件输出在 github.com/barrypt/grpc-go-example/helloworld/helloworld 目录
+option go_package = "github.com/barrypt/grpc-go-example/helloworld/helloworld";
 // 指定当前proto文件属于helloworld包
 package helloworld;
 
@@ -169,4 +169,4 @@ protoc 中原生包含了部分语言（java、php、python、ruby等等）的�
 
 
 
-[protobuf-process]:https://github.com/lixd/blog/raw/master/images/grpc/protobuf-process.png
+[protobuf-process]:https://github.com/barrypt/blog/raw/master/images/grpc/protobuf-process.png

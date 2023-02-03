@@ -627,8 +627,8 @@ func (ki *keyIndex) tombstone(lg *zap.Logger, main int64, sub int64) error {
 
 
 
-[mvcc-arch]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/mvcc-arch.png
-[keyIndex]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/keyIndex.webp
-[mvcc-get]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/mvcc-get.png
-[mvcc-put]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/mvcc-put.png
+[mvcc-arch]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/mvcc-arch.png
+[keyIndex]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/keyIndex.webp
+[mvcc-get]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/mvcc-get.png
+[mvcc-put]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/mvcc-put.png
 

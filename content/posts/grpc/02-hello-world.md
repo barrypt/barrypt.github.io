@@ -92,8 +92,8 @@ helloworld/
 ```protobuf
 //声明proto的版本 只有 proto3 才支持 gRPC
 syntax = "proto3";
-// 将编译后文件输出在 github.com/lixd/grpc-go-example/helloworld/helloworld 目录
-option go_package = "github.com/lixd/grpc-go-example/helloworld/helloworld";
+// 将编译后文件输出在 github.com/barrypt/grpc-go-example/helloworld/helloworld 目录
+option go_package = "github.com/barrypt/grpc-go-example/helloworld/helloworld";
 // 指定当前proto文件属于helloworld包
 package helloworld;
 
@@ -154,7 +154,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/lixd/grpc-go-example/helloworld/helloworld"
+	pb "github.com/barrypt/grpc-go-example/helloworld/helloworld"
 	"google.golang.org/grpc"
 )
 
@@ -210,7 +210,7 @@ import (
 	"os"
 	"time"
 
-	pb "github.com/lixd/grpc-go-example/helloworld/helloworld"
+	pb "github.com/barrypt/grpc-go-example/helloworld/helloworld"
 	"google.golang.org/grpc"
 )
 
@@ -255,7 +255,7 @@ func main() {
 先运行服务端
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/helloworld/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/helloworld/server$ go run main.go 
 2021/01/23 14:47:20 Serving gRPC on 0.0.0.0:50051
 2021/01/23 14:47:32 Received: world
 2021/01/23 14:47:52 Received: 指月
@@ -264,9 +264,9 @@ lixd@17x:~/17x/projects/grpc-go-example/helloworld/server$ go run main.go
 然后运行客户端
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/helloworld/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/helloworld/client$ go run main.go 
 2021/01/23 14:47:32 Greeting: Hello world
-lixd@17x:~/17x/projects/grpc-go-example/helloworld/client$ go run main.go 指月
+barrypt@17x:~/17x/projects/grpc-go-example/helloworld/client$ go run main.go 指月
 2021/01/23 14:47:52 Greeting: Hello 指月
 ```
 
@@ -296,6 +296,6 @@ lixd@17x:~/17x/projects/grpc-go-example/helloworld/client$ go run main.go 指月
 
 
 
-[Github]:https://github.com/lixd/grpc-go-example
+[Github]:https://github.com/barrypt/grpc-go-example
 [Protobuf 章节]:https://www.lixueduan.com/post/grpc/01-protobuf
-[protobuf详解]:https://github.com/lixd/daily-notes/blob/master/Components/RPC/gRPC/%E5%BC%95%E5%85%A5%E5%85%B6%E4%BB%96proto%E6%96%87%E4%BB%B6.md
+[protobuf详解]:https://github.com/barrypt/daily-notes/blob/master/Components/RPC/gRPC/%E5%BC%95%E5%85%A5%E5%85%B6%E4%BB%96proto%E6%96%87%E4%BB%B6.md

@@ -13,7 +13,7 @@ tags: ["Network"]
 
 ## OSI与TCP/IP模型
 
-![Model](https://github.com/lixd/blog/raw/master/images/network/osi-tcp-ip-model.png)
+![Model](https://github.com/barrypt/blog/raw/master/images/network/osi-tcp-ip-model.png)
 
 **`应用层:`通过应用进程间的交互来完成特定网络应用。**
 
@@ -25,7 +25,7 @@ tags: ["Network"]
 
 **`物理层：`利用传输介质为数据链路层提供屋里连接，实现比特流的透明传输。**
 
-![](https://github.com/lixd/blog/raw/master/images/network/tcp-ip-model.gif)
+![](https://github.com/barrypt/blog/raw/master/images/network/tcp-ip-model.gif)
 
 ### 1. 应用层
 

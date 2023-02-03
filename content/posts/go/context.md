@@ -732,9 +732,9 @@ func (c *valueCtx) Value(key interface{}) interface{} {
 
 
 
-[Github]:https://github.com/lixd/i-go/tree/master/a-tutorials/lib/ctx
-[context-tree]:https://github.com/lixd/blog/raw/master/images/golang/lib/context/context-tree.png
-[context-cancel]:https://github.com/lixd/blog/raw/master/images/golang/lib/context/context-cancel.png
-[req-step]: https://github.com/lixd/blog/raw/master/images/golang/lib/context/req-step.png
-[context-value]:https://github.com/lixd/blog/raw/master/images/golang/lib/context/context-value.png
+[Github]:https://github.com/barrypt/i-go/tree/master/a-tutorials/lib/ctx
+[context-tree]:https://github.com/barrypt/blog/raw/master/images/golang/lib/context/context-tree.png
+[context-cancel]:https://github.com/barrypt/blog/raw/master/images/golang/lib/context/context-cancel.png
+[req-step]: https://github.com/barrypt/blog/raw/master/images/golang/lib/context/req-step.png
+[context-value]:https://github.com/barrypt/blog/raw/master/images/golang/lib/context/context-value.png
 

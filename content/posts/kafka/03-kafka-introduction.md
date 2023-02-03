@@ -172,5 +172,5 @@ CDH/HDP Kafka，这些大数据平台天然集成了 Apache Kafka，通过便捷
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example
 

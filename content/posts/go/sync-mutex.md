@@ -519,5 +519,5 @@ func semrelease1(addr *uint32, handoff bool, skipframes int) {
 
 
 
-[mutex-state]:https://github.com/lixd/blog/raw/master/images/golang/lib/sync-mutex/mutex-state.png
+[mutex-state]:https://github.com/barrypt/blog/raw/master/images/golang/lib/sync-mutex/mutex-state.png
 

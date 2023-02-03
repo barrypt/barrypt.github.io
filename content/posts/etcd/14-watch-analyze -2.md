@@ -704,6 +704,6 @@ etcd 基于 map 和区间树数实现了 watcher 与事件快速匹配，保障�
 
 ![etcd-v3-watch-arch][etcd-v3-watch-arch]
 
-[etcd-v3-watch-arch]:https://github.com/lixd/blog/raw/master/images/etcd/watch/etcd-v3-watch-arch.webp
-[etcd-watcher-state-change]:https://github.com/lixd/blog/raw/master/images/etcd/watch/watcher%20%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%85%B3%E7%B3%BB%E5%9B%BE.png
-[etcd-watcher-interval-tree]:https://github.com/lixd/blog/raw/master/images/etcd/watch/etcd-watcher-interval-tree.png
+[etcd-v3-watch-arch]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/etcd-v3-watch-arch.webp
+[etcd-watcher-state-change]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/watcher%20%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%85%B3%E7%B3%BB%E5%9B%BE.png
+[etcd-watcher-interval-tree]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/etcd-watcher-interval-tree.png

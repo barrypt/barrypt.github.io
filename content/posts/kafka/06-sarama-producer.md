@@ -780,5 +780,5 @@ func (bp *brokerProducer) run() {
 
 
 
-[Github]: https://github.com/lixd/kafka-go-example
-[Sarama Producer 流程.png]:https://github.com/lixd/blog/raw/master/images/kafka/Sarama%20Producer%20%E6%B5%81%E7%A8%8B.png
+[Github]: https://github.com/barrypt/kafka-go-example
+[Sarama Producer 流程.png]:https://github.com/barrypt/blog/raw/master/images/kafka/Sarama%20Producer%20%E6%B5%81%E7%A8%8B.png

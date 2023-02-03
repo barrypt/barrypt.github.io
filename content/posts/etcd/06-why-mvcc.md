@@ -362,7 +362,7 @@ generations:
 
 
 
-[mvcc-arch]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/mvcc-arch.png
-[keyIndex]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/keyIndex.webp
-[mvcc-get]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/mvcc-get.png
-[mvcc-put]:https://github.com/lixd/blog/raw/master/images/etcd/mvcc/mvcc-put.png
+[mvcc-arch]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/mvcc-arch.png
+[keyIndex]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/keyIndex.webp
+[mvcc-get]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/mvcc-get.png
+[mvcc-put]:https://github.com/barrypt/blog/raw/master/images/etcd/mvcc/mvcc-put.png

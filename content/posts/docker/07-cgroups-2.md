@@ -35,16 +35,16 @@ categories: ["Docker"]
 
 ```shell
 #进入目录/sys/fs/cgroup/pids/并新建一个目录，即创建了一个子cgroup
-lixd  /home/lixd $ cd /sys/fs/cgroup/pids
-lixd  /sys/fs/cgroup/pids $ sudo mkdir test
+barrypt  /home/barrypt $ cd /sys/fs/cgroup/pids
+barrypt  /sys/fs/cgroup/pids $ sudo mkdir test
 ```
 
 再来看看test目录下的文件
 
 ```shell
-lixd  /sys/fs/cgroup/pids $ cd test
+barrypt  /sys/fs/cgroup/pids $ cd test
 #除了上一篇中介绍的那些文件外，多了两个文件
- lixd  /sys/fs/cgroup/pids/test $ ls
+ barrypt  /sys/fs/cgroup/pids/test $ ls
 cgroup.clone_children  cgroup.procs  notify_on_release  pids.current  pids.events  pids.max  tasks
 ```
 
@@ -83,10 +83,10 @@ bash: fork: retry: Resource temporarily unavailable
 打开另一个 shell 查看
 
 ```shell
- lixd  /mnt/c/Users/意琦行 $ cd /sys/fs/cgroup/pids/test
- lixd  /sys/fs/cgroup/pids/test $ ls
+ barrypt  /mnt/c/Users/意琦行 $ cd /sys/fs/cgroup/pids/test
+ barrypt  /sys/fs/cgroup/pids/test $ ls
 cgroup.clone_children  cgroup.procs  notify_on_release  pids.current  pids.events  pids.max  tasks
- lixd  /sys/fs/cgroup/pids/test $ cat pids.current
+ barrypt  /sys/fs/cgroup/pids/test $ cat pids.current
 1
 ```
 
@@ -285,7 +285,7 @@ $ while : ; do : ; done &
 # top 看一下 cpu 占用率，果然是100%了
 
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-  519 lixd      25   5   13444   2912      0 R 100.0   0.0   0:05.66 zsh   
+  519 barrypt      25   5   13444   2912      0 R 100.0   0.0   0:05.66 zsh   
   
 
 # 回到第一个shell窗口，限制当前进程的cpu使用率
@@ -293,7 +293,7 @@ root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu/test# echo 519 >> cgroup.procs
 
 # 再切回第二个窗口，发现519进程的cpu已经降到20%了，说明限制生效了
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-  519 lixd      25   5   13444   2912      0 R  20.0   0.0   0:31.86 zsh  
+  519 barrypt      25   5   13444   2912      0 R  20.0   0.0   0:31.86 zsh  
   
 # 查看被限制的统计结果
 root@DESKTOP-9K4GB6E:/sys/fs/cgroup/cpu/test# cat cpu.stat
@@ -779,4 +779,4 @@ sh: echo: I/O error
 
 
 
-[Github]:https://github.com/lixd/mydocker
+[Github]:https://github.com/barrypt/mydocker

@@ -12,7 +12,7 @@ baseURL = "https://blog.yudlk.com"
 [author]
 name = "qpt"
 email = "qupengtao0116@163.com"
-link = "https://github.com/lixd"
+link = "https://github.com/barrypt"
 
 # 菜单配置
 [menu]
@@ -263,7 +263,7 @@ paginate = 6
 # Social config in home page
 # 主页的社交信息设置
 [params.social]
-GitHub = "lixd"
+GitHub = "barrypt"
 Linkedin = ""
 Twitter = ""
 Instagram = ""

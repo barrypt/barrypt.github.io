@@ -47,7 +47,7 @@ redolog 是顺序写入 redolog file 的物理文件中去的。
 
 redolog file 是固定大小的（如下图），所以为了能够一直记录它只能采用循环写入方式，`write pos`为当前记录的位置，`checkpoint`为当前可以擦除的位置，代表更新的行已经完成数据库的磁盘更改,可以覆盖掉了。
 
-![redolog-cycle-write](https://github.com/lixd/blog/raw/master/images/mysql/redolog-cycle-write.jpg)
+![redolog-cycle-write](https://github.com/barrypt/blog/raw/master/images/mysql/redolog-cycle-write.jpg)
 
 
 
@@ -77,7 +77,7 @@ redolog file 是固定大小的（如下图），所以为了能够一直记录�
 
 对于写入 redolog 文件的操作不直接刷盘，而是先写入内存中的重做日志缓冲（redolog buffer），然后根据用户设置参数（`innodb_flush_log_at_trx_commit`）来执行刷盘逻辑。
 
-![redolog-flush](https://github.com/lixd/blog/raw/master/images/mysql/redolog-flush.png)
+![redolog-flush](https://github.com/barrypt/blog/raw/master/images/mysql/redolog-flush.png)
 
 
 

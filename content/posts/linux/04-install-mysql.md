@@ -23,7 +23,7 @@ tags: ["Linux"]
 
 网址`https://dev.mysql.com/downloads/mysql/5.7.html#downloads`
 
-![mysql](https://github.com/lixd/blog/raw/master/images/linux/software-install/mysql5.7-down.png)
+![mysql](https://github.com/barrypt/blog/raw/master/images/linux/software-install/mysql5.7-down.png)
 
 ## 1. 安装依赖
 

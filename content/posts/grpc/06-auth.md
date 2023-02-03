@@ -329,21 +329,21 @@ func main() {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/authentication/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/authentication/server$ go run main.go 
 2021/01/24 22:17:35 Serving gRPC on 0.0.0.0:50051
 ```
 
 Client
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/authentication/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/authentication/client$ go run main.go 
 UnaryEcho:  hello world
 ```
 
 授权信息正确则可以正常请求，故意传一个错误的数据测试一下
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/authentication/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/authentication/client$ go run main.go 
 2021/01/24 22:18:19 client.UnaryEcho(_) = _, rpc error: code = Unauthenticated desc = Unauthorized: 
 exit status 1
 ```
@@ -371,5 +371,5 @@ exit status 1
 
 
 
-[Github]: https://github.com/lixd/grpc-go-example
+[Github]: https://github.com/barrypt/grpc-go-example
 

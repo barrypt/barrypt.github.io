@@ -64,7 +64,7 @@ Tekton 由一些列组件组成：
 
 本文主要记录 tektoncd 的部署过程。整个部署实际很简单，不过 tektoncd 所有镜像默认存放在 gcr.io 的，导致国内使用比较困难，镜像问题算是部署中最大的一个难点。
 
-因此在写这篇文章时将当前用到的所有镜像都推送到了 [dockerhub/lixd96](https://hub.docker.com/u/lixd96?page=1) 这个用户下，大家可以直接使用，同时文章里提供了脚本用于将官方 yaml 中的镜像替换为  [dockerhub/lixd96](https://hub.docker.com/u/lixd96?page=1) 下的镜像，从而解决使用官方 yaml 部署导致的无法从 gcr.io 拉取镜像的问题。
+因此在写这篇文章时将当前用到的所有镜像都推送到了 [dockerhub/barrypt96](https://hub.docker.com/u/barrypt96?page=1) 这个用户下，大家可以直接使用，同时文章里提供了脚本用于将官方 yaml 中的镜像替换为  [dockerhub/barrypt96](https://hub.docker.com/u/barrypt96?page=1) 下的镜像，从而解决使用官方 yaml 部署导致的无法从 gcr.io 拉取镜像的问题。
 
 > 根据这篇文章操作，不出意外的话应该几分钟就能完成部署，整个过程非常丝滑~
 
@@ -109,34 +109,34 @@ curl https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.43.2/re
 使用 sed 命令挨个替换镜像
 
 ```Bash
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/controller:v0.43.2@sha256:e1a541216f70bfc519739e056111d0f69e7959913e28ccbf98ce9fe2fd0dd406/lixd96\/tektoncd-pipeline-cmd-controller:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/controller:v0.43.2@sha256:e1a541216f70bfc519739e056111d0f69e7959913e28ccbf98ce9fe2fd0dd406/barrypt96\/tektoncd-pipeline-cmd-controller:v0.43.2/' pipeline.yaml
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/resolvers:v0.43.2@sha256:5ea2565c256a5085ee422d4778166fd1fe0f985ff6e3816542728379433f30db/lixd96\/tektoncd-pipeline-cmd-resolvers:v0.43.2/' pipeline.yaml
-
-
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/webhook:v0.43.2@sha256:e2bc5e55370049efa5ed3e16868ecec65fb9cdb6df0fd7e08568a8b6f3193186/lixd96\/tektoncd-pipeline-cmd-webhook:v0.43.2/' pipeline.yaml
-
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/kubeconfigwriter:v0.43.2@sha256:449fae542ca42a94171c7e6fe41af4451c62126743f77b47f09bbcecc932145e/lixd96\/tektoncd-pipeline-cmd-kubeconfigwriter:v0.43.2/' pipeline.yaml
-
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/git-init:v0.43.2@sha256:cd5fb697a91af1883917e5e8ab230566bff60fd1310fb2d0e12badcee7db5db6/lixd96\/tektoncd-pipeline-cmd-git-init:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/resolvers:v0.43.2@sha256:5ea2565c256a5085ee422d4778166fd1fe0f985ff6e3816542728379433f30db/barrypt96\/tektoncd-pipeline-cmd-resolvers:v0.43.2/' pipeline.yaml
 
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/entrypoint:v0.43.2@sha256:50333090b874cdff1706d9f4de9d367270586d91a3204f223ad3c9c8f8b5968b/lixd96\/tektoncd-pipeline-cmd-entrypoint:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/webhook:v0.43.2@sha256:e2bc5e55370049efa5ed3e16868ecec65fb9cdb6df0fd7e08568a8b6f3193186/barrypt96\/tektoncd-pipeline-cmd-webhook:v0.43.2/' pipeline.yaml
+
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/kubeconfigwriter:v0.43.2@sha256:449fae542ca42a94171c7e6fe41af4451c62126743f77b47f09bbcecc932145e/barrypt96\/tektoncd-pipeline-cmd-kubeconfigwriter:v0.43.2/' pipeline.yaml
+
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/git-init:v0.43.2@sha256:cd5fb697a91af1883917e5e8ab230566bff60fd1310fb2d0e12badcee7db5db6/barrypt96\/tektoncd-pipeline-cmd-git-init:v0.43.2/' pipeline.yaml
+
+
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/entrypoint:v0.43.2@sha256:50333090b874cdff1706d9f4de9d367270586d91a3204f223ad3c9c8f8b5968b/barrypt96\/tektoncd-pipeline-cmd-entrypoint:v0.43.2/' pipeline.yaml
  
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/nop:v0.43.2@sha256:6c99e85668d5c5d383ee341fb22affb71ea2908f5615a3ec0157980ac1891ef4/lixd96\/tektoncd-pipeline-cmd-nop:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/nop:v0.43.2@sha256:6c99e85668d5c5d383ee341fb22affb71ea2908f5615a3ec0157980ac1891ef4/barrypt96\/tektoncd-pipeline-cmd-nop:v0.43.2/' pipeline.yaml
 
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/sidecarlogresults:v0.43.2@sha256:8c7e3dbb3cbfa76e9d291d869d50c93b4b9001dab6e3143d5db7b4e297144814/lixd96\/tektoncd-pipeline-cmd-sidecarlogresults:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/sidecarlogresults:v0.43.2@sha256:8c7e3dbb3cbfa76e9d291d869d50c93b4b9001dab6e3143d5db7b4e297144814/barrypt96\/tektoncd-pipeline-cmd-sidecarlogresults:v0.43.2/' pipeline.yaml
 
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/imagedigestexporter:v0.43.2@sha256:768185690a3c5b5a79c764fe3d66bac8351136a14dd82d9fd7da019789b4ed95/lixd96\/tektoncd-pipeline-cmd-imagedigestexporter:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/imagedigestexporter:v0.43.2@sha256:768185690a3c5b5a79c764fe3d66bac8351136a14dd82d9fd7da019789b4ed95/barrypt96\/tektoncd-pipeline-cmd-imagedigestexporter:v0.43.2/' pipeline.yaml
 
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/pullrequest-init:v0.43.2@sha256:8f5809192c455ea3a657203337e139482b06ffdef1a32d3ad494d6bcdb7c1465/lixd96\/tektoncd-pipeline-cmd-pullrequest-init:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/pullrequest-init:v0.43.2@sha256:8f5809192c455ea3a657203337e139482b06ffdef1a32d3ad494d6bcdb7c1465/barrypt96\/tektoncd-pipeline-cmd-pullrequest-init:v0.43.2/' pipeline.yaml
 
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/workingdirinit:v0.43.2@sha256:707cf41528b19e7b20925fcfe17b1ebf8e61a22fe824df6b79c17b36f81a2d19/lixd96\/tektoncd-pipeline-cmd-workingdirinit:v0.43.2/' pipeline.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/pipeline\/cmd\/workingdirinit:v0.43.2@sha256:707cf41528b19e7b20925fcfe17b1ebf8e61a22fe824df6b79c17b36f81a2d19/barrypt96\/tektoncd-pipeline-cmd-workingdirinit:v0.43.2/' pipeline.yaml
 ```
 
 从 dockerhub 拉取镜像
@@ -158,7 +158,7 @@ webhook
 workingdirinit
 "
 
-for image in $images;do ctr --namespace k8s.io image pull docker.io/lixd96/tektoncd-pipeline-cmd-$image:$tag;done
+for image in $images;do ctr --namespace k8s.io image pull docker.io/barrypt96/tektoncd-pipeline-cmd-$image:$tag;done
 ```
 
 apply 到 k8s
@@ -193,28 +193,28 @@ curl https://storage.googleapis.com/tekton-releases/triggers/previous/v0.22.1/in
 然后使用 sed 替换镜像
 
 ```Bash
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/controller:v0.22.1@sha256:47f18d03c08ebc8ef474dd62e7d83ead3c4aa802c72668dafb73fd6afedd305f/lixd96\/tektoncd-triggers-cmd-controller:v0.22.1/' trigger-release.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/controller:v0.22.1@sha256:47f18d03c08ebc8ef474dd62e7d83ead3c4aa802c72668dafb73fd6afedd305f/barrypt96\/tektoncd-triggers-cmd-controller:v0.22.1/' trigger-release.yaml
 
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/webhook:v0.22.1@sha256:9a124b2ead10a6bc3ae1d32d05b9fe664465cfe6d09830ef89f3987a443a5c86/lixd96\/tektoncd-triggers-cmd-webhook:v0.22.1/' trigger-release.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/webhook:v0.22.1@sha256:9a124b2ead10a6bc3ae1d32d05b9fe664465cfe6d09830ef89f3987a443a5c86/barrypt96\/tektoncd-triggers-cmd-webhook:v0.22.1/' trigger-release.yaml
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/eventlistenersink:v0.22.1@sha256:bd8b2ec63012605739dc74871d1a20634d1055ed3d77864a582a9b5f2d22ab92/lixd96\/tektoncd-triggers-cmd-eventlistenersink:v0.22.1/' trigger-release.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/eventlistenersink:v0.22.1@sha256:bd8b2ec63012605739dc74871d1a20634d1055ed3d77864a582a9b5f2d22ab92/barrypt96\/tektoncd-triggers-cmd-eventlistenersink:v0.22.1/' trigger-release.yaml
 
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/controller:v0.22.1@sha256:47f18d03c08ebc8ef474dd62e7d83ead3c4aa802c72668dafb73fd6afedd305f/lixd96\/tektoncd-triggers-cmd-controller:v0.22.1/' trigger-interceptors.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/controller:v0.22.1@sha256:47f18d03c08ebc8ef474dd62e7d83ead3c4aa802c72668dafb73fd6afedd305f/barrypt96\/tektoncd-triggers-cmd-controller:v0.22.1/' trigger-interceptors.yaml
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/eventlistenersink:v0.22.1@sha256:bd8b2ec63012605739dc74871d1a20634d1055ed3d77864a582a9b5f2d22ab92/lixd96\/tektoncd-triggers-cmd-eventlistenersink:v0.22.1/' trigger-interceptors.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/eventlistenersink:v0.22.1@sha256:bd8b2ec63012605739dc74871d1a20634d1055ed3d77864a582a9b5f2d22ab92/barrypt96\/tektoncd-triggers-cmd-eventlistenersink:v0.22.1/' trigger-interceptors.yaml
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/webhook:v0.22.1@sha256:9a124b2ead10a6bc3ae1d32d05b9fe664465cfe6d09830ef89f3987a443a5c86/lixd96\/tektoncd-triggers-cmd-webhook:v0.22.1/' trigger-interceptors.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/webhook:v0.22.1@sha256:9a124b2ead10a6bc3ae1d32d05b9fe664465cfe6d09830ef89f3987a443a5c86/barrypt96\/tektoncd-triggers-cmd-webhook:v0.22.1/' trigger-interceptors.yaml
 
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/interceptors:v0.22.1@sha256:eda7af449fb82b06e952da0f5c0d1c2a3eddbab041e43065d37f67523c60c494/lixd96\/tektoncd-triggers-cmd-interceptors:v0.22.1/' trigger-interceptors.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/triggers\/cmd\/interceptors:v0.22.1@sha256:eda7af449fb82b06e952da0f5c0d1c2a3eddbab041e43065d37f67523c60c494/barrypt96\/tektoncd-triggers-cmd-interceptors:v0.22.1/' trigger-interceptors.yaml
 ```
 
 接着拉取镜像
 
 ```Bash
 tag=v0.22.1
-dockerUserName=lixd96
+dockerUserName=barrypt96
 
 images="
 controller
@@ -257,14 +257,14 @@ curl https://storage.googleapis.com/tekton-releases/dashboard/previous/v0.31.0/t
 同样的，替换镜像
 
 ```Bash
-sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/dashboard\/cmd\/dashboard:v0.31.0@sha256:454a405aa4f874a0c22db7ab47ccb225a95addd3de904084e35c5de78e4f2c48/lixd96\/tektoncd-dashboard-cmd-dashboard:v0.31.0/' tekton-dashboard-release.yaml
+sed -i 's/gcr.io\/tekton-releases\/github.com\/tektoncd\/dashboard\/cmd\/dashboard:v0.31.0@sha256:454a405aa4f874a0c22db7ab47ccb225a95addd3de904084e35c5de78e4f2c48/barrypt96\/tektoncd-dashboard-cmd-dashboard:v0.31.0/' tekton-dashboard-release.yaml
 ```
 
 然后拉取镜像
 
 ```Bash
 tag=v0.31.0
-dockerUserName=lixd96
+dockerUserName=barrypt96
 images="
 dashboard
 "

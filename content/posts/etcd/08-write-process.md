@@ -238,5 +238,5 @@ etcd 的解决方案是合并再合并：
 
 
 
-[etcd-write-step]:https://github.com/lixd/blog/raw/master/images/etcd/write-process/etcd-write-step.png
-[wal-struct]:https://github.com/lixd/blog/raw/master/images/etcd/write-process/wal-struct.png
+[etcd-write-step]:https://github.com/barrypt/blog/raw/master/images/etcd/write-process/etcd-write-step.png
+[wal-struct]:https://github.com/barrypt/blog/raw/master/images/etcd/write-process/wal-struct.png

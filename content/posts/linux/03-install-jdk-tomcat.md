@@ -17,7 +17,7 @@ tags: ["Linux"]
 
 安装包下载`jdk-8u191-linux-x64.tar.gz ` 注意32位和64位的别下载错了。
 
-![](https://github.com/lixd/blog/raw/master/images/linux/software-install/jdk1.8-down.png)
+![](https://github.com/barrypt/blog/raw/master/images/linux/software-install/jdk1.8-down.png)
 
 命令`uname -a` 查看Linux系统位数。
 
@@ -51,7 +51,7 @@ tags: ["Linux"]
 
 网址`https://tomcat.apache.org/download-80.cgi`
 
-![](https://github.com/lixd/blog/raw/master/images/linux/software-install/tomcat8-down.png)
+![](https://github.com/barrypt/blog/raw/master/images/linux/software-install/tomcat8-down.png)
 
 1.压缩包上传到虚拟机`/usr/software目录下`
 

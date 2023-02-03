@@ -99,13 +99,13 @@ func Consume(topic string) {
 先启动 consumer  
 
 ```sh
-lixd@17x:~/17x/projects/kafka-go-example/helloworld/consumer/cmd$ go run main.go 
+barrypt@17x:~/17x/projects/kafka-go-example/helloworld/consumer/cmd$ go run main.go 
 ```
 
 再启动 producer
 
 ```sh
-lixd@17x:~/17x/projects/kafka-go-example/helloworld/producer/cmd$ go run main.go 
+barrypt@17x:~/17x/projects/kafka-go-example/helloworld/producer/cmd$ go run main.go 
 2021/07/31 10:38:32 [Producer] partitionid: 0; offset:7340, value: 1627699112413451557
 2021/07/31 10:38:32 [Producer] partitionid: 0; offset:7341, value: 1627699112483251015
 2021/07/31 10:38:32 [Producer] partitionid: 0; offset:7342, value: 1627699112518530847
@@ -151,4 +151,4 @@ ok，一切正常。
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example

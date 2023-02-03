@@ -295,11 +295,11 @@ cgdelete cpu:./mycgroup
 
 ```shell
 # 创建一个目录作为挂载点
-lixd  ~ $ mkdir cgroup-test
+barrypt  ~ $ mkdir cgroup-test
 # 创建一个不挂载任何subsystem的hierarchy，由于 name=cgroup-test 的 cgroup 不存在，所以这里会由hierarchy默认创建出来
- ✘ lixd  ~ $ sudo mount -t cgroup -o none,name=cgroup-test cgroup-test ./cgroup-test
- lixd  ~ $ cd cgroup-test
- lixd  ~/cgroup-test $ ls
+ ✘ barrypt  ~ $ sudo mount -t cgroup -o none,name=cgroup-test cgroup-test ./cgroup-test
+ barrypt  ~ $ cd cgroup-test
+ barrypt  ~/cgroup-test $ ls
  # 可以发现多了几个文件
 cgroup.clone_children  cgroup.procs  cgroup.sane_behavior  notify_on_release  release_agent  tasks
 ```
@@ -322,10 +322,10 @@ cgroup.clone_children  cgroup.procs  cgroup.sane_behavior  notify_on_release  re
 
 ```shell
  # 创建子cgroup cgroup-1
- lixd  ~/cgroup-test $ sudo mkdir cgroup-1
+ barrypt  ~/cgroup-test $ sudo mkdir cgroup-1
   # 创建子cgroup cgroup-1
- lixd  ~/cgroup-test $ sudo mkdir cgroup-2
- lixd  ~/cgroup-test $ tree
+ barrypt  ~/cgroup-test $ sudo mkdir cgroup-2
+ barrypt  ~/cgroup-test $ tree
 .
 ├── cgroup-1
 │   ├── cgroup.clone_children
@@ -414,7 +414,7 @@ cgroup on /sys/fs/cgroup/net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,n
 cgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,hugetlb)
 cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)
 cgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,rdma)
-cgroup-test on /home/lixd/cgroup-test type cgroup (rw,relatime,name=cgroup-test)
+cgroup-test on /home/barrypt/cgroup-test type cgroup (rw,relatime,name=cgroup-test)
 ```
 
 
@@ -523,7 +523,7 @@ cgroups 分为以下三个部分：
 
 
 
-[cgroups层级结构示意图-1]:https://github.com/lixd/blog/raw/master/images/docker/cgroups%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE-1.png
-[cgroups层级结构示意图-2]:https://github.com/lixd/blog/raw/master/images/docker/cgroups%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE-2.png
+[cgroups层级结构示意图-1]:https://github.com/barrypt/blog/raw/master/images/docker/cgroups%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE-1.png
+[cgroups层级结构示意图-2]:https://github.com/barrypt/blog/raw/master/images/docker/cgroups%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE-2.png
 
-[Github]: https://github.com/lixd/mydocker
+[Github]: https://github.com/barrypt/mydocker

@@ -17,7 +17,7 @@ tags: ["设计模式"]
 
 > 它通过引入一个外观角色来简化客户端与子系统之间的交互，为复杂的子系统调用提供一个统一的入口，降低子系统与客户端的耦合度，且客户端调用非常方便。
 
-![](https://github.com/lixd/blog/raw/master/images/java/design-patterns/facade.jpg)
+![](https://github.com/barrypt/blog/raw/master/images/java/design-patterns/facade.jpg)
 
 **外观模式结构**：
 

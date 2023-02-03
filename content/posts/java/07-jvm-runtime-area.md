@@ -13,7 +13,7 @@ tags: ["Java"]
 
 
 
-![Java运行时数据区](https://github.com/lixd/blog/raw/master/images/java/jvm/runtime-data-areas.png)
+![Java运行时数据区](https://github.com/barrypt/blog/raw/master/images/java/jvm/runtime-data-areas.png)
 
 **线程私有的**：`程序计数器` 、`虚拟机栈`、`本地方法栈`
 

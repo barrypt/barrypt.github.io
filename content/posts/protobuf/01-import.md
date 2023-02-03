@@ -97,7 +97,7 @@ protoc 编译的时候通过 `--proto_path` 指定在哪个目录去寻找 impor
 目录结构如下
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example$ tree
+barrypt@17x:~/17x/projects/grpc-go-example$ tree
 ├── protobuf
 │   │ 
 │   └── import
@@ -147,7 +147,7 @@ message Computer {
 在`项目根路径(grpc-go-example)`下进行编译
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example$ protoc --proto_path=. --go_out=. ./protobuf/import/*.proto 
+barrypt@17x:~/17x/projects/grpc-go-example$ protoc --proto_path=. --go_out=. ./protobuf/import/*.proto 
 ```
 
 

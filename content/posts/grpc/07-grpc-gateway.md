@@ -88,7 +88,7 @@ protoc --go_out . --go-grpc_out . --grpc-gateway_out . hello_world.proto
 
 ## 3. 例子
 
-> 本文所有代码都在这里 [Github](https://github.com/lixd/i-go/tree/master/grpc/gateway)。
+> 本文所有代码都在这里 [Github](https://github.com/barrypt/i-go/tree/master/grpc/gateway)。
 
 首先确保自己的环境是ok的，具体如下：
 
@@ -132,7 +132,7 @@ message HelloReply {
 使用 protoc 编译生成不同模块的源文件，具体命令如下:
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features$ protoc --proto_path=./proto \
+barrypt@17x:~/17x/projects/grpc-go-example/features$ protoc --proto_path=./proto \
     --go_out=./proto --go_opt=paths=source_relative \
     --go-grpc_out=./proto --go-grpc_opt=paths=source_relative \
    ./proto/helloworld/hello_world.proto
@@ -158,7 +158,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/helloworld"
+	pb "github.com/barrypt/grpc-go-example/features/proto/helloworld"
 	"google.golang.org/grpc"
 )
 var port = flag.Int("port", 50051, "the port to serve on")
@@ -232,12 +232,12 @@ func main() {
 到此分别运行 server.go、client.go ，一个简单的 gRPC demo 就跑起来了。
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/gateway/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/gateway/server$ go run main.go 
 2021/01/30 10:15:53 Serving gRPC on 0.0.0.0:50051
 ```
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/gateway/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/gateway/client$ go run main.go 
 2021/01/30 10:17:23 Greeting: hello world
 ```
 
@@ -255,7 +255,7 @@ lixd@17x:~/17x/projects/grpc-go-example/features/gateway/client$ go run main.go
 
 ```protobuf
 syntax = "proto3";
-option go_package = "github.com/lixd/grpc-go-example/features/proto/echo";
+option go_package = "github.com/barrypt/grpc-go-example/features/proto/echo";
 package helloworld;
 import "google/api/annotations.proto";
 
@@ -339,7 +339,7 @@ https://github.com/googleapis/googleapis/blob/master/google/api/http.proto
 增加 `--grpc-gateway_out`
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features$ protoc --proto_path=./proto \
+barrypt@17x:~/17x/projects/grpc-go-example/features$ protoc --proto_path=./proto \
    --go_out=./proto --go_opt=paths=source_relative \
   --go-grpc_out=./proto --go-grpc_opt=paths=source_relative \
   --grpc-gateway_out=./proto --grpc-gateway_opt=paths=source_relative \
@@ -369,7 +369,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/helloworld"
+	pb "github.com/barrypt/grpc-go-example/features/proto/helloworld"
 	"google.golang.org/grpc"
 )
 
@@ -438,7 +438,7 @@ func main() {
 运行并测试效果。
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/gateway/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/gateway/server$ go run main.go 
 2021/01/30 10:32:15 Serving gRPC on 0.0.0.0:50051
 2021/01/30 10:32:15 Serving gRPC-Gateway on http://0.0.0.0:8080
 ```
@@ -446,7 +446,7 @@ lixd@17x:~/17x/projects/grpc-go-example/features/gateway/server$ go run main.go
 gRPC 请求
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/gateway/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/gateway/client$ go run main.go 
 2021/01/30 10:32:18 Greeting: hello world
 ```
 
@@ -585,6 +585,6 @@ func request_Greeter_SayHello_0(ctx context.Context, marshaler runtime.Marshaler
 
 
 
-[Github]: https://github.com/lixd/grpc-go-example
-[gRPC-Gateway]: https://github.com/lixd/blog/raw/master/images/grpc/grpc-gateway.png
+[Github]: https://github.com/barrypt/grpc-go-example
+[gRPC-Gateway]: https://github.com/barrypt/blog/raw/master/images/grpc/grpc-gateway.png
 

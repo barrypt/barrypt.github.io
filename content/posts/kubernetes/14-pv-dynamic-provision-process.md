@@ -32,7 +32,7 @@ tags: ["Kubernetes"]
 这里需要一个部署好了存储插件的 k8s 集群。
 
 * 推荐使用 kubeclipper 安装集群，具体可以参考 [Kubernetes教程(十一)---使用 KubeClipper 通过一条命令快速创建 k8s 集群](https://www.lixueduan.com/posts/kubernetes/11-install-by-kubeclipper/)
-* 同时这里有一个 [安装 NFS 的脚本](https://github.com/lixd/i-go/blob/77d058c885b9086cdc6a35a35b564f5e8f34d2b2/shell/install-nfs.sh)，等会可以作为存储后端使用
+* 同时这里有一个 [安装 NFS 的脚本](https://github.com/barrypt/i-go/blob/77d058c885b9086cdc6a35a35b564f5e8f34d2b2/shell/install-nfs.sh)，等会可以作为存储后端使用
 
 
 

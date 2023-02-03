@@ -395,7 +395,7 @@ func ConsumerGroup(topic, group, name string) {
 				因为每次 Rebalance 后需要再次执行 Consume() 来恢复连接
 				Consume 开始才发起 Join Group 请求 如果当前消费者加入后成为了 消费者组 leader,则还会进行 Rebalance 过程，从新分配
 				组内每个消费组需要消费的 topic 和 partition，最后 Sync Group 后才开始消费
-				具体信息见 https://github.com/lixd/kafka-go-example/issues/4
+				具体信息见 https://github.com/barrypt/kafka-go-example/issues/4
 			*/
 			err = cg.Consume(ctx, []string{topic}, handler)
 			if err != nil {
@@ -456,4 +456,4 @@ func (h MyConsumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSession, c
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example

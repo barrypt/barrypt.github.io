@@ -222,17 +222,17 @@ Leader Epoch，我们大致可以认为是Leader版本。它由两部分数据�
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example
 
 
 
-[Steaming-Pipeline]:https://github.com/lixd/blog/raw/master/images/kafka/hw/Steaming-Pipeline.webp
-[HW]:https://github.com/lixd/blog/raw/master/images/kafka/hw/Kafka-Leader%E5%89%AF%E6%9C%AC%E7%9A%84%E9%AB%98%E6%B0%B4%E4%BD%8D%E5%9B%BE.webp
-[Other-LEO]:https://github.com/lixd/blog/raw/master/images/kafka/hw/%E4%BF%9D%E5%AD%98%E5%85%B6%E4%BB%96%E5%89%AF%E6%9C%ACLEO%E5%80%BC.webp
-[Sync-1]:https://github.com/lixd/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A51.webp
-[Sync-2]:https://github.com/lixd/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A52.webp
-[Sync-3]:https://github.com/lixd/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A53.webp
-[Sync-4]:https://github.com/lixd/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A54.webp
-[Msg-Lost]:https://github.com/lixd/blog/raw/master/images/kafka/hw/%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1.webp
-[LEO]:https://github.com/lixd/blog/raw/master/images/kafka/hw/Leader%20Epoch%E9%98%B2%E6%AD%A2%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1.webp
+[Steaming-Pipeline]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/Steaming-Pipeline.webp
+[HW]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/Kafka-Leader%E5%89%AF%E6%9C%AC%E7%9A%84%E9%AB%98%E6%B0%B4%E4%BD%8D%E5%9B%BE.webp
+[Other-LEO]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/%E4%BF%9D%E5%AD%98%E5%85%B6%E4%BB%96%E5%89%AF%E6%9C%ACLEO%E5%80%BC.webp
+[Sync-1]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A51.webp
+[Sync-2]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A52.webp
+[Sync-3]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A53.webp
+[Sync-4]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A54.webp
+[Msg-Lost]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1.webp
+[LEO]:https://github.com/barrypt/blog/raw/master/images/kafka/hw/Leader%20Epoch%E9%98%B2%E6%AD%A2%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1.webp
 

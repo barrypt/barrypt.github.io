@@ -25,7 +25,7 @@ tags: ["Tracing","Jaeger"]
 
 
 
-![jaeger-architecture.png](https://github.com/lixd/blog/raw/master/images/tracing/jaeger-architecture.png)
+![jaeger-architecture.png](https://github.com/barrypt/blog/raw/master/images/tracing/jaeger-architecture.png)
 
 完整架构包含如下组件：
 

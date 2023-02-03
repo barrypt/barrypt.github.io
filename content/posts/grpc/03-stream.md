@@ -35,7 +35,7 @@ Stream  顾名思义就是一种流，可以源源不断的推送数据，很适
 ```protobuf
 syntax = "proto3";
 
-option go_package = "github.com/lixd/grpc-go-example/features/proto/echo";
+option go_package = "github.com/barrypt/grpc-go-example/features/proto/echo";
 
 package echo;
 
@@ -64,7 +64,7 @@ message EchoResponse {
 **编译**
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/proto/echo$ protoc --go_out=. --go_opt=paths=source_relative \
+barrypt@17x:~/17x/projects/grpc-go-example/features/proto/echo$ protoc --go_out=. --go_opt=paths=source_relative \
 --go-grpc_out=. --go-grpc_opt=paths=source_relative \
 ./echo.proto
 ```
@@ -118,7 +118,7 @@ func unary(client pb.EchoClient) {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
 2021/01/23 19:00:30 Serving gRPC on 0.0.0.0:50051
 2021/01/23 19:00:36 Recved: hello world
 ```
@@ -126,7 +126,7 @@ lixd@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go
 Client
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
 Recved:hello world
 ```
 
@@ -210,7 +210,7 @@ func serverStream(client pb.EchoClient) {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
 2021/01/23 19:06:18 Serving gRPC on 0.0.0.0:50051
 2021/01/23 19:06:27 Recved Hello World
 ```
@@ -218,7 +218,7 @@ lixd@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go
 Client
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
 2021/01/23 19:06:27 Recv data:Hello World
 2021/01/23 19:06:27 Recv data:Hello World
 2021/01/23 19:06:27 server closed
@@ -306,7 +306,7 @@ func clientStream(client pb.EchoClient) {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
 2021/01/23 19:10:34 Serving gRPC on 0.0.0.0:50051
 2021/01/23 19:10:42 Recved hello world
 2021/01/23 19:10:42 Recved hello world
@@ -316,7 +316,7 @@ lixd@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go
 Cliet
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
 2021/01/23 19:10:42 sum: ok
 ```
 
@@ -451,7 +451,7 @@ func bidirectionalStream(client pb.EchoClient) {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/server$ go run main.go 
 2021/01/23 19:14:56 Serving gRPC on 0.0.0.0:50051
 Recved :hello world 
 Recved :hello world 
@@ -460,7 +460,7 @@ Recved :hello world
 Client
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/stream/client$ go run main.go 
 Recved:hello world 
 Recved:hello world 
 Server Closed
@@ -512,5 +512,5 @@ Server Closed
 
 
 
-[Github]:https://github.com/lixd/grpc-go-example
+[Github]:https://github.com/barrypt/grpc-go-example
 

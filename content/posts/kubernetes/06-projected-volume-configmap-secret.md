@@ -91,7 +91,7 @@ Data
 user:
 ----
 name: "17x"
-github: "https://github.com/lixd"
+github: "https://github.com/barrypt"
 blog: "https://www.lixueduan.com"
 Events:  <none>
 ```
@@ -107,7 +107,7 @@ metadata:
 data:
   user: |+
     name: "17x"
-    github: "https://github.com/lixd"
+    github: "https://github.com/barrypt"
     blog: "https://www.lixueduan.com"
 ```
 
@@ -125,7 +125,7 @@ NAME   DATA   AGE
 cm2    1      17s
 $ kubectl get configmap cm2 -o go-template='{{.data}}'
 map[user:name: "17x"
-github: "https://github.com/lixd"
+github: "https://github.com/barrypt"
 blog: "https://www.lixueduan.com"]
 ```
 
@@ -133,7 +133,7 @@ blog: "https://www.lixueduan.com"]
 
 ```yaml
 User: "17x"
-Github: "https://github.com/lixd"
+Github: "https://github.com/barrypt"
 Blog: "https://www.lixueduan.com"
 ```
 
@@ -148,10 +148,10 @@ NAME        DATA   AGE
 cm3         2      8s
 $ kubectl get configmap cm3 -o go-template='{{.data}}'
 map[conf1.yaml:User: "17x"
-Github: "https://github.com/lixd"
+Github: "https://github.com/barrypt"
 Blog: "https://www.lixueduan.com"
  conf2.yaml:User: "17x"
-Github: "https://github.com/lixd"
+Github: "https://github.com/barrypt"
 Blog: "https://www.refersmoon.com"
 ```
 
@@ -176,7 +176,7 @@ map[blog:https://www.lixueduan.com name:17x][root@iZ2ze9ebgot9h2acvk4uabZ config
 $ kubectl create configmap cm5 --from-env-file=conf.env 
 configmap/cm5 created
 $ kubectl get configmap cm5 -o go-template='{{.data}}'
-map[blog:https://www.lixueduan.com github:https://github.com/lixd name:17x]
+map[blog:https://www.lixueduan.com github:https://github.com/barrypt name:17x]
 ```
 
 `conf.env`文件如下
@@ -185,7 +185,7 @@ map[blog:https://www.lixueduan.com github:https://github.com/lixd name:17x]
 
 ```env
 name=17x
-github=https://github.com/lixd
+github=https://github.com/barrypt
 blog=https://www.lixueduan.com
 ```
 

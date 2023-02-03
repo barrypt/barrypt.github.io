@@ -267,9 +267,9 @@ Etcd 里实现的 Raft 算法库也是很精简的，只有 Raft 算法，将所
 
 
 
-[state-machine-replication]:https://github.com/lixd/blog/raw/master/images/etcd/raft/state-machine-replication.png
-[raft-leader-election]:https://github.com/lixd/blog/raw/master/images/etcd/raft/raft-leader-election.png
-[raft-log-replication]:https://github.com/lixd/blog/raw/master/images/etcd/raft/raft-log-replication.png
-[raft-log-1]:https://github.com/lixd/blog/raw/master/images/etcd/raft/raft-log-1.png
-[raft-log-2]:https://github.com/lixd/blog/raw/master/images/etcd/raft/raft-log-2.png
+[state-machine-replication]:https://github.com/barrypt/blog/raw/master/images/etcd/raft/state-machine-replication.png
+[raft-leader-election]:https://github.com/barrypt/blog/raw/master/images/etcd/raft/raft-leader-election.png
+[raft-log-replication]:https://github.com/barrypt/blog/raw/master/images/etcd/raft/raft-log-replication.png
+[raft-log-1]:https://github.com/barrypt/blog/raw/master/images/etcd/raft/raft-log-1.png
+[raft-log-2]:https://github.com/barrypt/blog/raw/master/images/etcd/raft/raft-log-2.png
 

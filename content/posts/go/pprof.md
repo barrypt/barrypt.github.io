@@ -218,7 +218,7 @@ go tool pprof http://127.0.0.1:8080/debug/pprof/profile?-seconds=10
 采集成功后或自动保存到 home 目录下。
 
 ```shell
-Saved profile in /home/lixd/pprof/pprof.server.samples.cpu.002.pb.gz
+Saved profile in /home/barrypt/pprof/pprof.server.samples.cpu.002.pb.gz
 ```
 
 
@@ -400,7 +400,7 @@ Dropped 13 nodes (cum <= 0.01s)
 ```shell
 (pprof) list main.logic
 Total: 2.62s
-ROUTINE ======================== main.logic in /home/lixd/17x/projects/hello/test/pprof/tool/tool.go
+ROUTINE ======================== main.logic in /home/barrypt/17x/projects/hello/test/pprof/tool/tool.go
      2.55s      2.60s (flat, cum) 99.24% of Total
          .          .     50:}
          .          .     51:
@@ -430,7 +430,7 @@ ROUTINE ======================== main.logic in /home/lixd/17x/projects/hello/tes
 
 大概是这个样子的。
 
-![pprof-svg.png](https://github.com/lixd/blog/raw/master/images/golang/pprof/pprof-svg.png)
+![pprof-svg.png](https://github.com/barrypt/blog/raw/master/images/golang/pprof/pprof-svg.png)
 
 关于图形的说明： 
 
@@ -462,7 +462,7 @@ go tool pprof -http=:8081 ~/pprof/pprof.samples.cpu.001.pb.gz
 
 在浏览器中即可查看到相关信息了 view 中可以选择查询各种内容：具体如下
 
-![pprof-flame.png](https://github.com/lixd/blog/raw/master/images/golang/pprof/pprof-flame.png)
+![pprof-flame.png](https://github.com/barrypt/blog/raw/master/images/golang/pprof/pprof-flame.png)
 
 说明：
 

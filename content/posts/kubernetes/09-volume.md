@@ -171,7 +171,7 @@ docker run -v /home:/test ...
 
 出去 namespace 和 rootfs 相关的逻辑，挂载卷的核心逻辑其实就是调用 linux 的 **bind mount** api，将宿主机的目录挂载到容器中的目录上。
 
-> 具体实现见之前写的一个 [简易的 docker](https://github.com/lixd/mydocker)
+> 具体实现见之前写的一个 [简易的 docker](https://github.com/barrypt/mydocker)
 
 
 
@@ -538,7 +538,7 @@ Pod 创建之后 k8s 就可以根据 claimName 找到对应 PVC，然后 PVC 绑
 
 
 
-[csi-arch]:https://github.com/lixd/blog/raw/master/images/kubernetes/csi/csi-arch.png
-[volume]:https://github.com/lixd/blog/raw/master/images/kubernetes/csi/volume.png
-[dynamic-provisioning]:https://github.com/lixd/blog/raw/master/images/kubernetes/csi/dynamic-provisioning.png
+[csi-arch]:https://github.com/barrypt/blog/raw/master/images/kubernetes/csi/csi-arch.png
+[volume]:https://github.com/barrypt/blog/raw/master/images/kubernetes/csi/volume.png
+[dynamic-provisioning]:https://github.com/barrypt/blog/raw/master/images/kubernetes/csi/dynamic-provisioning.png
 

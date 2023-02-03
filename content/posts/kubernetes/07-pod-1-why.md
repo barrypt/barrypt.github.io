@@ -207,4 +207,4 @@ Pod 扮演的是传统部署环境里“虚拟机”的角色。这样的设计�
 
 
 
-[pod-infra]:https://github.com/lixd/blog/raw/master/images/kubernetes/pod/pod-infra.png
+[pod-infra]:https://github.com/barrypt/blog/raw/master/images/kubernetes/pod/pod-infra.png

@@ -501,4 +501,4 @@ etcd 中新增了**预选**功能，主要用于避免无效的选举对集群�
 
 
 
-[leader-election]:https://github.com/lixd/blog/raw/master/images/distributed/raft/leder-election.png
+[leader-election]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/leder-election.png

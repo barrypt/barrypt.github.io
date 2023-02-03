@@ -308,12 +308,12 @@ requiresConsistency 具体含义如下：
 
 
 
-[Anatomy of a Topic]:https://github.com/lixd/blog/raw/master/images/kafka/partition/Anatomy%20of%20a%20Topic.webp
-[Round-robin]:https://github.com/lixd/blog/raw/master/images/kafka/partition/Round-robin.webp
-[Randomness]:https://github.com/lixd/blog/raw/master/images/kafka/partition/Randomness.webp
-[Key-ordering]:https://github.com/lixd/blog/raw/master/images/kafka/partition/Key-ordering.webp
+[Anatomy of a Topic]:https://github.com/barrypt/blog/raw/master/images/kafka/partition/Anatomy%20of%20a%20Topic.webp
+[Round-robin]:https://github.com/barrypt/blog/raw/master/images/kafka/partition/Round-robin.webp
+[Randomness]:https://github.com/barrypt/blog/raw/master/images/kafka/partition/Randomness.webp
+[Key-ordering]:https://github.com/barrypt/blog/raw/master/images/kafka/partition/Key-ordering.webp
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example
 

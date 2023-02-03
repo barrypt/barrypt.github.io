@@ -532,4 +532,4 @@ os/exec 包执行命令时会创建子进程，通过管道连接子进程以收
 
 
 
-[go-exec-process]:https://github.com/lixd/blog/raw/master/images/golang/lib/os-exec/go_exec_process.png
+[go-exec-process]:https://github.com/barrypt/blog/raw/master/images/golang/lib/os-exec/go_exec_process.png

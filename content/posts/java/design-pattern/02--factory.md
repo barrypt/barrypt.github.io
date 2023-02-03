@@ -37,7 +37,7 @@ tags: ["设计模式"]
 
 ## 2. 简单工厂模式
 
-![](https://github.com/lixd/blog/raw/master/images/java/design-patterns/easy-factory.png)
+![](https://github.com/barrypt/blog/raw/master/images/java/design-patterns/easy-factory.png)
 
 ```java
 /**
@@ -120,7 +120,7 @@ public class EasyFactoryTest {
 
 简单工厂模式中，如果创建对象时传入的字符串出现错误则不能正确创建产品。工厂方法模式为每种产品创建一个工厂，则不会出现这样的问题。
 
-![](https://github.com/lixd/blog/raw/master/images/java/design-patterns/factory-method.png)
+![](https://github.com/barrypt/blog/raw/master/images/java/design-patterns/factory-method.png)
 
 ```java
 /**
@@ -172,7 +172,7 @@ public class FactoryMethodTest {
 
 网上找的一个类图：
 
-![](https://github.com/lixd/blog/raw/master/images/java/design-patterns/abstract-factory.jpg)
+![](https://github.com/barrypt/blog/raw/master/images/java/design-patterns/abstract-factory.jpg)
 
 > 工厂方法模式有一个问题就是，类的创建依赖工厂类，也就是说，如果想要拓展程序，必须对工厂类进行修改，这违背了闭包原则，所以，从设计角度考虑，有一定的问题，如何解决？就用到抽象工厂模式，创建多个工厂类，这样一旦需要增加新的功能，直接增加新的工厂类就可以了，不需要修改之前的代码。
 

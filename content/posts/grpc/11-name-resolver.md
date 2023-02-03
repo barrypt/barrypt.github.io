@@ -42,7 +42,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 	"google.golang.org/grpc"
 )
 
@@ -86,7 +86,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 	"google.golang.org/grpc"
 
 	"google.golang.org/grpc/resolver"
@@ -238,12 +238,12 @@ Builder 则采用 Builder 模式在包初始化时创建并注册构造自定义
 分别启动服务端和客户端进行测试：
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/name_resolving/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/name_resolving/server$ go run main.go 
 2021/05/15 10:04:11 serving on localhost:50051
 ```
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/name_resolving/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/name_resolving/client$ go run main.go 
 --- calling helloworld.Greeter/SayHello to "passthrough:///localhost:50051"
 this is examples/name_resolving (from localhost:50051)
 this is examples/name_resolving (from localhost:50051)
@@ -556,5 +556,5 @@ func (ccr *ccResolverWrapper) UpdateState(s resolver.State) {
 
 
 
-[Github]:https://github.com/lixd/grpc-go-example
-[name-reslover]:https://github.com/lixd/blog/raw/master/images/grpc/name-resolver.png
+[Github]:https://github.com/barrypt/grpc-go-example
+[name-reslover]:https://github.com/barrypt/blog/raw/master/images/grpc/name-resolver.png

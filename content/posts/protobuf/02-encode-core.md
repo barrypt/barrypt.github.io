@@ -406,7 +406,7 @@ protocol buffers 在序列化方面，与 XML 相比，有诸多优点：
 
 
 
-[varints-encode]:https://github.com/lixd/blog/raw/master/images/protobuf/varints-encode.png
+[varints-encode]:https://github.com/barrypt/blog/raw/master/images/protobuf/varints-encode.png
 
-[pb_message_structure_encoding]:https://github.com/lixd/blog/raw/master/images/protobuf/pb_message_structure_encoding.png
+[pb_message_structure_encoding]:https://github.com/barrypt/blog/raw/master/images/protobuf/pb_message_structure_encoding.png
 

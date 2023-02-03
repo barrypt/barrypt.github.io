@@ -1,7 +1,7 @@
 ---
 title: "服务网格和 Istio 概述"
 description: "概述"
-date: 2023-02-03 17:00:00
+date: 2023-02-03
 draft: false
 tags: ["istio"]
 categories: ["istio"]

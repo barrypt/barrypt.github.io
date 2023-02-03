@@ -59,7 +59,7 @@ services:
 
 默认安装的 MySQL 最新版本,需要其他版本的话请自行修改镜像。
 
-[更多`docker-compose.yml`点击这里](https://github.com/lixd/ymls)
+[更多`docker-compose.yml`点击这里](https://github.com/barrypt/ymls)
 
 ## 3. 启动
 

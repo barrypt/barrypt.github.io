@@ -358,7 +358,7 @@ func main() {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/interceptor/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/interceptor/server$ go run main.go 
 2021/01/24 19:58:12 Server gRPC on 0.0.0.0:50051
 LOG:    Receive a message (Type: *echo.EchoRequest) at 2021-01-24T19:58:14+08:00
 bidi echoing message "Request 1"
@@ -372,7 +372,7 @@ LOG:    Receive a message (Type: *echo.EchoRequest) at 2021-01-24T19:58:14+08:00
 Client
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/interceptor/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/interceptor/client$ go run main.go 
 LOG:    Send a message (Type: *echo.EchoRequest) at 2021-01-24T19:58:14+08:00
 LOG:    Send a message (Type: *echo.EchoRequest) at 2021-01-24T19:58:14+08:00
 LOG:    Receive a message (Type: *echo.EchoResponse) at 2021-01-24T19:58:14+08:00
@@ -449,6 +449,6 @@ gRPC 拦截器可以分为：一元拦截器和流拦截器，服务端拦截器
 
 
 
-[Github]:https://github.com/lixd/grpc-go-example
+[Github]:https://github.com/barrypt/grpc-go-example
 [go-grpc-middleware]:https://github.com/grpc-ecosystem/go-grpc-middleware
 

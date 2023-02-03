@@ -44,7 +44,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 )
 
 var port = flag.Int("port", 50052, "port number")
@@ -118,7 +118,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 	"google.golang.org/grpc"
 )
 
@@ -174,7 +174,7 @@ func main() {
 先启动服务端
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/retry/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/retry/server$ go run main.go 
 listen on address :50052
 2021/02/17 17:35:29 request failed count: 1
 ```
@@ -182,7 +182,7 @@ listen on address :50052
 在启动客户端
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/retry/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/retry/client$ go run main.go 
 2021/02/17 17:35:29 UnaryEcho error: rpc error: code = Unavailable desc = maybeFailRequest: failing it
 exit status 1
 ```
@@ -198,15 +198,15 @@ emmm 并没有重试。。。
 > 因为是客户端的重试功能，所以是在客户端设置环境变量，服务端则不需要。
 
 ```sh
-lixd@17x$ export GRPC_GO_RETRY=on
-lixd@17x$ echo $GRPC_GO_RETRY
+barrypt@17x$ export GRPC_GO_RETRY=on
+barrypt@17x$ echo $GRPC_GO_RETRY
 on
 ```
 
 然后重新启动服务端和客户端
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/retry/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/retry/server$ go run main.go 
 listen on address :50052
 2021/02/17 17:37:55 request failed count: 1
 2021/02/17 17:37:55 request failed count: 2
@@ -215,7 +215,7 @@ listen on address :50052
 ```
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/retry/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/retry/client$ go run main.go 
 2021/02/17 17:37:55 UnaryEcho reply: message:"Try and Success"
 ```
 
@@ -509,4 +509,4 @@ gRPC 中内置了 retry 功能，使用比较简单。
 
 
 
-[Github]: https://github.com/lixd/grpc-go-example
+[Github]: https://github.com/barrypt/grpc-go-example

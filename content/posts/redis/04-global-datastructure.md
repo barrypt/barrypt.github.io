@@ -102,7 +102,7 @@ Redis 解决哈希冲突的方式，就是**链式哈希（链地址法）**。�
 
 
 
-[全局哈希表]:https://raw.githubusercontent.com/lixd/blog/master/images/redis/global-hash-table.png
-[哈希冲突]: https://raw.githubusercontent.com/lixd/blog/master/images/redis/hash-collision.png
-[Rehash]: https://raw.githubusercontent.com/lixd/blog/master/images/redis/rehash.png
+[全局哈希表]:https://raw.githubusercontent.com/barrypt/blog/master/images/redis/global-hash-table.png
+[哈希冲突]: https://raw.githubusercontent.com/barrypt/blog/master/images/redis/hash-collision.png
+[Rehash]: https://raw.githubusercontent.com/barrypt/blog/master/images/redis/rehash.png
 

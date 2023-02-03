@@ -51,7 +51,7 @@ public class Outer {
 
 虽然这两个类写在同一个文件中， 但是编译完成后， 还是生成各自的class文件： 
 
-![local](https://github.com/lixd/blog/raw/master/images/java/javase/inner-out-class.png )
+![local](https://github.com/barrypt/blog/raw/master/images/java/javase/inner-out-class.png )
 
 
 

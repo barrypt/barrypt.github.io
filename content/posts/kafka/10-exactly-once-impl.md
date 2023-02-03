@@ -416,5 +416,5 @@ Producer 逻辑基本分析完了，和前面分析的一样，Producer 需要�
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example
 

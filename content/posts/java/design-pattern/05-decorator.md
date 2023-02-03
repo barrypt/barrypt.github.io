@@ -19,7 +19,7 @@ categories: ["Java"]
 >
 > 它是通过创建一个包装对象，也就是装饰来包裹真实的对象。是继承关系的一个替代方案。
 
-![](https://github.com/lixd/blog/raw/master/images/java/design-patterns/decorator.png)
+![](https://github.com/barrypt/blog/raw/master/images/java/design-patterns/decorator.png)
 
 **装饰模式由4种角色组成：**
 （1）抽象构件（Component）角色：给出一个抽象接口，以规范准备接收附加职责的对象。

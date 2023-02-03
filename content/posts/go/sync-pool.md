@@ -238,7 +238,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 * 2）使用时直接 Get
 * 3）使用完成后先进行**字段清空**,然后在 Put 回去。
 
-> 一定要进行 Reset，不然会出现意想不到的问题。分享一个[类似的坑](https://github.com/lixd/daily-notes/blob/master/Golang/FAQ/mongodb%E9%87%87%E5%9D%91.md)
+> 一定要进行 Reset，不然会出现意想不到的问题。分享一个[类似的坑](https://github.com/barrypt/daily-notes/blob/master/Golang/FAQ/mongodb%E9%87%87%E5%9D%91.md)
 
 
 
@@ -1021,5 +1021,5 @@ func poolCleanup() {
 
 
 
-[Github]:https://github.com/lixd/i-go/blob/master/a-tutorials/lib/sync_pool/main.go
-[pool-structure]:https://github.com/lixd/blog/raw/master/images/golang/lib/sync-pool/pool-structure.png
+[Github]:https://github.com/barrypt/i-go/blob/master/a-tutorials/lib/sync_pool/main.go
+[pool-structure]:https://github.com/barrypt/blog/raw/master/images/golang/lib/sync-pool/pool-structure.png

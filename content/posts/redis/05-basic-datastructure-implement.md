@@ -353,24 +353,24 @@ typedef struct zset {
 
 
 
-[data-type-structure]: https://github.com/lixd/blog/raw/master/images/redis/data-structure/data-type-structure.png
-[ziplist]: https://github.com/lixd/blog/raw/master/images/redis/data-structure/ziplist.png
+[data-type-structure]: https://github.com/barrypt/blog/raw/master/images/redis/data-structure/data-type-structure.png
+[ziplist]: https://github.com/barrypt/blog/raw/master/images/redis/data-structure/ziplist.png
 
-[string-int]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/string-int.png
-[string-raw]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/string-raw.png
-[string-embstr]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/string-embstr.png
+[string-int]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/string-int.png
+[string-raw]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/string-raw.png
+[string-embstr]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/string-embstr.png
 
-[hash-ziplist-obj]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/hash-ziplist-obj.png
-[hash-ziplist-item]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/hash-ziplist-item.png
-[hash-hashtable]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/hash-hashtable.png
+[hash-ziplist-obj]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/hash-ziplist-obj.png
+[hash-ziplist-item]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/hash-ziplist-item.png
+[hash-hashtable]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/hash-hashtable.png
 
-[list-ziplist]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/list-ziplist.png
-[list-linkedlist]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/list-linkedlist.png
+[list-ziplist]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/list-ziplist.png
+[list-linkedlist]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/list-linkedlist.png
 
-[intset]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/intset.png
-[hashtable]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/hashtable.png
+[intset]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/intset.png
+[hashtable]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/hashtable.png
 
-[ziplist-obj]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/ziplist-obj.png
-[ziplist-item]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/ziplist-item.png
-[skiplist-obj]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/skiplist-obj.png
-[skiplist-item]:https://github.com/lixd/blog/raw/master/images/redis/data-structure/skiplist-item.png
+[ziplist-obj]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/ziplist-obj.png
+[ziplist-item]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/ziplist-item.png
+[skiplist-obj]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/skiplist-obj.png
+[skiplist-item]:https://github.com/barrypt/blog/raw/master/images/redis/data-structure/skiplist-item.png

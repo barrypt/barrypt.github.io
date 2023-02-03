@@ -337,5 +337,5 @@ Docker 容器全景图如下：
 
 
 
-[docker-overview]:https://github.com/lixd/blog/raw/master/images/docker/docker-overview.jpg
+[docker-overview]:https://github.com/barrypt/blog/raw/master/images/docker/docker-overview.jpg
 

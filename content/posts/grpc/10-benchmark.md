@@ -35,7 +35,7 @@ $ sudo vim /etc/profile
 $ source /etc/profile
 # 具体位置就是刚解压的位置
 $ cat /etc/profile
-export PATH=$PATH:/home/lixd/17x/env
+export PATH=$PATH:/home/barrypt/17x/env
 ```
 
 具体语法
@@ -187,10 +187,10 @@ ghz [<flags>] [<host>]
 
 二者只是打开方式不同，具体原理是一样的。
 
-首页启动服务端，这里就是要之前[HelloWorld教程](https://lixueduan.com/post/grpc/02-hello-world/)中的[Greeter](https://github.com/lixd/grpc-go-example/tree/main/helloworld/server)服务。
+首页启动服务端，这里就是要之前[HelloWorld教程](https://lixueduan.com/post/grpc/02-hello-world/)中的[Greeter](https://github.com/barrypt/grpc-go-example/tree/main/helloworld/server)服务。
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/helloworld/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/helloworld/server$ go run main.go 
 2021/04/17 10:53:46 Serving gRPC on 0.0.0.0:50051
 ```
 
@@ -349,13 +349,13 @@ import (
 	"github.com/bojand/ghz/printer"
 	"github.com/bojand/ghz/runner"
 	"github.com/golang/protobuf/proto"
-	pb "github.com/lixd/grpc-go-example/helloworld/helloworld"
+	pb "github.com/barrypt/grpc-go-example/helloworld/helloworld"
 )
 
 // 官方文档 https://ghz.sh/docs/intro.html
 func main() {
 	// 组装BinaryData
-	item := pb.HelloRequest{Name: "lixd"}
+	item := pb.HelloRequest{Name: "barrypt"}
 	buf := proto.Buffer{}
 	err := buf.EncodeMessage(&item)
 	if err != nil {
@@ -416,5 +416,5 @@ ghz.go  report.html
 
 
 
-[Github]:https://github.com/lixd/grpc-go-example
-[ghz-html]:https://github.com/lixd/blog/raw/master/images/grpc/ghz-html.png
+[Github]:https://github.com/barrypt/grpc-go-example
+[ghz-html]:https://github.com/barrypt/blog/raw/master/images/grpc/ghz-html.png

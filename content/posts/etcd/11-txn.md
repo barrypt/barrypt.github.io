@@ -241,4 +241,4 @@ OK
 
 
 
-[etcd-v3-txn-commit]: https://github.com/lixd/blog/raw/master/images/etcd/txn/etcd-v3-txn-commit.webp
+[etcd-v3-txn-commit]: https://github.com/barrypt/blog/raw/master/images/etcd/txn/etcd-v3-txn-commit.webp

@@ -174,9 +174,9 @@ Demo 如下，完整代码见[Github][github]
 
 
 [demo]:https://lixueduan.com/tools/canvasfp/fp-crc.html
-[github]:https://github.com/lixd/i-vue/tree/master/canvasfp
+[github]:https://github.com/barrypt/i-vue/tree/master/canvasfp
 [fingerprint.js]:https://github.com/fingerprintjs/fingerprintjs
 
-[png-header]:https://github.com/lixd/blog/raw/master/images/web/canvasfp/png-header.png
-[png-footer]:https://github.com/lixd/blog/raw/master/images/web/canvasfp/png-footer.png
+[png-header]:https://github.com/barrypt/blog/raw/master/images/web/canvasfp/png-header.png
+[png-footer]:https://github.com/barrypt/blog/raw/master/images/web/canvasfp/png-footer.png
 

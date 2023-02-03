@@ -70,10 +70,10 @@ conn, err := grpc.Dial(addr,grpc.WithInsecure())
 $ openssl genrsa -out ca.key 2048
 
 # 生成.csr 证书签名请求文件
-$ openssl req -new -key ca.key -out ca.csr  -subj "/C=GB/L=China/O=lixd/CN=www.lixueduan.com"
+$ openssl req -new -key ca.key -out ca.csr  -subj "/C=GB/L=China/O=barrypt/CN=www.lixueduan.com"
 
 # 自签名生成.crt 证书文件
-$ openssl req -new -x509 -days 3650 -key ca.key -out ca.crt  -subj "/C=GB/L=China/O=lixd/CN=www.lixueduan.com"
+$ openssl req -new -x509 -days 3650 -key ca.key -out ca.crt  -subj "/C=GB/L=China/O=barrypt/CN=www.lixueduan.com"
 ```
 
 #### 服务端证书
@@ -94,7 +94,7 @@ $ openssl genrsa -out server.key 2048
 
 # 生成.csr 证书签名请求文件
 $ openssl req -new -key server.key -out server.csr \
-	-subj "/C=GB/L=China/O=lixd/CN=www.lixueduan.com" \
+	-subj "/C=GB/L=China/O=barrypt/CN=www.lixueduan.com" \
 	-reqexts SAN \
 	-config <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:*.lixueduan.com,DNS:*.refersmoon.com"))
 
@@ -202,14 +202,14 @@ func main() {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/encryption/server-side-TLS/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/encryption/server-side-TLS/server$ go run main.go 
 2021/01/24 18:00:25 Server gRPC on 0.0.0.0:50051
 ```
 
 Client
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/encryption/server-side-TLS/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/encryption/server-side-TLS/client$ go run main.go 
 UnaryEcho:  hello world
 ```
 
@@ -238,7 +238,7 @@ $ openssl genrsa -out server.key 2048
 
 # 生成.csr 证书签名请求文件
 $ openssl req -new -key server.key -out server.csr \
-	-subj "/C=GB/L=China/O=lixd/CN=www.lixueduan.com" \
+	-subj "/C=GB/L=China/O=barrypt/CN=www.lixueduan.com" \
 	-reqexts SAN \
 	-config <(cat /etc/ssl/openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:*.lixueduan.com,DNS:*.refersmoon.com"))
 
@@ -375,14 +375,14 @@ func main() {
 Server
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/encryption/mutual-TLS/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/encryption/mutual-TLS/server$ go run main.go 
 2021/01/24 18:02:01 Serving gRPC on 0.0.0.0:50051
 ```
 
 Client
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/encryption/mutual-TLS/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/encryption/mutual-TLS/client$ go run main.go 
 UnaryEcho:  hello world
 ```
 
@@ -437,7 +437,7 @@ Go 1.15 版本开始废弃 CommonName 并且推荐使用 SAN 证书，导致依�
 
 
 
-[Github]:https://github.com/lixd/grpc-go-example
-[grpc-tls-wireshark]:https://github.com/lixd/blog/raw/master/images/grpc/grpc-tls-wireshark.png
-[证书制作章节]:https://github.com/lixd/daily-notes/blob/master/Components/RPC/gRPC/openssl%E5%88%B6%E4%BD%9C%E8%AF%81%E4%B9%A6.md
+[Github]:https://github.com/barrypt/grpc-go-example
+[grpc-tls-wireshark]:https://github.com/barrypt/blog/raw/master/images/grpc/grpc-tls-wireshark.png
+[证书制作章节]:https://github.com/barrypt/daily-notes/blob/master/Components/RPC/gRPC/openssl%E5%88%B6%E4%BD%9C%E8%AF%81%E4%B9%A6.md
 

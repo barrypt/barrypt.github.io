@@ -34,7 +34,7 @@ Git本地有四个工作区域：
 
 文件在这四个区域之间的转换关系如下：
 
-![](https://github.com/lixd/blog/raw/master/images/git/git-work-tree.png)
+![](https://github.com/barrypt/blog/raw/master/images/git/git-work-tree.png)
 
 - **Working Directory**： 工作区，就是你平时存放项目代码的地方，大概就是一个文件夹。
 - **Index / Stage**： 暂存区，用于临时存放你的改动，事实上它只是一个文件，保存即将提交到文件列表信息
@@ -63,7 +63,7 @@ git的工作流程一般是这样的：
 
 SHA-1算法计算文件的校验和。
 
-![img](https://github.com/lixd/blog/raw/master/images/git/git-file-status.png)
+![img](https://github.com/barrypt/blog/raw/master/images/git/git-file-status.png)
 
 **Untracked:**   未跟踪, 此文件在文件夹中, 但并没有加入到git库, 不参与版本控制. 通过git add 状态变为Staged。
 
@@ -75,7 +75,7 @@ SHA-1算法计算文件的校验和。
 
  下面的图很好的解释了这四种状态的转变：
 
-![img](https://github.com/lixd/blog/raw/master/images/git/git-status-change.png)
+![img](https://github.com/barrypt/blog/raw/master/images/git/git-status-change.png)
 
 > 新建文件后 --->Untracked
 >
@@ -122,7 +122,7 @@ Initialized empty Git repository in C:/Users/13452/Desktop/gitte/.git/
 ```shell
 git clone [url]
 # 例如
-git@github.com:lixd/daily-notes.git  
+git@github.com:barrypt/daily-notes.git  
 ```
 
 ### 2.2 代码提交
@@ -422,7 +422,7 @@ git config -l
 
 最后附上一张网上找到的`Git常用命令速查表`
 
-![](https://github.com/lixd/blog/raw/master/images/git/git-comand-fast-select.png)
+![](https://github.com/barrypt/blog/raw/master/images/git/git-comand-fast-select.png)
 
 ## 4. 参考
 

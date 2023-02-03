@@ -19,7 +19,7 @@ tags: ["设计模式"]
 >
 > **把一个类的接口变换成客户端所期待的另一种接口**
 
-![](https://github.com/lixd/blog/raw/master/images/java/design-patterns/adapter.jpeg)
+![](https://github.com/barrypt/blog/raw/master/images/java/design-patterns/adapter.jpeg)
 
 用到的对象
 

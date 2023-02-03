@@ -256,6 +256,6 @@ deployment.extensions/nginx-deployment
 
 
 
-[replicaset]:https://github.com/lixd/blog/raw/master/images/kubernetes/deployment/replicaset.jpg
-[replicaset-roll-update]:https://github.com/lixd/blog/raw/master/images/kubernetes/deployment/replicaset-roll-update.jpg
+[replicaset]:https://github.com/barrypt/blog/raw/master/images/kubernetes/deployment/replicaset.jpg
+[replicaset-roll-update]:https://github.com/barrypt/blog/raw/master/images/kubernetes/deployment/replicaset-roll-update.jpg
 

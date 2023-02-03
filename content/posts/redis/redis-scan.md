@@ -435,7 +435,7 @@ float Q_rsqrt( float number )
 
 
 
-[scan_time_vs_count]:https://github.com/lixd/blog/raw/master/images/redis/scan/scan_time_vs_count.png
-[redis-scale]:https://github.com/lixd/blog/raw/master/images/redis/scan/redis-scale.png
-[scan-rbi]:https://github.com/lixd/blog/raw/master/images/redis/scan/scan-rbi.png
+[scan_time_vs_count]:https://github.com/barrypt/blog/raw/master/images/redis/scan/scan_time_vs_count.png
+[redis-scale]:https://github.com/barrypt/blog/raw/master/images/redis/scan/redis-scale.png
+[scan-rbi]:https://github.com/barrypt/blog/raw/master/images/redis/scan/scan-rbi.png
 

@@ -144,16 +144,16 @@ clone 和 unshare 的功能都是创建并加入新的 namespace， 他们的区
 
 ```shell
 #查看当前bash进程所属的namespace
- lixd  ~  ls -l /proc/$$/ns
+ barrypt  ~  ls -l /proc/$$/ns
 total 0
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 cgroup -> 'cgroup:[4026531835]'
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 ipc -> 'ipc:[4026532227]'
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 mnt -> 'mnt:[4026532241]'
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 net -> 'net:[4026531992]'
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 pid -> 'pid:[4026532243]'
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 pid_for_children -> 'pid:[4026532243]'
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 user -> 'user:[4026531837]'
-lrwxrwxrwx 1 lixd lixd 0 Jan  6 19:00 uts -> 'uts:[4026532242]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 cgroup -> 'cgroup:[4026531835]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 ipc -> 'ipc:[4026532227]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 mnt -> 'mnt:[4026532241]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 net -> 'net:[4026531992]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 pid -> 'pid:[4026532243]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 pid_for_children -> 'pid:[4026532243]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 user -> 'user:[4026531837]'
+lrwxrwxrwx 1 barrypt barrypt 0 Jan  6 19:00 uts -> 'uts:[4026532242]'
 ```
 
 以`ipc:[4026532227]`为例，ipc 是 namespace 的类型，4026532227 是 inode number。
@@ -233,7 +233,7 @@ func main() {
 
 ```shell
 DESKTOP-9K4GB6E# go run main.go
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker#
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker#
 ```
 
 运行后会进入了一个新的 shell 环境。
@@ -245,7 +245,7 @@ root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker#
 首先使用` pstree`查看进程关系：
 
 ```shell
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# pstree -pl
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# pstree -pl
 init(1)─┬─init(1272)───init(1273)───server(1274)─┬─{server}(1282)
         │                                        ├─{server}(1283)
         │                                        ├─{server}(1284)
@@ -285,9 +285,9 @@ init(1)─┬─init(1272)───init(1273)───server(1274)─┬─{serv
 main 程序 pid 为 8182,后续新创建的 bash pid 为 8187，现在查看二者 uts 是否相同即可：
 
 ```shell
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# readlink /proc/8182/ns/uts
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# readlink /proc/8182/ns/uts
 uts:[4026532242]
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# readlink /proc/8187/ns/uts
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# readlink /proc/8187/ns/uts
 uts:[4026532386]
 ```
 
@@ -296,15 +296,15 @@ uts:[4026532386]
 在这个新的 bash 环境中修改 hostname
 
 ```shell
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# hostname bash
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# hostname
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# hostname bash
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# hostname
 bash
 ```
 
 新开一个在宿主机上查看 hostname：
 
 ```shell
- lixd  ~ $ hostname
+ barrypt  ~ $ hostname
 DESKTOP-9K4GB6E
 ```
 
@@ -361,7 +361,7 @@ key        msqid      owner      perms      used-bytes   messages
 
 ```shell
 DESKTOP-9K4GB6E# go run main.go
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# ipcs -q
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# ipcs -q
 ------ Message Queues --------
 key        msqid      owner      perms      used-bytes   messages
 ```
@@ -402,7 +402,7 @@ func main() {
 
 ```shell
 DESKTOP-9K4GB6E# go run main.go
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# pstree -pl
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# pstree -pl
 init(1)─┬─init(1272)───init(1273)───server(1274)─┬─{server}(1282)
         │                                        ├─{server}(1283)
         │                                        ├─{server}(1284)
@@ -441,7 +441,7 @@ init(1)─┬─init(1272)───init(1273)───server(1274)─┬─{serv
 > 这里只能使用 `echo $$` 命令查看，ps、top 等命令会查看到其他 Namespace 中的信息。
 
 ```shell
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# echo $$
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# echo $$
 1
 ```
 
@@ -476,7 +476,7 @@ root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# echo $$
 
 ```shell
 DESKTOP-9K4GB6E# go run main.go
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# ls /proc
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# ls /proc
 1     3764  7476  9476       cmdline    driver       kallsyms     loadavg  net           swaps        vmallocinfo
 1272  3765  7477  9557       config.gz  execdomains  kcore        locks    pagetypeinfo  sys          vmstat
 1273  5171  7520  9562       consoles   filesystems  key-users    mdstat   partitions    sysvipc      zoneinfo
@@ -492,9 +492,9 @@ root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# ls /proc
 现在把 proc 目录挂载到当前 Namespace 中来：
 
 ```shell
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# mount -t proc proc /proc
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# mount -t proc proc /proc
 
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# ls /proc
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# ls /proc
 1          cmdline    diskstats    interrupts  key-users    loadavg  mounts        schedstat  sysvipc      vmallocinfo
 10         config.gz  dma          iomem       keys         locks    mtrr          self       thread-self  vmstat
 acpi       consoles   driver       ioports     kmsg         mdstat   net           softirqs   timer_list   zoneinfo
@@ -508,7 +508,7 @@ cgroups    devices    fs           kcore       kpageflags   modules  sched_debug
 此时就可以通过 ps 命令来查看了：
 
 ```shell
-root@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker# ps -ef
+root@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker# ps -ef
 UID        PID  PPID  C STIME TTY          TIME CMD
 root         1     0  0 13:13 pts/2    00:00:00 bash
 root        11     1  0 13:13 pts/2    00:00:00 ps -ef
@@ -553,7 +553,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 ```shell
 DESKTOP-9K4GB6E# go run main.go
-nobody@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker$ id
+nobody@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker$ id
 uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
 ```
 
@@ -612,7 +612,7 @@ DESKTOP-9K4GB6E# ip addr
 
 ```shell
 DESKTOP-9K4GB6E# go run main.go
-nobody@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker$ ip addr
+nobody@DESKTOP-9K4GB6E:/home/barrypt/projects/docker/mydocker$ ip addr
 1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 2: tunl0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN group default qlen 1000
@@ -647,4 +647,4 @@ nobody@DESKTOP-9K4GB6E:/home/lixd/projects/docker/mydocker$ ip addr
 
 
 
-[Github]:https://github.com/lixd/mydocker
+[Github]:https://github.com/barrypt/mydocker

@@ -253,4 +253,4 @@ client 请求中间组件，由中间组件再去请求后端的 Pod。
 
 
 
-[Github]: https://github.com/lixd/grpc-go-example
+[Github]: https://github.com/barrypt/grpc-go-example

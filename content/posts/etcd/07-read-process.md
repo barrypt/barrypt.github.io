@@ -172,5 +172,5 @@ A：**主要是性能因素**，如果将所有读请求都转发到 Leader，�
 
 
 
-[etcd-simple-arch]:https://github.com/lixd/blog/raw/master/images/etcd/read-process/etcd-simple-arch.png
-[etcd-read-process]:https://github.com/lixd/blog/raw/master/images/etcd/read-process/etcd-read-process.png
+[etcd-simple-arch]:https://github.com/barrypt/blog/raw/master/images/etcd/read-process/etcd-simple-arch.png
+[etcd-read-process]:https://github.com/barrypt/blog/raw/master/images/etcd/read-process/etcd-read-process.png

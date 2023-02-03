@@ -310,12 +310,12 @@ http://kailing.pub/raft/index.html
 
 
 
-[leader-election]:https://github.com/lixd/blog/raw/master/images/distributed/raft/leder-election.png
-[log-matching]:https://github.com/lixd/blog/raw/master/images/distributed/raft/log-matching.png
-[log-replication]:https://github.com/lixd/blog/raw/master/images/distributed/raft/log-replication.png
-[raft-core]:https://github.com/lixd/blog/raw/master/images/distributed/raft/raft-core.png
-[raft-safety]:https://github.com/lixd/blog/raw/master/images/distributed/raft/raft-safety.png
-[replicated-state-machine]:https://github.com/lixd/blog/raw/master/images/distributed/raft/replicated-state-machine.png
-[state-machine-safety]:https://github.com/lixd/blog/raw/master/images/distributed/raft/state-machine-safety.png
-[term]:https://github.com/lixd/blog/raw/master/images/distributed/raft/term.png
+[leader-election]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/leder-election.png
+[log-matching]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/log-matching.png
+[log-replication]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/log-replication.png
+[raft-core]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/raft-core.png
+[raft-safety]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/raft-safety.png
+[replicated-state-machine]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/replicated-state-machine.png
+[state-machine-safety]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/state-machine-safety.png
+[term]:https://github.com/barrypt/blog/raw/master/images/distributed/raft/term.png
 

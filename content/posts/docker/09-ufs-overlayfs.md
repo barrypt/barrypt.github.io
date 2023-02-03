@@ -19,7 +19,7 @@ categories: ["Docker"]
 
 
 
-[Github]:https://github.com/lixd/mydocker
+[Github]:https://github.com/barrypt/mydocker
 
 ## 1. 概述
 

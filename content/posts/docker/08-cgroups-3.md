@@ -474,8 +474,8 @@ func cGroups() {
 运行并测试：
 
 ```shell
-lixd  ~/projects/docker/mydocker main $ go build main.go
-lixd  ~/projects/docker/mydocker main $ sudo ./main
+barrypt  ~/projects/docker/mydocker main $ go build main.go
+barrypt  ~/projects/docker/mydocker main $ sudo ./main
 fork 进程 PID： 21827
 当前进程 pid 1
 stress: info: [7] dispatching hogs: 0 cpu, 0 io, 1 vm, 0 hdd
@@ -533,4 +533,4 @@ init(1)─┬─init(8)───init(9)───fsnotifier-wsl(10)
 
 
 
-[Github]:https://github.com/lixd/mydocker
+[Github]:https://github.com/barrypt/mydocker

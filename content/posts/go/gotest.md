@@ -317,7 +317,7 @@ BenchmarkFib20-6           31034             39250 ns/op
 BenchmarkFib40-6               2         601045684 ns/op
 PASS
 ok      hello/test/bench        10.483s
-lixd@17x:~/17x/projects/hello/test/bench$ 
+barrypt@17x:~/17x/projects/hello/test/bench$ 
 
 ```
 

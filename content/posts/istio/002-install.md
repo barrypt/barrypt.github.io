@@ -1,7 +1,7 @@
 ---
 title: "在Kubernetes(k8s)集群上安装部署istio1.14"
 description: "安装"
-date: 2023-02-03 22:00:00
+date: 2023-02-03
 draft: false
 tags: ["istio"]
 categories: ["istio"]

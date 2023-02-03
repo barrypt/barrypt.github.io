@@ -632,5 +632,5 @@ Go 优化：
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example
 

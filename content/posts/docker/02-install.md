@@ -232,7 +232,7 @@ $ docker version
 sudo groupadd docker
 # 将自己加入到 docker 用户组
 # sudo usermod -aG docker $USER
-sudo usermod -aG docker lixd
+sudo usermod -aG docker barrypt
 # 重启 docker
 sudo systemctl restart docker
 # 给docker.sock添加权限 好像每次重启docker后都需要重新添加权限。。

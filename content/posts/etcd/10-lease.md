@@ -718,8 +718,8 @@ func (le *lessor) initAndRecover() {
 
 
 
-[lease-arch]:https://github.com/lixd/blog/raw/master/images/etcd/lease/lease-arch.png
-[lease-process]:https://github.com/lixd/blog/raw/master/images/etcd/lease/lease-process.png
+[lease-arch]:https://github.com/barrypt/blog/raw/master/images/etcd/lease/lease-arch.png
+[lease-process]:https://github.com/barrypt/blog/raw/master/images/etcd/lease/lease-process.png
 
 
 

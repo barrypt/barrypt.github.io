@@ -38,7 +38,7 @@ Hugo 都是静态博客，即最终生成的是静态页面，而所谓部署就
 
 需要在仓库根目录下创建 `.github/workflow` 这个二级目录，然后在 workflow 下以 yml  形式配置 Github Action。
 
->  具体可以参考 [这个仓库](https://github.com/lixd/lixd.github.io)
+>  具体可以参考 [这个仓库](https://github.com/barrypt/barrypt.github.io)
 
 
 
@@ -220,12 +220,6 @@ git commit -m "test action"
 
 
 
-到此，整个配置就完成了，具体细节可以参考 [这个仓库](https://github.com/lixd/lixd.github.io)
+到此，整个配置就完成了，具体细节可以参考 [这个仓库](https://github.com/barrypt/barrypt.github.io)
 
 
-
-[github-secret-config]:https://github.com/lixd/blog/raw/master/images/blogutil/github-secret-config.png
-
-[github-actions]:https://github.com/lixd/blog/raw/master/images/blogutil/github-actions.png
-
-[github-action-detail]:https://github.com/lixd/blog/raw/master/images/blogutil/github-action-detail.png

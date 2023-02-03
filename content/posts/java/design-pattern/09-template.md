@@ -21,7 +21,7 @@ tags: ["设计模式"]
 >
 >  这就是模板方法模式的用意。
 
-![](https://github.com/lixd/blog/raw/master/images/java/designpattern/template.png)
+![](https://github.com/barrypt/blog/raw/master/images/java/designpattern/template.png)
 
 　　**抽象模板(Abstract Template)角色有如下责任：**
 

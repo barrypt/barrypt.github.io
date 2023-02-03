@@ -331,11 +331,11 @@ etcd v3 相对 v2 的提升：
 
 
 
-[http2]:https://github.com/lixd/blog/raw/master/images/etcd/watch/HTTP2.webp
-[etcd-v3-watch-model]:https://github.com/lixd/blog/raw/master/images/etcd/watch/etcd-v3-watch-model.webp
-[etcd-v3-watch-arch]:https://github.com/lixd/blog/raw/master/images/etcd/watch/etcd-v3-watch-arch.webp
+[http2]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/HTTP2.webp
+[etcd-v3-watch-model]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/etcd-v3-watch-model.webp
+[etcd-v3-watch-arch]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/etcd-v3-watch-arch.webp
 
 
-[etcd-watcher-state-change]:https://github.com/lixd/blog/raw/master/images/etcd/watch/watcher%20%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%85%B3%E7%B3%BB%E5%9B%BE.png
+[etcd-watcher-state-change]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/watcher%20%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%85%B3%E7%B3%BB%E5%9B%BE.png
 
-[etcd-watcher-interval-tree]:https://github.com/lixd/blog/raw/master/images/etcd/watch/etcd-watcher-interval-tree.png
+[etcd-watcher-interval-tree]:https://github.com/barrypt/blog/raw/master/images/etcd/watch/etcd-watcher-interval-tree.png

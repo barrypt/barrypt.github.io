@@ -494,7 +494,7 @@ typedef struct redisObject {
 
 `Redis核心技术实战`
 
-[Redis 数据类型与底层数据结构对应关系]:https://raw.githubusercontent.com/lixd/blog/master/images/redis/underlying-datastructure.png
+[Redis 数据类型与底层数据结构对应关系]:https://raw.githubusercontent.com/barrypt/blog/master/images/redis/underlying-datastructure.png
 
-[压缩列表]:https://raw.githubusercontent.com/lixd/blog/master/images/redis/ziplist.png
+[压缩列表]:https://raw.githubusercontent.com/barrypt/blog/master/images/redis/ziplist.png
 

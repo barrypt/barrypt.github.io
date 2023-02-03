@@ -247,7 +247,7 @@ echo 333 INFO >> elk.log
 
 
 
-[basic]:https://github.com/lixd/blog/raw/master/images/elasticsearch/elk/basic.png
-[advanced]:https://github.com/lixd/blog/raw/master/images/elasticsearch/elk/advanced.png
-[log]:https://github.com/lixd/blog/raw/master/images/elasticsearch/elk/log.png
+[basic]:https://github.com/barrypt/blog/raw/master/images/elasticsearch/elk/basic.png
+[advanced]:https://github.com/barrypt/blog/raw/master/images/elasticsearch/elk/advanced.png
+[log]:https://github.com/barrypt/blog/raw/master/images/elasticsearch/elk/log.png
 

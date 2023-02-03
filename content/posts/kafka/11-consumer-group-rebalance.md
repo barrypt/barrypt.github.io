@@ -193,7 +193,7 @@ func ConsumerGroup(topic, group, name string) {
 				因为每次 Rebalance 后需要再次执行 Consume() 来恢复连接
 				Consume 开始才发起 Join Group 请求 如果当前消费者加入后成为了 消费者组 leader,则还会进行 Rebalance 过程，从新分配
 				组内每个消费组需要消费的 topic 和 partition，最后 Sync Group 后才开始消费
-				具体信息见 https://github.com/lixd/kafka-go-example/issues/4
+				具体信息见 https://github.com/barrypt/kafka-go-example/issues/4
 			*/
 			err = cg.Consume(ctx, []string{topic}, handler)
 			if err != nil {
@@ -216,7 +216,7 @@ func ConsumerGroup(topic, group, name string) {
 
 * 1）需要实现 sarama.ConsumerGroup 接口
 * 2）具体消费逻辑在 ConsumeClaim 方法中实现，**消费完成后通过`sess.MarkMessage`标记消息已经被消费**
-* 3）**需要在 for 循环中调用 Consume 方法**，因为 Rebalance 的存在会导致连接终端或者被分配到其他 Broker 上去，需要重新建立连接，具体见 [issues#4](https://github.com/lixd/kafka-go-example/issues/4)
+* 3）**需要在 for 循环中调用 Consume 方法**，因为 Rebalance 的存在会导致连接终端或者被分配到其他 Broker 上去，需要重新建立连接，具体见 [issues#4](https://github.com/barrypt/kafka-go-example/issues/4)
 
 
 
@@ -262,6 +262,6 @@ Rebalance 弊端：
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example
 
-[rebalance]:https://github.com/lixd/blog/raw/master/images/kafka/kafka-rebalance.webp
+[rebalance]:https://github.com/barrypt/blog/raw/master/images/kafka/kafka-rebalance.webp

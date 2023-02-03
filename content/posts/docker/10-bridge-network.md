@@ -40,7 +40,7 @@ Docker有多种网络模型。对于单机上运行的多个容器，可以使�
 
 ### veth pair
 
-> 相关笔记： [veth-pair ](https://github.com/lixd/daily-notes/blob/master/ComputerScience/Linux/veth%E8%AE%BE%E5%A4%87%E5%AF%B9.md)
+> 相关笔记： [veth-pair ](https://github.com/barrypt/daily-notes/blob/master/ComputerScience/Linux/veth%E8%AE%BE%E5%A4%87%E5%AF%B9.md)
 
 `Veth`是成对出现的两张虚拟网卡，从一端发送的数据包，总会在另一端接收到。利用`Veth`的特性，我们可以将一端的虚拟网卡"放入"容器内，另一端接入虚拟交换机。这样，接入同一个虚拟交换机的容器之间就实现了网络互通。
 
@@ -48,7 +48,7 @@ Docker有多种网络模型。对于单机上运行的多个容器，可以使�
 
 ### bridge
 
-> 相关笔记：[Linux bridge](https://github.com/lixd/daily-notes/blob/master/ComputerScience/Linux/bridge%E8%AE%BE%E5%A4%87.md)
+> 相关笔记：[Linux bridge](https://github.com/barrypt/daily-notes/blob/master/ComputerScience/Linux/bridge%E8%AE%BE%E5%A4%87.md)
 
 我们可以认为`Linux bridge`就是虚拟交换机，连接在同一个`bridge`上的容器组成局域网，不同的`bridge`之间网络是隔离的。 `docker network create [NETWORK NAME]`实际上就是创建出虚拟交换机。
 
@@ -58,7 +58,7 @@ Docker有多种网络模型。对于单机上运行的多个容器，可以使�
 
 ### NAT
 
-> 相关笔记：[iptables](https://github.com/lixd/daily-notes/blob/master/ComputerScience/Linux/iptables.md)
+> 相关笔记：[iptables](https://github.com/barrypt/daily-notes/blob/master/ComputerScience/Linux/iptables.md)
 
 NAT（Network Address Translation），是指网络地址转换。
 
@@ -452,9 +452,9 @@ $ sudo ip link  del veth3
 
 ## 5. 参考
 
-[iptables 笔记](https://github.com/lixd/daily-notes/blob/master/ComputerScience/Linux/iptables.md)
+[iptables 笔记](https://github.com/barrypt/daily-notes/blob/master/ComputerScience/Linux/iptables.md)
 
-[veth-pair 笔记](https://github.com/lixd/daily-notes/blob/master/ComputerScience/Linux/veth%E8%AE%BE%E5%A4%87%E5%AF%B9.md)
+[veth-pair 笔记](https://github.com/barrypt/daily-notes/blob/master/ComputerScience/Linux/veth%E8%AE%BE%E5%A4%87%E5%AF%B9.md)
 
 [Docker bridge networks](https://docs.docker.com/network/bridge/)
 
@@ -464,6 +464,6 @@ $ sudo ip link  del veth3
 
 
 
-[Github]:https://github.com/lixd/mydocker
+[Github]:https://github.com/barrypt/mydocker
 
-[Docker Bridge 网络拓扑]: https://github.com/lixd/blog/raw/master/images/docker/Docker%20Bridge%20%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91.png
+[Docker Bridge 网络拓扑]: https://github.com/barrypt/blog/raw/master/images/docker/Docker%20Bridge%20%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91.png

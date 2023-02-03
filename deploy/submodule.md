@@ -8,7 +8,7 @@ git submodule add {url} [path]
 ```
 demo
 ```bash
-git submodule add https://github.com/lixd/LoveIt themes/LoveIt
+git submodule add https://github.com/barrypt/LoveIt themes/LoveIt
 ```
 
 ### 更新
@@ -28,7 +28,7 @@ git submodule update --init --recursive
 ```text
 [submodule "themes/LoveIt"]
 path = themes/LoveIt
-url = https://github.com/lixd/LoveIt
+url = https://github.com/barrypt/LoveIt
 ```
 * 2）从主仓库中移除该 submodule 对应文件
   该 submodule 对应 themes/LoveIt 目录，因此直接移除 themes 下的 LoveIt 目录
@@ -36,7 +36,7 @@ url = https://github.com/lixd/LoveIt
   需要移除的内容如下：
 ```text
 [submodule "themes/LoveIt"]
-	url = https://github.com/lixd/LoveIt
+	url = https://github.com/barrypt/LoveIt
 	active = true
 ```
 * 4）删除 .git/modules 目录下该 submodule 对应文件

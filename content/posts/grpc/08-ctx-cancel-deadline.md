@@ -102,7 +102,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 
@@ -171,12 +171,12 @@ func main() {
 ### Run
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/deadline/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/deadline/server$ go run main.go 
 server listening at port [::]:50051
 ```
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/deadline/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/deadline/client$ go run main.go 
 [1] wanted = OK, got = OK
 [2] wanted = DeadlineExceeded, got = DeadlineExceeded
 [3] wanted = OK, got = OK
@@ -209,7 +209,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 	"google.golang.org/grpc"
 )
 
@@ -262,7 +262,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 	"google.golang.org/grpc"
 )
 
@@ -350,4 +350,4 @@ ctx 可以使用`context.WithDeadline()`或者`context.WithTimeout()`,二者效�
 
 
 
-[Github]: https://github.com/lixd/grpc-go-example
+[Github]: https://github.com/barrypt/grpc-go-example

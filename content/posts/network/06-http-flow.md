@@ -69,7 +69,7 @@ TCP 三次握手，四次挥手详情见[计算机网络(二)---TCP三次握手�
 
 首先是 三次握手，毕竟 HTTP 也是基于 TCP 的，所以需要先建立 TCP 连接。
 
-<img src="https://github.com/lixd/blog/raw/master/images/network/tcp-connection-three.jpg" style="zoom:67%;" />
+<img src="https://github.com/barrypt/blog/raw/master/images/network/tcp-connection-three.jpg" style="zoom:67%;" />
 
 从图中可以看到，客户端发送两次请求，总共 66+54 字节，服务端一次请求共 66 字节。
 
@@ -123,7 +123,7 @@ TCP 三次握手，四次挥手详情见[计算机网络(二)---TCP三次握手�
 
 ![ws-tcp-4][ws-tcp-4]
 
-<img src="https://github.com/lixd/blog/raw/master/images/network/tcp-close-connection-four.jpg" style="zoom: 67%;" />
+<img src="https://github.com/barrypt/blog/raw/master/images/network/tcp-close-connection-four.jpg" style="zoom: 67%;" />
 
 客户端：54+54
 
@@ -156,9 +156,9 @@ TCP 三次握手，四次挥手详情见[计算机网络(二)---TCP三次握手�
 
 
 
-[ws-tcp-3]:https://github.com/lixd/blog/raw/master/images/network/http-flow/ws-tcp-3.png
-[ws-tls]:https://github.com/lixd/blog/raw/master/images/network/http-flow/ws-tls.png
-[ws-logic]:https://github.com/lixd/blog/raw/master/images/network/http-flow/ws-logic.png
-[ws-keep-alive]:https://github.com/lixd/blog/raw/master/images/network/http-flow/ws-keep-alive.png
-[ws-tcp-4]:https://github.com/lixd/blog/raw/master/images/network/http-flow/ws-tcp-4.png
+[ws-tcp-3]:https://github.com/barrypt/blog/raw/master/images/network/http-flow/ws-tcp-3.png
+[ws-tls]:https://github.com/barrypt/blog/raw/master/images/network/http-flow/ws-tls.png
+[ws-logic]:https://github.com/barrypt/blog/raw/master/images/network/http-flow/ws-logic.png
+[ws-keep-alive]:https://github.com/barrypt/blog/raw/master/images/network/http-flow/ws-keep-alive.png
+[ws-tcp-4]:https://github.com/barrypt/blog/raw/master/images/network/http-flow/ws-tcp-4.png
 

@@ -250,4 +250,4 @@ bin/kafka-configs.sh --zookeeper localhost:2181 --entity-type topics --entity-na
 
 
 
-[kafka-config-params]:https://github.com/lixd/blog/raw/master/images/kafka/kafka-config-params.png
+[kafka-config-params]:https://github.com/barrypt/blog/raw/master/images/kafka/kafka-config-params.png

@@ -71,7 +71,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 )
 
 var (
@@ -128,7 +128,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/lixd/grpc-go-example/features/proto/echo"
+	pb "github.com/barrypt/grpc-go-example/features/proto/echo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/resolver"
 )
@@ -246,13 +246,13 @@ func (*exampleResolver) Close()                                  {}
 分别运行服务端和客户端查看结果
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/load_balancing/server$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/load_balancing/server$ go run main.go 
 2021/05/23 09:47:59 serving on 0.0.0.0:50052
 2021/05/23 09:47:59 serving on 0.0.0.0:50051
 ```
 
 ```sh
-lixd@17x:~/17x/projects/grpc-go-example/features/load_balancing/client$ go run main.go 
+barrypt@17x:~/17x/projects/grpc-go-example/features/load_balancing/client$ go run main.go 
 --- calling helloworld.Greeter/SayHello with pick_first ---
 this is examples/load_balancing (from :50051)
 this is examples/load_balancing (from :50051)
@@ -309,5 +309,5 @@ gRPC 内置负载均衡实现：
 
 
 
-[Github]:https://github.com/lixd/grpc-go-example
+[Github]:https://github.com/barrypt/grpc-go-example
 

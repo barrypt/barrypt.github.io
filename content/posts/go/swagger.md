@@ -502,4 +502,4 @@ func init() {
 
 
 
-[github]:https://github.com/lixd/i-go/tree/master/gin/swagger
+[github]:https://github.com/barrypt/i-go/tree/master/gin/swagger

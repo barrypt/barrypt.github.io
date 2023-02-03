@@ -197,5 +197,5 @@ Kafka 收到消息后会先存储在也缓存中(Page Cache)中，之后由操�
 
 
 
-[Github]:https://github.com/lixd/kafka-go-example
+[Github]:https://github.com/barrypt/kafka-go-example
 

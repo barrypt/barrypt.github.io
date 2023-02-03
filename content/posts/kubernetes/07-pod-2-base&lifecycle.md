@@ -359,4 +359,4 @@ kubelet 向runtime发送信号，最终runtime会将信号发送给容器中的�
 
 
 
-[pod-infra]:https://github.com/lixd/blog/raw/master/images/kubernetes/pod/pod-infra.png
+[pod-infra]:https://github.com/barrypt/blog/raw/master/images/kubernetes/pod/pod-infra.png

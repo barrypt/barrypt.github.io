@@ -456,4 +456,4 @@ go func() {
 
 
 
-[singleflight]:https://github.com/lixd/blog/raw/master/images/golang/singleflight/cache.png
+[singleflight]:https://github.com/barrypt/blog/raw/master/images/golang/singleflight/cache.png

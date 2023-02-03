@@ -1020,6 +1020,6 @@ send/recv的时候都会判断recvq/sendq是否有goroutine正在等待，有则
 
 
 
-[chan_struct]:https://github.com/lixd/blog/raw/master/images/golang/lib/chan/chan_struct.png
-[recvq]:https://github.com/lixd/blog/raw/master/images/golang/lib/chan/recvq.png
-[sendq]:https://github.com/lixd/blog/raw/master/images/golang/lib/chan/sendq.png
+[chan_struct]:https://github.com/barrypt/blog/raw/master/images/golang/lib/chan/chan_struct.png
+[recvq]:https://github.com/barrypt/blog/raw/master/images/golang/lib/chan/recvq.png
+[sendq]:https://github.com/barrypt/blog/raw/master/images/golang/lib/chan/sendq.png
