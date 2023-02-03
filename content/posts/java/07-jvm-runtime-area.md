@@ -2,7 +2,7 @@
 title: "Java运行时数据区"
 description: "Java运行时数据区，包括线程私有的程序计数器，虚拟机栈，本地方法栈和线程共享的堆，方法区等简单介绍"
 date: 2019-02-24 22:00:00
-draft: false
+draft: true
 categories: ["Java"]
 tags: ["Java"]
 ---

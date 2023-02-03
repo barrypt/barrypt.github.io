@@ -2,7 +2,7 @@
 title: "枚举式单例模式与序列化"
 description: "单例模式枚举式写法的序列化与反序列化安全问题分析"
 date: 2018-11-24 22:00:00
-draft: false
+draft: true
 categories: ["Java"]
 tags: ["设计模式"]
 ---

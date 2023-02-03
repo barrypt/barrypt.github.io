@@ -2,7 +2,7 @@
 title: "Java常用设计模式(十)---观察者模式"
 description: "观察者模式的具体实现及其在JDK中的应用"
 date: 2018-12-25 22:00:00
-draft: false
+draft: true
 categories: ["Java"]
 tags: ["设计模式"]
 ---

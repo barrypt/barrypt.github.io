@@ -2,7 +2,7 @@
 title: "volatile关键字在单例模式(双重校验锁)中的作用"
 description: "双重校验锁式单例模式中volatile关键字起什么作用？《并发编程的艺术》笔记"
 date: 2018-12-03 22:00:00
-draft: false
+draft: true
 categories: ["Java"]
 tags: ["Java"]
 ---
